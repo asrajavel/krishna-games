@@ -28,13 +28,13 @@ export function Timer({ durationMs, onExpire, paused = false }: Props) {
   const progress = 1 - elapsed / durationMs;
   const seconds = Math.ceil((durationMs - elapsed) / 1000);
   const color =
-    progress > 0.6 ? "bg-krishna-correct" :
-    progress > 0.3 ? "bg-yellow-400" :
+    progress > 0.6 ? "bg-krishna-gold" :
+    progress > 0.3 ? "bg-krishna-green" :
     "bg-krishna-wrong";
 
   return (
     <div className="w-full flex items-center gap-4">
-      <div className="flex-1 h-4 bg-gray-700 rounded-full overflow-hidden">
+      <div className="flex-1 h-4 bg-white/10 rounded-full overflow-hidden">
         <div
           className={`h-full ${color} rounded-full transition-all duration-100`}
           style={{ width: `${progress * 100}%` }}

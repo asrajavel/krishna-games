@@ -1,27 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --krishna-bg: #0a1628;
-  --krishna-gold: #d4a843;
-  --krishna-green: #1a6b4a;
-  --krishna-correct: #22c55e;
-  --krishna-wrong: #ef4444;
-  --krishna-cream: #f5f0e8;
+  --krishna-bg: #0b0e17;
+  --krishna-gold: #00d4ff;
+  --krishna-green: #7b61ff;
+  --krishna-correct: #00ff88;
+  --krishna-wrong: #ff3366;
+  --krishna-cream: #e0e6f0;
 }
 
 @theme {
-  --color-krishna-bg: #0a1628;
-  --color-krishna-gold: #d4a843;
-  --color-krishna-green: #1a6b4a;
-  --color-krishna-correct: #22c55e;
-  --color-krishna-wrong: #ef4444;
-  --color-krishna-cream: #f5f0e8;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  --color-krishna-bg: #0b0e17;
+  --color-krishna-gold: #00d4ff;
+  --color-krishna-green: #7b61ff;
+  --color-krishna-correct: #00ff88;
+  --color-krishna-wrong: #ff3366;
+  --color-krishna-cream: #e0e6f0;
 }
 
 body {

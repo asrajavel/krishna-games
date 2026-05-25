@@ -43,7 +43,7 @@ export function QuizResult({ score, total, onDone }: Props) {
       </div>
       <button
         onClick={onDone}
-        className="mt-4 px-8 py-4 bg-krishna-gold/20 border-2 border-krishna-gold rounded-xl text-krishna-gold text-xl hover:bg-krishna-gold/30"
+        className="mt-4 px-8 py-4 bg-krishna-gold/10 border-2 border-krishna-gold rounded-xl text-krishna-gold text-xl hover:bg-krishna-gold/20 shadow-[0_0_20px_rgba(0,212,255,0.2)]"
       >
         Back to Home
       </button>

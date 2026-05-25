@@ -32,14 +32,14 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
   const handleExpire = useCallback(() => { if (!answered) onAnswer(null); }, [answered, onAnswer]);
 
   const optionStyle = (index: number) => {
-    const base = "w-full py-5 px-8 rounded-xl text-2xl font-semibold text-left transition-all duration-200";
+    const base = "w-full py-6 px-12 rounded-xl text-2xl font-semibold text-left transition-colors duration-300 border-2";
     if (answered) {
-      if (index === question.correctIndex) return `${base} bg-krishna-correct text-white`;
-      if (index === selectedIndex) return `${base} bg-krishna-wrong text-white`;
-      return `${base} bg-gray-700/50 text-gray-400`;
+      if (index === question.correctIndex) return `${base} bg-krishna-correct/20 border-krishna-correct text-krishna-correct`;
+      if (index === selectedIndex) return `${base} bg-krishna-wrong/20 border-krishna-wrong text-krishna-wrong`;
+      return `${base} bg-white/5 border-white/10 text-krishna-cream/40`;
     }
-    if (index === highlightedIndex) return `${base} bg-krishna-gold/30 border-2 border-krishna-gold text-krishna-cream`;
-    return `${base} bg-gray-700/50 border-2 border-transparent text-krishna-cream hover:bg-krishna-gold/20`;
+    if (index === highlightedIndex) return `${base} bg-krishna-gold/15 border-krishna-gold text-krishna-cream shadow-[0_0_20px_rgba(0,212,255,0.3)]`;
+    return `${base} bg-white/5 border-white/10 text-krishna-cream hover:bg-krishna-gold/10`;
   };
 
   return (
@@ -66,17 +66,20 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
           </button>
         ))}
       </div>
-      {answered && (
-        <div className="text-3xl font-bold">
-          {selectedIndex === question.correctIndex ? (
+      <div className="text-3xl font-bold h-20 flex flex-col items-center justify-center">
+        {answered && (
+          selectedIndex === question.correctIndex ? (
             <span className="text-krishna-correct">Correct!</span>
           ) : selectedIndex === null ? (
             <span className="text-krishna-wrong">Time's up!</span>
           ) : (
-            <span className="text-krishna-wrong">Wrong! Answer: {question.options[question.correctIndex]}</span>
-          )}
-        </div>
-      )}
+            <>
+              <span className="text-krishna-wrong">Wrong!</span>
+              <span className="text-krishna-correct text-2xl">Correct: {question.options[question.correctIndex]}</span>
+            </>
+          )
+        )}
+      </div>
     </div>
   );
 }
