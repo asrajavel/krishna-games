@@ -15,7 +15,7 @@ export function GameCard({ title, description, emoji, available, onClick }: Prop
         w-64 h-72 rounded-2xl border-2 flex flex-col items-center justify-center gap-4 p-6
         text-center transition-all duration-200
         ${available
-          ? "border-krishna-gold bg-krishna-gold/10 hover:bg-krishna-gold/20 hover:scale-105 cursor-pointer shadow-[0_0_30px_rgba(0,212,255,0.15)]"
+          ? "border-krishna-gold bg-krishna-gold/10 hover:bg-krishna-gold/20 hover:scale-105 cursor-pointer pulse-card"
           : "border-white/10 bg-white/5 opacity-40 cursor-not-allowed"
         }
       `}

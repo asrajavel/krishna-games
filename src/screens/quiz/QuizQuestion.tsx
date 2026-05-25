@@ -43,42 +43,53 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
   };
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center p-8 gap-8">
-      <div className="text-krishna-gold text-2xl font-semibold">
-        Question {questionNumber} of {totalQuestions}
-      </div>
-      <div className="w-full max-w-2xl">
-        <Timer key={question.id} durationMs={TIME_PER_QUESTION_MS} onExpire={handleExpire} paused={answered} />
-      </div>
-      <h2 className="text-4xl font-bold text-krishna-cream text-center max-w-3xl leading-tight">
-        {question.question}
-      </h2>
-      <div className="w-full max-w-2xl flex flex-col gap-4">
-        {question.options.map((option, index) => (
-          <button
-            key={index}
-            className={optionStyle(index)}
-            onClick={() => !answered && onAnswer(index)}
-            disabled={answered}
-          >
-            <span className="text-krishna-gold mr-4">{LABELS[index]}.</span>
-            {option}
-          </button>
-        ))}
-      </div>
-      <div className="text-3xl font-bold h-20 flex flex-col items-center justify-center">
-        {answered && (
-          selectedIndex === question.correctIndex ? (
-            <span className="text-krishna-correct">Correct!</span>
-          ) : selectedIndex === null ? (
-            <span className="text-krishna-wrong">Time's up!</span>
-          ) : (
-            <>
-              <span className="text-krishna-wrong">Wrong!</span>
-              <span className="text-krishna-correct text-2xl">Correct: {question.options[question.correctIndex]}</span>
-            </>
-          )
-        )}
+    <div className="w-full h-full flex">
+      {question.image && (
+        <div className="w-1/4 h-full border-r border-white/10">
+          <img
+            src={question.image}
+            alt=""
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
+      <div className={`${question.image ? "w-3/4" : "w-full"} h-full flex flex-col items-center justify-center p-8 gap-6`}>
+        <div className="text-krishna-gold text-2xl font-semibold">
+          Question {questionNumber} of {totalQuestions}
+        </div>
+        <div className="w-full max-w-2xl">
+          <Timer key={question.id} durationMs={TIME_PER_QUESTION_MS} onExpire={handleExpire} paused={answered} />
+        </div>
+        <h2 className="text-4xl font-bold text-krishna-cream text-center max-w-3xl leading-tight">
+          {question.question}
+        </h2>
+        <div className="w-full max-w-2xl flex flex-col gap-4">
+          {question.options.map((option, index) => (
+            <button
+              key={index}
+              className={optionStyle(index)}
+              onClick={() => !answered && onAnswer(index)}
+              disabled={answered}
+            >
+              <span className="text-krishna-gold mr-4">{LABELS[index]}.</span>
+              {option}
+            </button>
+          ))}
+        </div>
+        <div className="text-3xl font-bold h-20 flex flex-col items-center justify-center">
+          {answered && (
+            selectedIndex === question.correctIndex ? (
+              <span className="text-krishna-correct">Correct!</span>
+            ) : selectedIndex === null ? (
+              <span className="text-krishna-wrong">Time's up!</span>
+            ) : (
+              <>
+                <span className="text-krishna-wrong">Wrong!</span>
+                <span className="text-krishna-correct text-2xl">Correct: {question.options[question.correctIndex]}</span>
+              </>
+            )
+          )}
+        </div>
       </div>
     </div>
   );

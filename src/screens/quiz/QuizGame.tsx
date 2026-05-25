@@ -1,9 +1,7 @@
 import { useState, useCallback } from "react";
-import { pickRandomQuestions } from "../../data/questions";
+import { getQuestions, QUESTIONS } from "../../data/questions";
 import { QuizQuestion } from "./QuizQuestion";
 import { QuizResult } from "./QuizResult";
-
-const QUESTIONS_PER_ROUND = 5;
 
 interface Props {
   onExit: () => void;
@@ -11,7 +9,7 @@ interface Props {
 
 export function QuizGame({ onExit }: Props) {
   const [state, setState] = useState(() => ({
-    questions: pickRandomQuestions(QUESTIONS_PER_ROUND),
+    questions: getQuestions(),
     currentIndex: 0,
     score: 0,
     answered: false,
@@ -28,7 +26,7 @@ export function QuizGame({ onExit }: Props) {
     setTimeout(() => {
       setState((prev) => {
         const nextIndex = prev.currentIndex + 1;
-        if (nextIndex >= QUESTIONS_PER_ROUND) {
+        if (nextIndex >= QUESTIONS.length) {
           setShowResult(true);
           return prev;
         }
@@ -38,14 +36,14 @@ export function QuizGame({ onExit }: Props) {
   }, [currentQuestion]);
 
   if (showResult) {
-    return <QuizResult score={state.score} total={QUESTIONS_PER_ROUND} onDone={onExit} />;
+    return <QuizResult score={state.score} total={QUESTIONS.length} onDone={onExit} />;
   }
 
   return (
     <QuizQuestion
       question={currentQuestion}
       questionNumber={state.currentIndex + 1}
-      totalQuestions={QUESTIONS_PER_ROUND}
+      totalQuestions={QUESTIONS.length}
       onAnswer={handleAnswer}
       answered={state.answered}
       selectedIndex={state.selectedIndex}
