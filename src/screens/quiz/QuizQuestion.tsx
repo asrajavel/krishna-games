@@ -3,7 +3,7 @@ import type { Question } from "../../types";
 import { Timer } from "../../components/Timer";
 import { useInput } from "../../hooks/useInput";
 
-const TIME_PER_QUESTION_MS = 10000;
+const TIME_PER_QUESTION_MS = 15000;
 
 interface Props {
   question: Question;
