@@ -1,6 +1,5 @@
 import { useState, useCallback } from "react";
 import { pickRandomQuestions } from "../../data/questions";
-import type { QuizState } from "../../types";
 import { QuizQuestion } from "./QuizQuestion";
 import { QuizResult } from "./QuizResult";
 
@@ -11,7 +10,7 @@ interface Props {
 }
 
 export function QuizGame({ onExit }: Props) {
-  const [state, setState] = useState<QuizState>(() => ({
+  const [state, setState] = useState(() => ({
     questions: pickRandomQuestions(QUESTIONS_PER_ROUND),
     currentIndex: 0,
     score: 0,

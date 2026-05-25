@@ -1,14 +1,5 @@
 @import "tailwindcss";
 
-:root {
-  --krishna-bg: #0b0e17;
-  --krishna-gold: #00d4ff;
-  --krishna-green: #7b61ff;
-  --krishna-correct: #00ff88;
-  --krishna-wrong: #ff3366;
-  --krishna-cream: #e0e6f0;
-}
-
 @theme {
   --color-krishna-bg: #0b0e17;
   --color-krishna-gold: #00d4ff;
@@ -19,8 +10,8 @@
 }
 
 body {
-  background-color: var(--krishna-bg);
-  color: var(--krishna-cream);
+  background-color: var(--color-krishna-bg);
+  color: var(--color-krishna-cream);
   font-family: system-ui, sans-serif;
   overflow: hidden;
   user-select: none;
