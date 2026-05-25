@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+:root {
+  --krishna-bg: #0a1628;
+  --krishna-gold: #d4a843;
+  --krishna-green: #1a6b4a;
+  --krishna-correct: #22c55e;
+  --krishna-wrong: #ef4444;
+  --krishna-cream: #f5f0e8;
+}
+
+@theme {
+  --color-krishna-bg: #0a1628;
+  --color-krishna-gold: #d4a843;
+  --color-krishna-green: #1a6b4a;
+  --color-krishna-correct: #22c55e;
+  --color-krishna-wrong: #ef4444;
+  --color-krishna-cream: #f5f0e8;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--krishna-bg);
+  color: var(--krishna-cream);
+  font-family: system-ui, sans-serif;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
