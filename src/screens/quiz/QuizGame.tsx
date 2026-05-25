@@ -13,7 +13,7 @@ export function QuizGame({ onExit }: Props) {
     currentIndex: 0,
     score: 0,
     answered: false,
-    selectedIndex: null,
+    selectedIndex: null as number | null,
   }));
   const [showResult, setShowResult] = useState(false);
 
