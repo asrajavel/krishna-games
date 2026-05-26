@@ -1,4 +1,6 @@
+import { useCallback } from "react";
 import { GameCard } from "../components/GameCard";
+import { useInput } from "../hooks/useInput";
 
 interface Props {
   onStartQuiz: () => void;
@@ -17,6 +19,9 @@ const PARTICLES = Array.from({ length: 20 }, (_, i) => {
 });
 
 export function HomeScreen({ onStartQuiz }: Props) {
+  const noop = useCallback(() => {}, []);
+  useInput({ onUp: noop, onDown: noop, onSelect: onStartQuiz });
+
   return (
     <div className="w-full h-full flex flex-col items-center justify-center gap-12 p-8 relative">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">

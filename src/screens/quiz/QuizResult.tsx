@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { useInput } from "../../hooks/useInput";
 
 interface Props {
   score: number;
@@ -10,6 +11,9 @@ const AUTO_RESET_SECONDS = 10;
 
 export function QuizResult({ score, total, onDone }: Props) {
   const [countdown, setCountdown] = useState(AUTO_RESET_SECONDS);
+
+  const noop = useCallback(() => {}, []);
+  useInput({ onUp: noop, onDown: noop, onSelect: onDone });
 
   useEffect(() => {
     const interval = setInterval(() => {
