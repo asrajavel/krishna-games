@@ -48,8 +48,9 @@ export function useInput({ onUp, onDown, onSelect, enabled = true }: UseInputOpt
   useEffect(() => {
     if (!enabled) return;
     let rafId: number;
-    let prevButtons: boolean[] = [];
-    let prevAxes: number[] = [];
+    const gp0 = navigator.getGamepads()[0];
+    let prevButtons: boolean[] = gp0 ? gp0.buttons.map((b) => b.pressed) : [];
+    let prevAxes: number[] = gp0 ? [...gp0.axes] : [];
 
     const poll = () => {
       const gp = navigator.getGamepads()[0];
