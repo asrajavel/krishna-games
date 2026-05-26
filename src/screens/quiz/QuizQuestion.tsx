@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import type { Question } from "../../types";
 import { Timer } from "../../components/Timer";
+import { NextQuestionTimerShowcase } from "../../components/NextQuestionTimerShowcase";
 import { useInput } from "../../hooks/useInput";
 
 const TIME_PER_QUESTION_MS = 15000;
@@ -90,6 +91,7 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
             )
           )}
         </div>
+        <NextQuestionTimerShowcase durationMs={4000} active={answered} />
       </div>
     </div>
   );
