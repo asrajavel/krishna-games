@@ -44,7 +44,7 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
   };
 
   return (
-    <div className="w-full h-full flex">
+    <div className="w-full h-full flex relative">
       {question.image && (
         <div className="w-1/4 h-full border-r border-white/10">
           <img
@@ -77,7 +77,7 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
             </button>
           ))}
         </div>
-        <div className="w-full max-w-2xl h-32 flex flex-col items-center justify-center gap-3">
+        <div className="w-full max-w-2xl h-20 flex flex-col items-center justify-center gap-1">
           <div className="text-3xl font-bold flex flex-col items-center gap-1">
             {answered && (
               selectedIndex === question.correctIndex ? (
@@ -92,8 +92,8 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
               )
             )}
           </div>
-          <NextQuestionTimer durationMs={4000} active={answered} />
         </div>
+        <NextQuestionTimer durationMs={4000} active={answered} />
       </div>
     </div>
   );
