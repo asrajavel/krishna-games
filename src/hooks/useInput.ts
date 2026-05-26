@@ -8,7 +8,7 @@ interface UseInputOptions {
 }
 
 export function useInput({ onUp, onDown, onSelect, enabled = true }: UseInputOptions) {
-  const lastInputTime = useRef(0);
+  const lastInputTime = useRef(Date.now());
   const DEBOUNCE_MS = 200;
 
   const debounced = useCallback((fn: () => void) => {

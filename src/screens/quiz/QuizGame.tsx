@@ -26,7 +26,7 @@ export function QuizGame({ onExit }: Props) {
     setTimeout(() => {
       setState((prev) => {
         const nextIndex = prev.currentIndex + 1;
-        if (nextIndex >= QUESTIONS.length) {
+        if (nextIndex >= prev.questions.length) {
           setShowResult(true);
           return prev;
         }
