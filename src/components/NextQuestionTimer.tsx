@@ -25,7 +25,7 @@ export function NextQuestionTimer({ durationMs, active }: Props) {
   const seconds = Math.ceil((durationMs - elapsed) / 1000);
 
   return (
-    <div className="flex items-center gap-3 w-full">
+    <div className={`flex items-center gap-3 w-full transition-opacity duration-200 ${active ? "opacity-100" : "opacity-0"}`}>
       <div className="flex-1 h-3 bg-white/10 rounded-full overflow-hidden">
         <div
           className="h-full bg-krishna-gold rounded-full transition-all duration-100"
