@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import type { Question } from "../../types";
 import { Timer } from "../../components/Timer";
-import { NextQuestionTimerShowcase } from "../../components/NextQuestionTimerShowcase";
+import { NextQuestionTimer } from "../../components/NextQuestionTimer";
 import { useInput } from "../../hooks/useInput";
 
 const TIME_PER_QUESTION_MS = 15000;
@@ -77,21 +77,23 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
             </button>
           ))}
         </div>
-        <div className="text-3xl font-bold h-20 flex flex-col items-center justify-center">
-          {answered && (
-            selectedIndex === question.correctIndex ? (
-              <span className="text-krishna-correct">Correct!</span>
-            ) : selectedIndex === null ? (
-              <span className="text-krishna-wrong">Time's up!</span>
-            ) : (
-              <>
-                <span className="text-krishna-wrong">Wrong!</span>
-                <span className="text-krishna-correct text-2xl">Correct: {question.options[question.correctIndex]}</span>
-              </>
-            )
-          )}
+        <div className="w-full max-w-2xl h-32 flex flex-col items-center justify-center gap-3">
+          <div className="text-3xl font-bold flex flex-col items-center gap-1">
+            {answered && (
+              selectedIndex === question.correctIndex ? (
+                <span className="text-krishna-correct">Correct!</span>
+              ) : selectedIndex === null ? (
+                <span className="text-krishna-wrong">Time's up!</span>
+              ) : (
+                <>
+                  <span className="text-krishna-wrong">Wrong!</span>
+                  <span className="text-krishna-correct text-2xl">Correct: {question.options[question.correctIndex]}</span>
+                </>
+              )
+            )}
+          </div>
+          <NextQuestionTimer durationMs={4000} active={answered} />
         </div>
-        <NextQuestionTimerShowcase durationMs={4000} active={answered} />
       </div>
     </div>
   );
