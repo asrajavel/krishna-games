@@ -4,6 +4,7 @@ import { useInput } from "../hooks/useInput";
 
 interface Props {
   onStartQuiz: () => void;
+  onStartKurukshetra: () => void;
 }
 
 const PARTICLES = Array.from({ length: 20 }, (_, i) => {
@@ -18,7 +19,7 @@ const PARTICLES = Array.from({ length: 20 }, (_, i) => {
   };
 });
 
-export function HomeScreen({ onStartQuiz }: Props) {
+export function HomeScreen({ onStartQuiz, onStartKurukshetra }: Props) {
   const noop = useCallback(() => {}, []);
   useInput({ onUp: noop, onDown: noop, onSelect: onStartQuiz });
 
@@ -53,6 +54,13 @@ export function HomeScreen({ onStartQuiz }: Props) {
           emoji="🪷"
           available={true}
           onClick={onStartQuiz}
+        />
+        <GameCard
+          title="Kurukshetra"
+          description="Arjuna's Resolve"
+          emoji="⚔️"
+          available={true}
+          onClick={onStartKurukshetra}
         />
         <GameCard
           title="Coming Soon"
