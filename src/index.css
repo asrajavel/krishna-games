@@ -56,23 +56,6 @@ body {
   animation: pulse-glow 2.5s ease-in-out infinite;
 }
 
-.shimmer-bar {
-  background: repeating-linear-gradient(
-    60deg,
-    #ffd700 0px,
-    #ffd700 12px,
-    #00d4ff 12px,
-    #00d4ff 24px
-  );
-  background-size: 34px 100%;
-  animation: shimmer-bar-scroll 0.6s linear infinite;
-}
-
-@keyframes shimmer-bar-scroll {
-  0% { background-position: 0 0; }
-  100% { background-position: 34px 0; }
-}
-
 .particle {
   position: absolute;
   border-radius: 50%;

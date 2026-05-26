@@ -6,7 +6,7 @@ interface Props {
   onDone: () => void;
 }
 
-const AUTO_RESET_SECONDS = 5;
+const AUTO_RESET_SECONDS = 10;
 
 export function QuizResult({ score, total, onDone }: Props) {
   const [countdown, setCountdown] = useState(AUTO_RESET_SECONDS);
