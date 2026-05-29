@@ -33,7 +33,7 @@ Run the full setup:
 ```bash
 # Install packages
 sudo apt update
-sudo apt install -y chromium-browser xserver-xorg xinit x11-xserver-utils unclutter
+sudo apt install -y --no-install-recommends xserver-xorg xinit x11-xserver-utils unclutter chromium-browser
 
 # Install Node.js (for building the app on the Pi)
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash -
