@@ -1,16 +1,14 @@
 #!/bin/bash
 # Krishna Games Kiosk - Pi Zero 2 W setup
 # Safe to re-run — skips steps that are already done.
-#   chmod +x setup-kiosk.sh && ./setup-kiosk.sh
-
 set -e
 
 echo "=== Krishna Games Kiosk Setup ==="
 
-# 1. Add swap if not present (Pi Zero 2 W has only 512MB RAM — Chromium warns below 1GB)
+# 1. Add swap if not present (Pi Zero 2 W has only 512MB RAM)
 if [ ! -f /swapfile ]; then
   echo ">>> Creating 512MB swap file..."
-  sudo fallocate -l 512M /swapfile
+  sudo dd if=/dev/zero of=/swapfile bs=1M count=512 status=progress
   sudo chmod 600 /swapfile
   sudo mkswap /swapfile
   sudo swapon /swapfile
@@ -19,7 +17,7 @@ else
   echo ">>> Swap already configured, skipping."
 fi
 
-# 2. Install minimal display packages (apt skips already-installed)
+# 2. Install packages
 echo ">>> Installing packages..."
 sudo apt update
 sudo apt install -y --no-install-recommends xserver-xorg xinit x11-xserver-utils unclutter chromium git xdotool
@@ -54,40 +52,57 @@ fi
 echo ">>> Building..."
 npm run build
 
-# 5. Enable auto-login on console (no keyboard needed at boot)
+# 5. Enable auto-login on console
 echo ">>> Enabling console auto-login..."
 sudo raspi-config nonint do_boot_behaviour B2
 
-# 6. Create X startup config
-echo ">>> Configuring kiosk display..."
-cat > ~/.xinitrc << EOF
+# 6. Create boot script (pulls, rebuilds, generates xinitrc, launches)
+cat > ~/start-kiosk.sh << 'BOOTEOF'
+#!/bin/sh
+cd ~/krishna-games
+
+# Pull latest code if network available
+if git pull origin master --ff-only 2>/dev/null | grep -v "Already up to date"; then
+  npm install --production=false 2>/dev/null
+  npm run build
+fi
+
+# Clear Chromium crash flags so "Restore pages?" never appears
+PREFS="$HOME/.config/chromium/Default/Preferences"
+if [ -f "$PREFS" ]; then
+  sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' "$PREFS"
+  sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' "$PREFS"
+fi
+
+# Generate xinitrc fresh each boot
+cat > ~/.xinitrc << XEOF
 #!/bin/sh
 xset s off
 xset -dpms
 xset s noblank
 unclutter -idle 0 &
-chromium --kiosk --disable-infobars --noerrdialogs \
-  --disable-translate --no-first-run --incognito \
-  --disk-cache-dir=/dev/null --disable-pinch \
-  file://$HOME/krishna-games/dist/index.html &
-sleep 5
-xdotool key Tab Return
-wait
-EOF
 
-# 7. Create boot script (pulls + rebuilds if changed, then launches)
-cat > ~/start-kiosk.sh << 'EOF'
-#!/bin/sh
-cd ~/krishna-games
-if git pull origin master --ff-only 2>/dev/null | grep -v "Already up to date"; then
-  npm install --production=false 2>/dev/null
-  npm run build
-fi
+# Restart Chromium automatically if it crashes
+while true; do
+  chromium --kiosk --disable-infobars --noerrdialogs \
+    --disable-translate --no-first-run --incognito \
+    --disable-session-crashed-bubble \
+    --disable-gpu \
+    --disk-cache-dir=/dev/null --disable-pinch \
+    file://$HOME/krishna-games/dist/index.html &
+  CHROME_PID=\$!
+  sleep 5
+  xdotool key Tab Return 2>/dev/null
+  wait \$CHROME_PID
+  sleep 2
+done
+XEOF
+
 startx
-EOF
+BOOTEOF
 chmod +x ~/start-kiosk.sh
 
-# 8. Auto-start on boot (only on physical console, not SSH)
+# 7. Auto-start on boot (only on physical console, not SSH)
 if ! grep -q "start-kiosk" ~/.bash_profile 2>/dev/null; then
   echo '[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && ~/start-kiosk.sh' >> ~/.bash_profile
 else
