@@ -113,7 +113,9 @@ sleep 1
 echo "--- Memory before launch ---"
 free -m
 
-chromium --kiosk --disable-infobars --noerrdialogs \
+chromium --disable-infobars --noerrdialogs \
+  --start-fullscreen --start-maximized \
+  --window-size=1920,1080 --window-position=0,0 \
   --disable-translate --no-first-run \
   --disable-session-crashed-bubble \
   --disable-gpu \
@@ -131,11 +133,25 @@ chromium --kiosk --disable-infobars --noerrdialogs \
   --disable-pinch \
   file://$HOME/krishna-games/dist/test.html &
 
-sleep 10
+sleep 8
+
+# Force Chromium window to cover full screen
+WID=\$(xdotool search --onlyvisible --name "" | head -1)
+if [ -n "\$WID" ]; then
+  echo "Found window: \$WID — forcing fullscreen"
+  xdotool windowactivate "\$WID"
+  xdotool windowmove "\$WID" 0 0
+  xdotool windowsize "\$WID" 1920 1080
+  xdotool key F11
+fi
+
+sleep 2
 echo "--- Memory after launch ---"
 free -m
 echo "--- Chromium processes ---"
 ps aux | grep chromium
+echo "--- Window info ---"
+xdotool getactivewindow getwindowgeometry 2>/dev/null || echo "no active window"
 xdotool key Tab Return 2>/dev/null
 wait
 XEOF
