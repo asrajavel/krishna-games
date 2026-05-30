@@ -5,16 +5,29 @@ set -e
 
 echo "=== Krishna Games Kiosk Setup ==="
 
-# 1. Add swap if not present (Pi Zero 2 W has only 512MB RAM)
+# 1. Add swap (1GB — Chromium needs it on 512MB Pi)
 if [ ! -f /swapfile ]; then
-  echo ">>> Creating 512MB swap file..."
-  sudo dd if=/dev/zero of=/swapfile bs=1M count=512 status=progress
+  echo ">>> Creating 1GB swap file..."
+  sudo dd if=/dev/zero of=/swapfile bs=1M count=1024 status=progress
   sudo chmod 600 /swapfile
   sudo mkswap /swapfile
   sudo swapon /swapfile
   echo '/swapfile swap swap defaults 0 0' | sudo tee -a /etc/fstab
+elif [ "$(stat -c%s /swapfile 2>/dev/null)" -lt 1000000000 ]; then
+  echo ">>> Upgrading swap to 1GB..."
+  sudo swapoff /swapfile 2>/dev/null || true
+  sudo dd if=/dev/zero of=/swapfile bs=1M count=1024 status=progress
+  sudo chmod 600 /swapfile
+  sudo mkswap /swapfile
+  sudo swapon /swapfile
 else
-  echo ">>> Swap already configured, skipping."
+  echo ">>> Swap already configured (1GB), skipping."
+fi
+
+# Enlarge /dev/shm for Chromium (default may be too small)
+if ! grep -q '/dev/shm' /etc/fstab 2>/dev/null; then
+  echo 'tmpfs /dev/shm tmpfs defaults,size=256M 0 0' | sudo tee -a /etc/fstab
+  sudo mount -o remount /dev/shm 2>/dev/null || true
 fi
 
 # 2. Install packages
@@ -77,27 +90,52 @@ fi
 # Generate xinitrc fresh each boot
 cat > ~/.xinitrc << XEOF
 #!/bin/sh
+exec > /tmp/kiosk-debug.log 2>&1
+echo "=== KIOSK DEBUG LOG ==="
+date
+echo "--- Memory before Chromium ---"
+free -m
+echo "--- /dev/shm ---"
+df -h /dev/shm
+echo "--- Screen info ---"
+xrandr 2>/dev/null || echo "xrandr not available"
+echo "=============================="
+
 xset s off
 xset -dpms
 xset s noblank
 unclutter -idle 0 &
 
+# Kill any prior Chromium to free RAM
+killall chromium 2>/dev/null || true
+sleep 1
+
+echo "--- Memory before launch ---"
+free -m
+
 chromium --kiosk --disable-infobars --noerrdialogs \
-  --disable-translate --no-first-run --incognito \
+  --disable-translate --no-first-run \
   --disable-session-crashed-bubble \
-  --disable-gpu --disable-software-rasterizer \
+  --disable-gpu \
   --disable-dev-shm-usage \
   --disable-extensions \
   --disable-background-networking \
   --disable-sync \
   --disable-default-apps \
+  --disable-component-update \
+  --disable-domain-reliability \
   --no-sandbox \
-  --js-flags="--max-old-space-size=128" \
+  --single-process \
   --renderer-process-limit=1 \
   --disk-cache-dir=/dev/null --disk-cache-size=1 \
   --disable-pinch \
   file://$HOME/krishna-games/dist/test.html &
-sleep 5
+
+sleep 10
+echo "--- Memory after launch ---"
+free -m
+echo "--- Chromium processes ---"
+ps aux | grep chromium
 xdotool key Tab Return 2>/dev/null
 wait
 XEOF
