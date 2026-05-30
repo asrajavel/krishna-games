@@ -85,9 +85,18 @@ unclutter -idle 0 &
 chromium --kiosk --disable-infobars --noerrdialogs \
   --disable-translate --no-first-run --incognito \
   --disable-session-crashed-bubble \
-  --disable-gpu \
-  --disk-cache-dir=/dev/null --disable-pinch \
-  file://$HOME/krishna-games/dist/index.html &
+  --disable-gpu --disable-software-rasterizer \
+  --disable-dev-shm-usage \
+  --disable-extensions \
+  --disable-background-networking \
+  --disable-sync \
+  --disable-default-apps \
+  --no-sandbox \
+  --js-flags="--max-old-space-size=128" \
+  --renderer-process-limit=1 \
+  --disk-cache-dir=/dev/null --disk-cache-size=1 \
+  --disable-pinch \
+  file://$HOME/krishna-games/dist/test.html &
 sleep 5
 xdotool key Tab Return 2>/dev/null
 wait
