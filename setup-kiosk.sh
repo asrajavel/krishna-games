@@ -22,7 +22,7 @@ fi
 # 2. Install minimal display packages (apt skips already-installed)
 echo ">>> Installing packages..."
 sudo apt update
-sudo apt install -y --no-install-recommends xserver-xorg xinit x11-xserver-utils unclutter chromium git
+sudo apt install -y --no-install-recommends xserver-xorg xinit x11-xserver-utils unclutter chromium git xdotool
 
 # 3. Install Node.js if not already present
 if ! command -v node &>/dev/null; then
@@ -68,8 +68,11 @@ xset s noblank
 unclutter -idle 0 &
 chromium --kiosk --disable-infobars --noerrdialogs \
   --disable-translate --no-first-run --incognito \
-  --disk-cache-dir=/dev/null --disable-pinch --no-memcheck \
-  file://$HOME/krishna-games/dist/index.html
+  --disk-cache-dir=/dev/null --disable-pinch \
+  file://$HOME/krishna-games/dist/index.html &
+sleep 5
+xdotool key Tab Return
+wait
 EOF
 
 # 7. Create boot script (pulls + rebuilds if changed, then launches)
