@@ -82,20 +82,15 @@ xset -dpms
 xset s noblank
 unclutter -idle 0 &
 
-# Restart Chromium automatically if it crashes
-while true; do
-  chromium --kiosk --disable-infobars --noerrdialogs \
-    --disable-translate --no-first-run --incognito \
-    --disable-session-crashed-bubble \
-    --disable-gpu \
-    --disk-cache-dir=/dev/null --disable-pinch \
-    file://$HOME/krishna-games/dist/index.html &
-  CHROME_PID=\$!
-  sleep 5
-  xdotool key Tab Return 2>/dev/null
-  wait \$CHROME_PID
-  sleep 2
-done
+chromium --kiosk --disable-infobars --noerrdialogs \
+  --disable-translate --no-first-run --incognito \
+  --disable-session-crashed-bubble \
+  --disable-gpu \
+  --disk-cache-dir=/dev/null --disable-pinch \
+  file://$HOME/krishna-games/dist/index.html &
+sleep 5
+xdotool key Tab Return 2>/dev/null
+wait
 XEOF
 
 startx
