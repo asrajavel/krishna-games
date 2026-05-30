@@ -126,7 +126,6 @@ chromium --disable-infobars --noerrdialogs \
   --disable-default-apps \
   --disable-component-update \
   --disable-domain-reliability \
-  --single-process \
   --renderer-process-limit=1 \
   --disk-cache-dir=/dev/null --disk-cache-size=1 \
   --disable-pinch \
