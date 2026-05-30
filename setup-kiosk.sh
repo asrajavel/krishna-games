@@ -10,7 +10,7 @@ echo "=== Krishna Games Kiosk Setup ==="
 # 1. Install minimal display packages
 echo ">>> Installing display packages..."
 sudo apt update
-sudo apt install -y --no-install-recommends xserver-xorg xinit x11-xserver-utils unclutter chromium
+sudo apt install -y --no-install-recommends xserver-xorg xinit x11-xserver-utils unclutter chromium git
 
 # 2. Install Node.js for building the app
 echo ">>> Installing Node.js..."
