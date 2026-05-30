@@ -126,12 +126,11 @@ chromium --disable-infobars --noerrdialogs \
   --disable-default-apps \
   --disable-component-update \
   --disable-domain-reliability \
-  --no-sandbox \
   --single-process \
   --renderer-process-limit=1 \
   --disk-cache-dir=/dev/null --disk-cache-size=1 \
   --disable-pinch \
-  file://$HOME/krishna-games/dist/test.html &
+  file://$HOME/krishna-games/dist/index.html &
 
 sleep 8
 
