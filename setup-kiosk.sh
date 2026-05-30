@@ -42,7 +42,11 @@ fi
 echo ">>> Building..."
 npm run build
 
-# 4. Create X startup config
+# 4. Enable auto-login on console (no keyboard needed at boot)
+echo ">>> Enabling console auto-login..."
+sudo raspi-config nonint do_boot_behaviour B2
+
+# 5. Create X startup config
 echo ">>> Configuring kiosk display..."
 cat > ~/.xinitrc << 'EOF'
 #!/bin/sh
@@ -56,7 +60,7 @@ chromium --kiosk --disable-infobars --noerrdialogs \
   file:///home/pi/krishna-games/dist/index.html
 EOF
 
-# 5. Create boot script (pulls + rebuilds if changed, then launches)
+# 6. Create boot script (pulls + rebuilds if changed, then launches)
 cat > ~/start-kiosk.sh << 'EOF'
 #!/bin/sh
 cd ~/krishna-games
@@ -68,7 +72,7 @@ startx
 EOF
 chmod +x ~/start-kiosk.sh
 
-# 6. Auto-start on boot (only on physical console, not SSH)
+# 7. Auto-start on boot (only on physical console, not SSH)
 if ! grep -q "start-kiosk" ~/.bash_profile 2>/dev/null; then
   echo '[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && ~/start-kiosk.sh' >> ~/.bash_profile
 else
