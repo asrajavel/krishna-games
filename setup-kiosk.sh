@@ -48,7 +48,7 @@ sudo raspi-config nonint do_boot_behaviour B2
 
 # 5. Create X startup config
 echo ">>> Configuring kiosk display..."
-cat > ~/.xinitrc << 'EOF'
+cat > ~/.xinitrc << EOF
 #!/bin/sh
 xset s off
 xset -dpms
@@ -57,7 +57,7 @@ unclutter -idle 0 &
 chromium --kiosk --disable-infobars --noerrdialogs \
   --disable-translate --no-first-run --incognito \
   --disk-cache-dir=/dev/null --disable-pinch \
-  file:///home/pi/krishna-games/dist/index.html
+  file://$HOME/krishna-games/dist/index.html
 EOF
 
 # 6. Create boot script (pulls + rebuilds if changed, then launches)

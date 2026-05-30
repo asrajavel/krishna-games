@@ -55,7 +55,7 @@ unclutter -idle 0 &
 chromium --kiosk --disable-infobars --noerrdialogs \
   --disable-translate --no-first-run --incognito \
   --disk-cache-dir=/dev/null --disable-pinch \
-  file:///home/pi/krishna-games/dist/index.html
+  file:///home/krishnagames/krishna-games/dist/index.html
 XEOF
 
 # Create boot script (pulls latest + rebuilds if changed)
