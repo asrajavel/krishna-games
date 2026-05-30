@@ -7,12 +7,24 @@ set -e
 
 echo "=== Krishna Games Kiosk Setup ==="
 
-# 1. Install minimal display packages (apt skips already-installed)
+# 1. Add swap if not present (Pi Zero 2 W has only 512MB RAM — Chromium warns below 1GB)
+if [ ! -f /swapfile ]; then
+  echo ">>> Creating 512MB swap file..."
+  sudo fallocate -l 512M /swapfile
+  sudo chmod 600 /swapfile
+  sudo mkswap /swapfile
+  sudo swapon /swapfile
+  echo '/swapfile swap swap defaults 0 0' | sudo tee -a /etc/fstab
+else
+  echo ">>> Swap already configured, skipping."
+fi
+
+# 2. Install minimal display packages (apt skips already-installed)
 echo ">>> Installing packages..."
 sudo apt update
 sudo apt install -y --no-install-recommends xserver-xorg xinit x11-xserver-utils unclutter chromium git
 
-# 2. Install Node.js if not already present
+# 3. Install Node.js if not already present
 if ! command -v node &>/dev/null; then
   echo ">>> Installing Node.js..."
   curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash -
@@ -21,7 +33,7 @@ else
   echo ">>> Node.js already installed ($(node -v)), skipping."
 fi
 
-# 3. Clone repo if not already cloned, then build
+# 4. Clone repo if not already cloned, then build
 if [ ! -d ~/krishna-games/.git ]; then
   echo ">>> Cloning krishna-games..."
   git clone https://github.com/asrajavel/krishna-games.git ~/krishna-games
@@ -42,11 +54,11 @@ fi
 echo ">>> Building..."
 npm run build
 
-# 4. Enable auto-login on console (no keyboard needed at boot)
+# 5. Enable auto-login on console (no keyboard needed at boot)
 echo ">>> Enabling console auto-login..."
 sudo raspi-config nonint do_boot_behaviour B2
 
-# 5. Create X startup config
+# 6. Create X startup config
 echo ">>> Configuring kiosk display..."
 cat > ~/.xinitrc << EOF
 #!/bin/sh
@@ -56,11 +68,11 @@ xset s noblank
 unclutter -idle 0 &
 chromium --kiosk --disable-infobars --noerrdialogs \
   --disable-translate --no-first-run --incognito \
-  --disk-cache-dir=/dev/null --disable-pinch \
+  --disk-cache-dir=/dev/null --disable-pinch --no-memcheck \
   file://$HOME/krishna-games/dist/index.html
 EOF
 
-# 6. Create boot script (pulls + rebuilds if changed, then launches)
+# 7. Create boot script (pulls + rebuilds if changed, then launches)
 cat > ~/start-kiosk.sh << 'EOF'
 #!/bin/sh
 cd ~/krishna-games
@@ -72,7 +84,7 @@ startx
 EOF
 chmod +x ~/start-kiosk.sh
 
-# 7. Auto-start on boot (only on physical console, not SSH)
+# 8. Auto-start on boot (only on physical console, not SSH)
 if ! grep -q "start-kiosk" ~/.bash_profile 2>/dev/null; then
   echo '[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && ~/start-kiosk.sh' >> ~/.bash_profile
 else
