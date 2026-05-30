@@ -10,7 +10,7 @@ echo "=== Krishna Games Kiosk Setup ==="
 # 1. Install minimal display packages
 echo ">>> Installing display packages..."
 sudo apt update
-sudo apt install -y --no-install-recommends xserver-xorg xinit x11-xserver-utils unclutter chromium-browser
+sudo apt install -y --no-install-recommends xserver-xorg xinit x11-xserver-utils unclutter chromium
 
 # 2. Install Node.js for building the app
 echo ">>> Installing Node.js..."
@@ -32,7 +32,7 @@ xset s off
 xset -dpms
 xset s noblank
 unclutter -idle 0 &
-chromium-browser --kiosk --disable-infobars --noerrdialogs \
+chromium --kiosk --disable-infobars --noerrdialogs \
   --disable-translate --no-first-run --incognito \
   --disk-cache-dir=/dev/null --disable-pinch \
   file:///home/pi/krishna-games/dist/index.html
