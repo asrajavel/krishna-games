@@ -45,7 +45,6 @@ export function QuizGame({ onExit }: Props) {
       questionNumber={state.currentIndex + 1}
       totalQuestions={QUESTIONS.length}
       onAnswer={handleAnswer}
-      onExit={onExit}
       answered={state.answered}
       selectedIndex={state.selectedIndex}
     />

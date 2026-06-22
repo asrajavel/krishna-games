@@ -75,23 +75,20 @@ export function DasavatarGame({ onExit }: Props) {
   }, []);
 
   return (
-    <div className="w-full h-full flex flex-col gap-6 p-8 relative bg-game-bg text-game-text">
-      <header className="flex items-start justify-between gap-8">
+    <div className="w-full h-full flex flex-col gap-5 p-8 pt-10 relative bg-game-bg text-game-text">
+      <div className="absolute inset-x-0 top-0 z-20">
+        <Timer
+          durationMs={GAME_DURATION_MS}
+          onExpire={handleExpire}
+          paused={!isGameActive}
+          variant="edge"
+        />
+      </div>
+
+      <header>
         <div className="flex-1">
           <h1 className="text-5xl font-extrabold text-game-accent">Match the Dasavatar</h1>
-          <p className="text-xl text-slate-300 mt-1 mb-4">Drag each name to the correct picture.</p>
-          <div className="w-full max-w-2xl">
-            <Timer durationMs={GAME_DURATION_MS} onExpire={handleExpire} paused={!isGameActive} />
-          </div>
-        </div>
-        <div className="text-right">
-          <button
-            onClick={onExit}
-            tabIndex={-1}
-            className="px-5 py-2 rounded-xl border border-slate-600 bg-slate-800/80 text-slate-200 text-lg shadow-sm hover:border-game-accent hover:text-game-accent"
-          >
-            Home
-          </button>
+          <p className="text-xl text-slate-300 mt-1">Drag each name to the correct picture.</p>
         </div>
       </header>
 

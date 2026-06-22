@@ -10,14 +10,13 @@ interface Props {
   questionNumber: number;
   totalQuestions: number;
   onAnswer: (selectedIndex: number | null) => void;
-  onExit: () => void;
   answered: boolean;
   selectedIndex: number | null;
 }
 
 const LABELS = ["A", "B", "C", "D"];
 
-export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswer, onExit, answered, selectedIndex }: Props) {
+export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswer, answered, selectedIndex }: Props) {
   const handleExpire = useCallback(() => { if (!answered) onAnswer(null); }, [answered, onAnswer]);
 
   const optionStyle = (index: number) => {
@@ -32,13 +31,15 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
 
   return (
     <div className="w-full h-full flex bg-game-bg text-game-text relative">
-      <button
-        onClick={onExit}
-        tabIndex={-1}
-        className="absolute top-8 right-8 z-10 px-5 py-2 rounded-xl border border-slate-600 bg-slate-800/80 text-slate-200 text-lg shadow-sm hover:border-game-accent hover:text-game-accent"
-      >
-        Home
-      </button>
+      <div className="absolute inset-x-0 top-0 z-20">
+        <Timer
+          key={question.id}
+          durationMs={TIME_PER_QUESTION_MS}
+          onExpire={handleExpire}
+          paused={answered}
+          variant="edge"
+        />
+      </div>
       {question.image && (
         <div className="w-1/4 h-full p-6">
           <img
@@ -51,9 +52,6 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
       <div className={`${question.image ? "w-3/4" : "w-full"} h-full flex flex-col items-center justify-center p-8 gap-6`}>
         <div className="text-game-accent text-2xl font-semibold">
           Question {questionNumber} of {totalQuestions}
-        </div>
-        <div className="w-full max-w-2xl">
-          <Timer key={question.id} durationMs={TIME_PER_QUESTION_MS} onExpire={handleExpire} paused={answered} />
         </div>
         <div className="w-full max-w-3xl rounded-3xl border border-slate-700 bg-game-panel p-8 shadow-xl">
           <h2 className="text-4xl font-bold text-center leading-tight">

@@ -4,9 +4,10 @@ interface Props {
   durationMs: number;
   onExpire: () => void;
   paused?: boolean;
+  variant?: "default" | "edge";
 }
 
-export function Timer({ durationMs, onExpire, paused = false }: Props) {
+export function Timer({ durationMs, onExpire, paused = false, variant = "default" }: Props) {
   const [elapsed, setElapsed] = useState(0);
 
   useEffect(() => {
@@ -31,6 +32,20 @@ export function Timer({ durationMs, onExpire, paused = false }: Props) {
     progress > 0.6 ? "bg-krishna-gold" :
     progress > 0.3 ? "bg-krishna-green" :
     "bg-krishna-wrong";
+
+  if (variant === "edge") {
+    return (
+      <div className="relative h-3 w-full bg-white/10 overflow-visible shadow-[0_4px_18px_rgba(0,0,0,0.35)]">
+        <div
+          className={`h-full ${color} transition-all duration-100`}
+          style={{ width: `${progress * 100}%` }}
+        />
+        <span className="absolute right-6 top-3 rounded-b-xl border-x border-b border-slate-700 bg-game-panel px-4 py-1 text-xl font-extrabold text-krishna-cream shadow-lg">
+          {seconds}s
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full flex items-center gap-4">
