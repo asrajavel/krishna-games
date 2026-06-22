@@ -1,8 +1,7 @@
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 import type { Question } from "../../types";
 import { Timer } from "../../components/Timer";
 import { NextQuestionTimer } from "../../components/NextQuestionTimer";
-import { useInput } from "../../hooks/useInput";
 
 const TIME_PER_QUESTION_MS = 15000;
 
@@ -11,32 +10,14 @@ interface Props {
   questionNumber: number;
   totalQuestions: number;
   onAnswer: (selectedIndex: number | null) => void;
+  onExit: () => void;
   answered: boolean;
   selectedIndex: number | null;
 }
 
 const LABELS = ["A", "B", "C", "D"];
 
-export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswer, answered, selectedIndex }: Props) {
-  const [selection, setSelection] = useState({ questionId: question.id, highlightedIndex: 0 });
-  const highlightedIndex = selection.questionId === question.id ? selection.highlightedIndex : 0;
-
-  const handleUp = useCallback(() => {
-    setSelection((prev) => {
-      const current = prev.questionId === question.id ? prev.highlightedIndex : 0;
-      return { questionId: question.id, highlightedIndex: current > 0 ? current - 1 : 3 };
-    });
-  }, [question.id]);
-  const handleDown = useCallback(() => {
-    setSelection((prev) => {
-      const current = prev.questionId === question.id ? prev.highlightedIndex : 0;
-      return { questionId: question.id, highlightedIndex: current < 3 ? current + 1 : 0 };
-    });
-  }, [question.id]);
-  const handleSelect = useCallback(() => { if (!answered) onAnswer(highlightedIndex); }, [answered, highlightedIndex, onAnswer]);
-
-  useInput({ onUp: handleUp, onDown: handleDown, onSelect: handleSelect, enabled: !answered });
-
+export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswer, onExit, answered, selectedIndex }: Props) {
   const handleExpire = useCallback(() => { if (!answered) onAnswer(null); }, [answered, onAnswer]);
 
   const optionStyle = (index: number) => {
@@ -46,12 +27,18 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
       if (index === selectedIndex) return `${base} bg-game-wrong/15 border-game-wrong text-game-wrong-soft`;
       return `${base} bg-slate-900 border-slate-800 text-slate-500`;
     }
-    if (index === highlightedIndex) return `${base} bg-game-panel-hover border-game-accent text-game-text shadow-[0_16px_36px_rgba(245,158,11,0.18)]`;
     return `${base} bg-game-panel border-slate-700 text-game-text hover:border-slate-500 hover:bg-game-panel-hover`;
   };
 
   return (
-    <div className="w-full h-full flex bg-game-bg text-game-text">
+    <div className="w-full h-full flex bg-game-bg text-game-text relative">
+      <button
+        onClick={onExit}
+        tabIndex={-1}
+        className="absolute top-8 right-8 z-10 px-5 py-2 rounded-xl border border-slate-600 bg-slate-800/80 text-slate-200 text-lg shadow-sm hover:border-game-accent hover:text-game-accent"
+      >
+        Home
+      </button>
       {question.image && (
         <div className="w-1/4 h-full p-6">
           <img
@@ -80,6 +67,7 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
               className={optionStyle(index)}
               onClick={() => !answered && onAnswer(index)}
               disabled={answered}
+              tabIndex={-1}
             >
               <span className="text-game-accent mr-4">{LABELS[index]}.</span>
               {option}

@@ -23,7 +23,7 @@ Single-page React app with useState-based screen switching (no router). Screen s
 
 **Screen flow:** HomeScreen → QuizGame → QuizQuestion (×5) → QuizResult → auto-reset to Home (5s)
 
-**Input:** `useInput` hook normalizes keyboard (arrows, WASD, Enter/Space) and gamepad (d-pad, analog stick, buttons) into `onUp`/`onDown`/`onSelect` callbacks with 200ms debounce. Quiz options are both tappable and keyboard-navigable.
+**Input:** Kiosk UI is mouse driven only. No need to add keyboard navigation
 
 ## Tailwind CSS v4
 

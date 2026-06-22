@@ -87,6 +87,7 @@ export function DasavatarGame({ onExit }: Props) {
         <div className="text-right">
           <button
             onClick={onExit}
+            tabIndex={-1}
             className="px-5 py-2 rounded-xl border border-slate-600 bg-slate-800/80 text-slate-200 text-lg shadow-sm hover:border-game-accent hover:text-game-accent"
           >
             Home
@@ -157,6 +158,7 @@ export function DasavatarGame({ onExit }: Props) {
                 setHoveredTargetId(null);
               }}
               disabled={isPlaced || !isGameActive}
+              tabIndex={-1}
               className={`
                 px-6 py-3 rounded-xl border text-2xl font-extrabold transition-all shadow-sm
                 ${wrongId === avatar.id ? "shake border-game-wrong bg-game-wrong/20 text-white" : ""}
@@ -186,6 +188,7 @@ export function DasavatarGame({ onExit }: Props) {
           </div>
           <button
             onClick={onExit}
+            tabIndex={-1}
             className="mt-4 px-8 py-4 bg-slate-800 border border-game-accent rounded-xl text-game-accent text-xl hover:bg-game-panel-hover shadow-lg"
           >
             Back to Home

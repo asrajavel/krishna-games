@@ -12,6 +12,7 @@ export function GameCard({ title, description, emoji, imageSrc, available, onCli
     <button
       onClick={available ? onClick : undefined}
       disabled={!available}
+      tabIndex={-1}
       className={`
         w-64 h-72 rounded-2xl border-2 flex flex-col items-center justify-center gap-4 p-6
         text-center transition-all duration-200
