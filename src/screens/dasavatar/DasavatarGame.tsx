@@ -75,11 +75,11 @@ export function DasavatarGame({ onExit }: Props) {
   }, []);
 
   return (
-    <div className="w-full h-full flex flex-col gap-6 p-8 relative">
+    <div className="w-full h-full flex flex-col gap-6 p-8 relative bg-game-bg text-game-text">
       <header className="flex items-start justify-between gap-8">
         <div className="flex-1">
-          <h1 className="text-5xl font-extrabold text-krishna-gold">Match the Dasavatar</h1>
-          <p className="text-xl text-krishna-cream/70 mt-1 mb-4">Drag each name to the correct picture.</p>
+          <h1 className="text-5xl font-extrabold text-game-accent">Match the Dasavatar</h1>
+          <p className="text-xl text-slate-300 mt-1 mb-4">Drag each name to the correct picture.</p>
           <div className="w-full max-w-2xl">
             <Timer durationMs={GAME_DURATION_MS} onExpire={handleExpire} paused={!isGameActive} />
           </div>
@@ -87,7 +87,7 @@ export function DasavatarGame({ onExit }: Props) {
         <div className="text-right">
           <button
             onClick={onExit}
-            className="px-5 py-2 rounded-xl border border-krishna-gold/60 text-krishna-gold text-lg hover:bg-krishna-gold/10"
+            className="px-5 py-2 rounded-xl border border-slate-600 bg-slate-800/80 text-slate-200 text-lg shadow-sm hover:border-game-accent hover:text-game-accent"
           >
             Home
           </button>
@@ -110,12 +110,12 @@ export function DasavatarGame({ onExit }: Props) {
                 setHoveredTargetId(avatar.id);
               }}
               className={`
-                rounded-2xl border-2 bg-white/5 p-2 flex flex-col min-h-0 transition-all
+                rounded-2xl border bg-game-panel p-3 flex flex-col min-h-0 transition-all shadow-lg
                 ${matchedName
-                  ? "border-krishna-correct shadow-[0_0_18px_rgba(0,255,136,0.35)]"
+                  ? "border-game-correct shadow-[0_12px_28px_rgba(34,197,94,0.2)]"
                   : isHovered
-                      ? "scale-[1.03] border-krishna-gold bg-krishna-gold/10 shadow-[0_0_26px_rgba(0,212,255,0.45)]"
-                      : "border-krishna-gold/35 hover:border-krishna-gold"
+                      ? "scale-[1.03] border-game-accent bg-game-panel-hover shadow-[0_16px_36px_rgba(245,158,11,0.22)]"
+                      : "border-slate-700 hover:border-slate-500"
                 }
               `}
             >
@@ -123,16 +123,16 @@ export function DasavatarGame({ onExit }: Props) {
                 src={avatar.image}
                 alt={avatar.name}
                 draggable={false}
-                className="w-full flex-1 min-h-0 object-contain rounded-xl bg-black/20"
+                className="w-full flex-1 min-h-0 object-contain rounded-xl bg-game-bg shadow-inner"
               />
               <div
                 className={`
-                  mt-2 h-12 rounded-xl border flex items-center justify-center text-2xl font-bold
+                  mt-3 h-12 rounded-xl border flex items-center justify-center text-2xl font-bold
                   ${matchedName
-                    ? "border-krishna-correct bg-krishna-correct/15 text-krishna-correct"
+                    ? "border-game-correct bg-game-correct/15 text-game-correct-soft"
                     : isHovered
-                        ? "border-krishna-gold bg-krishna-gold/20 text-krishna-gold"
-                    : "border-dashed border-krishna-cream/35 text-krishna-cream/45"
+                        ? "border-game-accent bg-game-accent/15 text-game-accent-soft"
+                    : "border-slate-700 bg-game-bg text-slate-400"
                   }
                 `}
               >
@@ -143,7 +143,7 @@ export function DasavatarGame({ onExit }: Props) {
         })}
       </main>
 
-      <section className="min-h-30 rounded-2xl border-2 border-white/10 bg-white/5 p-4 flex flex-wrap items-center justify-center gap-3">
+      <section className="min-h-30 rounded-2xl border border-slate-700 bg-game-panel p-4 flex flex-wrap items-center justify-center gap-3 shadow-lg">
         {nameCards.map((avatar) => {
           const isPlaced = placedIds.has(avatar.id);
 
@@ -158,11 +158,11 @@ export function DasavatarGame({ onExit }: Props) {
               }}
               disabled={isPlaced || !isGameActive}
               className={`
-                px-6 py-3 rounded-2xl border-2 text-2xl font-extrabold transition-all
-                ${wrongId === avatar.id ? "shake border-krishna-wrong bg-krishna-wrong/20 text-white" : ""}
+                px-6 py-3 rounded-xl border text-2xl font-extrabold transition-all shadow-sm
+                ${wrongId === avatar.id ? "shake border-game-wrong bg-game-wrong/20 text-white" : ""}
                 ${isPlaced
-                  ? "opacity-20 border-white/10 bg-white/5 text-krishna-cream"
-                  : "cursor-grab active:cursor-grabbing border-krishna-gold bg-krishna-gold/15 text-krishna-cream hover:bg-krishna-gold/25 hover:scale-105"
+                  ? "opacity-25 border-slate-700 bg-slate-900 text-slate-400"
+                  : "cursor-grab active:cursor-grabbing border-slate-500 bg-slate-800 text-slate-100 hover:border-game-accent hover:bg-game-panel-hover hover:text-game-accent-soft hover:scale-105"
                 }
               `}
             >
@@ -173,20 +173,20 @@ export function DasavatarGame({ onExit }: Props) {
       </section>
 
       {(isComplete || isTimedOut) && (
-        <div className="absolute inset-0 bg-krishna-bg flex flex-col items-center justify-center gap-8 p-8 text-center">
-          <h2 className="text-5xl font-bold text-krishna-gold">
+        <div className="absolute inset-0 bg-game-bg flex flex-col items-center justify-center gap-8 p-8 text-center">
+          <h2 className="text-5xl font-bold text-game-accent">
             {isComplete ? "Dasavatar Complete!" : "Time's Up!"}
           </h2>
-          <div className="text-8xl font-bold text-krishna-cream">{matchedCount} / {TOTAL_AVATARS}</div>
-          <p className="text-3xl text-krishna-cream/80">
+          <div className="text-8xl font-bold text-game-text">{matchedCount} / {TOTAL_AVATARS}</div>
+          <p className="text-3xl text-slate-300">
             {isComplete ? "Hare Krishna! Perfect match!" : "Try again and match all avatars!"}
           </p>
-          <div className="text-xl text-krishna-cream/50 mt-8">
+          <div className="text-xl text-slate-500 mt-8">
             Next player in {countdown}...
           </div>
           <button
             onClick={onExit}
-            className="mt-4 px-8 py-4 bg-krishna-gold/10 border-2 border-krishna-gold rounded-xl text-krishna-gold text-xl hover:bg-krishna-gold/20 shadow-[0_0_20px_rgba(0,212,255,0.2)]"
+            className="mt-4 px-8 py-4 bg-slate-800 border border-game-accent rounded-xl text-game-accent text-xl hover:bg-game-panel-hover shadow-lg"
           >
             Back to Home
           </button>

@@ -15,7 +15,7 @@ const PARTICLES = Array.from({ length: 20 }, (_, i) => {
     size: Math.random() * 4 + 2,
     duration,
     delay: -(Math.random() * duration),
-    color: Math.random() > 0.5 ? "rgba(0,212,255,0.9)" : "rgba(123,97,255,0.9)",
+    color: Math.random() > 0.5 ? "rgba(245,158,11,0.65)" : "rgba(148,163,184,0.45)",
   };
 });
 

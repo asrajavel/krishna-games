@@ -16,13 +16,13 @@ export function GameCard({ title, description, emoji, imageSrc, available, onCli
         w-64 h-72 rounded-2xl border-2 flex flex-col items-center justify-center gap-4 p-6
         text-center transition-all duration-200
         ${available
-          ? "border-krishna-gold bg-krishna-gold/10 hover:bg-krishna-gold/20 hover:scale-105 cursor-pointer pulse-card"
-          : "border-white/10 bg-white/5 opacity-40 cursor-not-allowed"
+          ? "border-slate-700 bg-game-panel hover:border-game-accent hover:bg-game-panel-hover hover:scale-105 cursor-pointer shadow-lg"
+          : "border-slate-800 bg-slate-900 opacity-40 cursor-not-allowed"
         }
       `}
     >
       {imageSrc ? (
-        <img src={imageSrc} alt="" className="w-20 h-20 object-contain drop-shadow-[0_0_14px_rgba(0,212,255,0.55)]" />
+        <img src={imageSrc} alt="" className="w-20 h-20 object-contain drop-shadow-[0_8px_18px_rgba(245,158,11,0.25)]" />
       ) : (
         <span className="text-6xl">{emoji}</span>
       )}

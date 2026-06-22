@@ -36,18 +36,20 @@ export function QuizResult({ score, total, onDone }: Props) {
   };
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center gap-8 p-8">
-      <h2 className="text-5xl font-bold text-krishna-gold">Quiz Complete!</h2>
-      <div className="text-8xl font-bold text-krishna-cream">
-        {score} / {total}
+    <div className="w-full h-full flex flex-col items-center justify-center gap-8 p-8 bg-game-bg text-game-text">
+      <div className="rounded-3xl border border-slate-700 bg-game-panel p-12 text-center shadow-2xl">
+        <h2 className="text-5xl font-bold text-game-accent">Quiz Complete!</h2>
+        <div className="mt-8 text-8xl font-bold">
+          {score} / {total}
+        </div>
+        <p className="mt-8 text-3xl text-slate-300">{getMessage()}</p>
       </div>
-      <p className="text-3xl text-krishna-cream/80">{getMessage()}</p>
-      <div className="text-xl text-krishna-cream/50 mt-8">
+      <div className="text-xl text-slate-500 mt-8">
         Next player in {countdown}...
       </div>
       <button
         onClick={onDone}
-        className="mt-4 px-8 py-4 bg-krishna-gold/10 border-2 border-krishna-gold rounded-xl text-krishna-gold text-xl hover:bg-krishna-gold/20 shadow-[0_0_20px_rgba(0,212,255,0.2)]"
+        className="mt-4 px-8 py-4 bg-game-panel border border-game-accent rounded-xl text-game-accent text-xl hover:bg-game-panel-hover shadow-lg"
       >
         Back to Home
       </button>

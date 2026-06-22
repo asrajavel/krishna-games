@@ -40,38 +40,40 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
   const handleExpire = useCallback(() => { if (!answered) onAnswer(null); }, [answered, onAnswer]);
 
   const optionStyle = (index: number) => {
-    const base = "w-full py-6 px-12 rounded-xl text-2xl font-semibold text-left transition-colors duration-300 border-2";
+    const base = "w-full py-6 px-10 rounded-2xl text-2xl font-semibold text-left transition-all duration-300 border shadow-sm";
     if (answered) {
-      if (index === question.correctIndex) return `${base} bg-krishna-correct/20 border-krishna-correct text-krishna-correct`;
-      if (index === selectedIndex) return `${base} bg-krishna-wrong/20 border-krishna-wrong text-krishna-wrong`;
-      return `${base} bg-white/5 border-white/10 text-krishna-cream/40`;
+      if (index === question.correctIndex) return `${base} bg-game-correct/15 border-game-correct text-game-correct-soft`;
+      if (index === selectedIndex) return `${base} bg-game-wrong/15 border-game-wrong text-game-wrong-soft`;
+      return `${base} bg-slate-900 border-slate-800 text-slate-500`;
     }
-    if (index === highlightedIndex) return `${base} bg-krishna-gold/15 border-krishna-gold text-krishna-cream shadow-[0_0_20px_rgba(0,212,255,0.3)]`;
-    return `${base} bg-white/5 border-white/10 text-krishna-cream hover:bg-krishna-gold/10`;
+    if (index === highlightedIndex) return `${base} bg-game-panel-hover border-game-accent text-game-text shadow-[0_16px_36px_rgba(245,158,11,0.18)]`;
+    return `${base} bg-game-panel border-slate-700 text-game-text hover:border-slate-500 hover:bg-game-panel-hover`;
   };
 
   return (
-    <div className="w-full h-full flex relative">
+    <div className="w-full h-full flex bg-game-bg text-game-text">
       {question.image && (
-        <div className="w-1/4 h-full border-r border-white/10">
+        <div className="w-1/4 h-full p-6">
           <img
             src={question.image}
             alt=""
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover rounded-3xl border border-slate-700 shadow-2xl"
           />
         </div>
       )}
       <div className={`${question.image ? "w-3/4" : "w-full"} h-full flex flex-col items-center justify-center p-8 gap-6`}>
-        <div className="text-krishna-gold text-2xl font-semibold">
+        <div className="text-game-accent text-2xl font-semibold">
           Question {questionNumber} of {totalQuestions}
         </div>
         <div className="w-full max-w-2xl">
           <Timer key={question.id} durationMs={TIME_PER_QUESTION_MS} onExpire={handleExpire} paused={answered} />
         </div>
-        <h2 className="text-4xl font-bold text-krishna-cream text-center max-w-3xl leading-tight">
-          {question.question}
-        </h2>
-        <div className="w-full max-w-2xl flex flex-col gap-4">
+        <div className="w-full max-w-3xl rounded-3xl border border-slate-700 bg-game-panel p-8 shadow-xl">
+          <h2 className="text-4xl font-bold text-center leading-tight">
+            {question.question}
+          </h2>
+        </div>
+        <div className="w-full max-w-2xl flex flex-col gap-4 rounded-3xl border border-slate-800 bg-slate-950/30 p-4 shadow-lg">
           {question.options.map((option, index) => (
             <button
               key={index}
@@ -79,7 +81,7 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
               onClick={() => !answered && onAnswer(index)}
               disabled={answered}
             >
-              <span className="text-krishna-gold mr-4">{LABELS[index]}.</span>
+              <span className="text-game-accent mr-4">{LABELS[index]}.</span>
               {option}
             </button>
           ))}
@@ -88,13 +90,13 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
           <div className="text-3xl font-bold flex flex-col items-center gap-1">
             {answered && (
               selectedIndex === question.correctIndex ? (
-                <span className="text-krishna-correct">Correct!</span>
+                <span className="text-game-correct-soft">Correct!</span>
               ) : selectedIndex === null ? (
-                <span className="text-krishna-wrong">Time's up!</span>
+                <span className="text-game-wrong-soft">Time's up!</span>
               ) : (
                 <>
-                  <span className="text-krishna-wrong">Wrong!</span>
-                  <span className="text-krishna-correct text-2xl">Correct: {question.options[question.correctIndex]}</span>
+                  <span className="text-game-wrong-soft">Wrong!</span>
+                  <span className="text-game-correct-soft text-2xl">Correct: {question.options[question.correctIndex]}</span>
                 </>
               )
             )}

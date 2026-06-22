@@ -1,12 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  --color-krishna-bg: #0b0e17;
-  --color-krishna-gold: #00d4ff;
-  --color-krishna-green: #7b61ff;
-  --color-krishna-correct: #00ff88;
-  --color-krishna-wrong: #ff3366;
-  --color-krishna-cream: #e0e6f0;
+  --color-krishna-bg: #111827;
+  --color-krishna-gold: #f59e0b;
+  --color-krishna-green: #64748b;
+  --color-krishna-correct: #22c55e;
+  --color-krishna-wrong: #ef4444;
+  --color-krishna-cream: #f9fafb;
+  --color-game-bg: #111827;
+  --color-game-panel: #1f2937;
+  --color-game-panel-hover: #273244;
+  --color-game-accent: #f59e0b;
+  --color-game-accent-soft: #fcd34d;
+  --color-game-correct: #22c55e;
+  --color-game-correct-soft: #86efac;
+  --color-game-wrong: #ef4444;
+  --color-game-wrong-soft: #fca5a5;
+  --color-game-text: #f9fafb;
 }
 
 body {
@@ -32,8 +42,8 @@ body {
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.2), 0 0 40px rgba(0, 212, 255, 0.1); }
-  50% { box-shadow: 0 0 30px rgba(0, 212, 255, 0.4), 0 0 60px rgba(0, 212, 255, 0.2), 0 0 80px rgba(123, 97, 255, 0.1); }
+  0%, 100% { box-shadow: 0 16px 32px rgba(0, 0, 0, 0.22); }
+  50% { box-shadow: 0 20px 40px rgba(245, 158, 11, 0.18); }
 }
 
 @keyframes shake {
@@ -46,9 +56,9 @@ body {
   background: linear-gradient(
     90deg,
     var(--color-krishna-gold) 0%,
-    #fff 20%,
-    #ff6b35 50%,
-    #fff 80%,
+    #f9fafb 24%,
+    #d97706 50%,
+    #f9fafb 76%,
     var(--color-krishna-gold) 100%
   );
   background-size: 200% auto;
