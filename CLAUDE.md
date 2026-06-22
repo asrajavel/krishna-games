@@ -19,17 +19,19 @@ Build locally, copy `dist/` to Pi, open with `chromium-browser --kiosk file:///p
 
 ## Architecture
 
-Single-page React app with useState-based screen switching (no router). Screen state is `"home" | "quiz"` in `App.tsx`.
+Single-page React app with useState-based screen switching (no router). Screen state is `"home" | "quiz" | "dasavatar"` in `App.tsx`.
 
 **Screen flow:** HomeScreen → QuizGame → QuizQuestion (×5) → QuizResult → auto-reset to Home (5s)
 
 **Input:** `useInput` hook normalizes keyboard (arrows, WASD, Enter/Space) and gamepad (d-pad, analog stick, buttons) into `onUp`/`onDown`/`onSelect` callbacks with 200ms debounce. Quiz options are both tappable and keyboard-navigable.
 
-
-
 ## Tailwind CSS v4
 
-Uses `@theme` block in `src/index.css` to define colors as `--color-krishna-`* custom properties. Reference in classes as `text-krishna-gold`, `bg-krishna-bg`, etc. Custom animations (shimmer, float-up, pulse-glow) are plain CSS keyframes in the same file — not in a Tailwind config.
+Uses `@theme` block in `src/index.css` to define colors as custom properties. Reference in classes as `text-krishna-gold`, `bg-game-panel`, etc. Custom animations (shimmer, float-up, pulse-glow, shake) are plain CSS keyframes in the same file — not in a Tailwind config.
+
+Keep colors centralized in `src/index.css`. Prefer named theme tokens like `bg-game-bg`, `bg-game-panel`, `text-game-accent`, `border-game-correct` over repeated arbitrary hex classes in components.
+
+Visual direction is a professional game UI: dark slate backgrounds, raised dark panels/cards, amber accent, subtle shadows.
 
 **Key gotcha:** Tailwind v4 CSS Cascade Layers — non-layered styles (like `body {}`) beat `@layer` styles. When overriding Tailwind utilities in plain CSS, keep this in mind.
 
@@ -38,4 +40,4 @@ Uses `@theme` block in `src/index.css` to define colors as `--color-krishna-`* c
 - No backend, no audio, no server on the Pi
 - Large text sizes throughout — readable from 3+ feet away
 - `overflow: hidden` and `user-select: none` on body for kiosk use
-
+- Keep the project small. Prefer simple local state and small focused components over adding abstractions early.
