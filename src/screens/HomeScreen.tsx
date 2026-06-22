@@ -46,7 +46,7 @@ export function HomeScreen({ onStartQuiz, onStartDasavatar }: Props) {
         <GameCard
           title="Krishna Quiz"
           description="Test your knowledge!"
-          emoji="🪷"
+          imageSrc="./quiz/quiz-icon.svg"
           available={true}
           onClick={onStartQuiz}
         />
