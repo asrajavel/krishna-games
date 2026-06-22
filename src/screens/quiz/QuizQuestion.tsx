@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import type { Question } from "../../types";
 import { Timer } from "../../components/Timer";
 import { NextQuestionTimer } from "../../components/NextQuestionTimer";
@@ -18,14 +18,21 @@ interface Props {
 const LABELS = ["A", "B", "C", "D"];
 
 export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswer, answered, selectedIndex }: Props) {
-  const [highlightedIndex, setHighlightedIndex] = useState(0);
+  const [selection, setSelection] = useState({ questionId: question.id, highlightedIndex: 0 });
+  const highlightedIndex = selection.questionId === question.id ? selection.highlightedIndex : 0;
 
-  useEffect(() => {
-    setHighlightedIndex(0);
+  const handleUp = useCallback(() => {
+    setSelection((prev) => {
+      const current = prev.questionId === question.id ? prev.highlightedIndex : 0;
+      return { questionId: question.id, highlightedIndex: current > 0 ? current - 1 : 3 };
+    });
   }, [question.id]);
-
-  const handleUp = useCallback(() => setHighlightedIndex((p) => (p > 0 ? p - 1 : 3)), []);
-  const handleDown = useCallback(() => setHighlightedIndex((p) => (p < 3 ? p + 1 : 0)), []);
+  const handleDown = useCallback(() => {
+    setSelection((prev) => {
+      const current = prev.questionId === question.id ? prev.highlightedIndex : 0;
+      return { questionId: question.id, highlightedIndex: current < 3 ? current + 1 : 0 };
+    });
+  }, [question.id]);
   const handleSelect = useCallback(() => { if (!answered) onAnswer(highlightedIndex); }, [answered, highlightedIndex, onAnswer]);
 
   useInput({ onUp: handleUp, onDown: handleDown, onSelect: handleSelect, enabled: !answered });

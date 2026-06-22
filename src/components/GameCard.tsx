@@ -1,12 +1,13 @@
 interface Props {
   title: string;
   description: string;
-  emoji: string;
+  emoji?: string;
+  imageSrc?: string;
   available: boolean;
   onClick: () => void;
 }
 
-export function GameCard({ title, description, emoji, available, onClick }: Props) {
+export function GameCard({ title, description, emoji, imageSrc, available, onClick }: Props) {
   return (
     <button
       onClick={available ? onClick : undefined}
@@ -20,7 +21,11 @@ export function GameCard({ title, description, emoji, available, onClick }: Prop
         }
       `}
     >
-      <span className="text-6xl">{emoji}</span>
+      {imageSrc ? (
+        <img src={imageSrc} alt="" className="w-20 h-20 object-contain drop-shadow-[0_0_14px_rgba(0,212,255,0.55)]" />
+      ) : (
+        <span className="text-6xl">{emoji}</span>
+      )}
       <h2 className="text-2xl font-bold text-krishna-cream">{title}</h2>
       <p className="text-lg text-krishna-cream/70">{description}</p>
       {available ? (

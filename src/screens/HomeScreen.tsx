@@ -4,6 +4,7 @@ import { useInput } from "../hooks/useInput";
 
 interface Props {
   onStartQuiz: () => void;
+  onStartDasavatar: () => void;
 }
 
 const PARTICLES = Array.from({ length: 20 }, (_, i) => {
@@ -18,7 +19,7 @@ const PARTICLES = Array.from({ length: 20 }, (_, i) => {
   };
 });
 
-export function HomeScreen({ onStartQuiz }: Props) {
+export function HomeScreen({ onStartQuiz, onStartDasavatar }: Props) {
   const noop = useCallback(() => {}, []);
   useInput({ onUp: noop, onDown: noop, onSelect: onStartQuiz });
 
@@ -55,11 +56,11 @@ export function HomeScreen({ onStartQuiz }: Props) {
           onClick={onStartQuiz}
         />
         <GameCard
-          title="Coming Soon"
-          description="More games coming!"
-          emoji="🎴"
-          available={false}
-          onClick={() => {}}
+          title="Dasavatar Match"
+          description="Drag names to pictures"
+          imageSrc="./dasavatar/dasavatar-icon.svg"
+          available={true}
+          onClick={onStartDasavatar}
         />
       </div>
     </div>

@@ -36,6 +36,12 @@ body {
   50% { box-shadow: 0 0 30px rgba(0, 212, 255, 0.4), 0 0 60px rgba(0, 212, 255, 0.2), 0 0 80px rgba(123, 97, 255, 0.1); }
 }
 
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
 .shimmer-text {
   background: linear-gradient(
     90deg,
@@ -62,4 +68,8 @@ body {
   pointer-events: none;
   box-shadow: 0 0 6px 2px currentColor;
   animation: float-up linear infinite;
+}
+
+.shake {
+  animation: shake 0.45s ease-in-out;
 }

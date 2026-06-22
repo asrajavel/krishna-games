@@ -6,11 +6,15 @@ interface Props {
 }
 
 export function NextQuestionTimer({ durationMs, active }: Props) {
+  if (!active) return null;
+
+  return <ActiveNextQuestionTimer durationMs={durationMs} />;
+}
+
+function ActiveNextQuestionTimer({ durationMs }: Pick<Props, "durationMs">) {
   const [elapsed, setElapsed] = useState(0);
 
   useEffect(() => {
-    if (!active) { setElapsed(0); return; }
-    setElapsed(0);
     const interval = setInterval(() => {
       setElapsed((prev) => {
         const next = prev + 50;
@@ -19,11 +23,9 @@ export function NextQuestionTimer({ durationMs, active }: Props) {
       });
     }, 50);
     return () => clearInterval(interval);
-  }, [active, durationMs]);
+  }, [durationMs]);
 
   const seconds = Math.ceil((durationMs - elapsed) / 1000);
-
-  if (!active) return null;
 
   return (
     <div className="absolute bottom-6 right-8 text-krishna-gold/70 text-2xl font-bold tabular-nums">
