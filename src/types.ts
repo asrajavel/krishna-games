@@ -6,5 +6,5 @@ export interface Question {
   image?: string;
 }
 
-export type Screen = "home" | "quiz" | "dasavatar" | "memory" | "sequence" | "puzzle";
+export type Screen = "home" | "quiz" | "dasavatar" | "memory" | "sequence" | "puzzle" | "odd-one-out";
 

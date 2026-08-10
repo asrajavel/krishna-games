@@ -6,6 +6,7 @@ interface Props {
   onStartMemory: () => void;
   onStartSequence: () => void;
   onStartPuzzle: () => void;
+  onStartOddOneOut: () => void;
 }
 
 const PARTICLES = Array.from({ length: 20 }, (_, i) => {
@@ -20,7 +21,7 @@ const PARTICLES = Array.from({ length: 20 }, (_, i) => {
   };
 });
 
-export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onStartSequence, onStartPuzzle }: Props) {
+export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onStartSequence, onStartPuzzle, onStartOddOneOut }: Props) {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center gap-12 p-8 relative">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
@@ -80,6 +81,13 @@ export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onSta
           imageSrc="./puzzle/yashoda-krishna.jpg"
           available={true}
           onClick={onStartPuzzle}
+        />
+        <GameCard
+          title="Odd One Out"
+          description="Find what does not belong"
+          emoji="🔍"
+          available={true}
+          onClick={onStartOddOneOut}
         />
       </div>
     </div>

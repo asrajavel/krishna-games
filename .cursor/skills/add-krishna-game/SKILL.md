@@ -14,10 +14,9 @@ Read:
 - `src/App.tsx`
 - `src/types.ts`
 - `src/screens/HomeScreen.tsx`
-- `src/components/Timer.tsx` and `GameCard.tsx`
 - One existing game closest to the requested interaction
 
-Do not inspect unrelated games or search the web unless required content cannot be produced locally.
+Do not inspect shared components unless their API is unclear or TypeScript fails. Do not inspect unrelated games, glob broadly, or search the web unless required content cannot be produced locally. Implement after these reads.
 
 ## Establish the game
 
@@ -38,6 +37,14 @@ Defaults unless the request requires otherwise:
 - On success, freeze and highlight the completed board for 4 seconds before showing results.
 - Show results for 10 seconds, then call `onExit`.
 - Create or download assets if required, or use emojis. Dont worry about copyright images, we will replace all images at the end.
+
+## UI defaults
+
+- Keep the title at the top.
+- Center the game board.
+- Put the question directly above the board.
+- Do not show live scores, instructions, or bottom feedback text.
+- Show interaction feedback through the game elements themselves, such as border and background colors.
 
 ## Implement
 
@@ -64,12 +71,8 @@ Complete one working implementation before visual verification. Do not take inte
 
 ## Stall requirements
 
-- After completion or timeout, show the result and automatically call `onExit` after 10 seconds.
 - Reuse `GameCard`, `Timer`, and existing components when they fit.
-- Use existing theme tokens from `src/index.css`; add a named token only if necessary.
-- Preserve the full-screen layout, `overflow: hidden`, and `user-select: none`.
 - Use large controls and labels; set `tabIndex={-1}` on stall buttons.
-- Do not add routing, persistence, backend services, audio, dependencies, or speculative abstractions.
 - Do not modify unrelated or pre-existing user changes.
 
 ## Verify
@@ -77,11 +80,10 @@ Complete one working implementation before visual verification. Do not take inte
 After implementation is complete, run once:
 
 ```sh
-npm run lint
-npm run build
+npm run lint && npm run build
 ```
 
-Use Playwright against the running app at 1920×1080. Use browser scripting to reach timed states instead of waiting through timers. Take one final screenshot and verify:
+Use one Playwright scripted session at 1920×1080. Accelerate timed states, avoid intermediate screenshots, and take one final screenshot. Verify:
 
 - Home card launches the game.
 - A new session starts cleanly.
@@ -92,3 +94,5 @@ Use Playwright against the running app at 1920×1080. Use browser scripting to r
 - The layout fits a fullscreen monitor without scrolling.
 
 Do not add a test framework solely for the game. Add a small test only if the new game contains non-trivial pure logic that benefits from one and the repository already supports running it.
+
+Keep the final response to two lines maximum.
