@@ -12,19 +12,16 @@ export function Timer({ durationMs, onExpire, paused = false, variant = "default
 
   useEffect(() => {
     if (paused) return;
-    const interval = setInterval(() => {
-      setElapsed((prev) => {
-        const next = prev + 100;
-        if (next >= durationMs) {
-          clearInterval(interval);
-          onExpire();
-          return durationMs;
-        }
-        return next;
-      });
-    }, 100);
+    const interval = setInterval(
+      () => setElapsed((prev) => Math.min(prev + 100, durationMs)),
+      100,
+    );
     return () => clearInterval(interval);
-  }, [durationMs, onExpire, paused]);
+  }, [durationMs, paused]);
+
+  useEffect(() => {
+    if (elapsed === durationMs && !paused) onExpire();
+  }, [durationMs, elapsed, onExpire, paused]);
 
   const progress = 1 - elapsed / durationMs;
   const seconds = Math.ceil((durationMs - elapsed) / 1000);

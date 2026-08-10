@@ -5,6 +5,7 @@ interface Props {
   onStartDasavatar: () => void;
   onStartMemory: () => void;
   onStartSequence: () => void;
+  onStartPuzzle: () => void;
 }
 
 const PARTICLES = Array.from({ length: 20 }, (_, i) => {
@@ -19,7 +20,7 @@ const PARTICLES = Array.from({ length: 20 }, (_, i) => {
   };
 });
 
-export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onStartSequence }: Props) {
+export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onStartSequence, onStartPuzzle }: Props) {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center gap-12 p-8 relative">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
@@ -72,6 +73,13 @@ export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onSta
           imageSrc="./sequence/sequence-icon.svg"
           available={true}
           onClick={onStartSequence}
+        />
+        <GameCard
+          title="Picture Puzzle"
+          description="Reassemble Krishna's picture"
+          imageSrc="./puzzle/yashoda-krishna.jpg"
+          available={true}
+          onClick={onStartPuzzle}
         />
       </div>
     </div>
