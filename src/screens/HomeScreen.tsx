@@ -9,6 +9,7 @@ interface Props {
   onStartOddOneOut: () => void;
   onStartMatchPairs: () => void;
   onStartWhackTarget: () => void;
+  onStartButterPot: () => void;
 }
 
 const PARTICLES = Array.from({ length: 20 }, (_, i) => {
@@ -23,7 +24,7 @@ const PARTICLES = Array.from({ length: 20 }, (_, i) => {
   };
 });
 
-export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onStartSequence, onStartPuzzle, onStartOddOneOut, onStartMatchPairs, onStartWhackTarget }: Props) {
+export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onStartSequence, onStartPuzzle, onStartOddOneOut, onStartMatchPairs, onStartWhackTarget, onStartButterPot }: Props) {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center gap-12 p-8 relative">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
@@ -104,6 +105,13 @@ export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onSta
           emoji="🧈"
           available={true}
           onClick={onStartWhackTarget}
+        />
+        <GameCard
+          title="Butter Pot Launcher"
+          description="Aim, charge, and break the pots"
+          emoji="🏺"
+          available={true}
+          onClick={onStartButterPot}
         />
       </div>
     </div>
