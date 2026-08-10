@@ -7,6 +7,7 @@ import { MemoryGame } from "./screens/memory/MemoryGame";
 import { SequenceGame } from "./screens/sequence/SequenceGame";
 import { PuzzleGame } from "./screens/puzzle/PuzzleGame";
 import { OddOneOutGame } from "./screens/odd-one-out/OddOneOutGame";
+import { MatchPairsGame } from "./screens/match-pairs/MatchPairsGame";
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>("home");
@@ -18,6 +19,7 @@ export default function App() {
   const goSequence = useCallback(() => setScreen("sequence"), []);
   const goPuzzle = useCallback(() => setScreen("puzzle"), []);
   const goOddOneOut = useCallback(() => setScreen("odd-one-out"), []);
+  const goMatchPairs = useCallback(() => setScreen("match-pairs"), []);
 
   return (
     <div className="w-screen h-screen overflow-hidden bg-krishna-bg">
@@ -29,6 +31,7 @@ export default function App() {
           onStartSequence={goSequence}
           onStartPuzzle={goPuzzle}
           onStartOddOneOut={goOddOneOut}
+          onStartMatchPairs={goMatchPairs}
         />
       ) : screen === "quiz" ? (
         <QuizGame onExit={goHome} />
@@ -42,6 +45,8 @@ export default function App() {
         <PuzzleGame onExit={goHome} />
       ) : screen === "odd-one-out" ? (
         <OddOneOutGame onExit={goHome} />
+      ) : screen === "match-pairs" ? (
+        <MatchPairsGame onExit={goHome} />
       ) : (
         null
       )}

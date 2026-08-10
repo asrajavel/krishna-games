@@ -73,6 +73,7 @@ Complete one working implementation before visual verification. Do not take inte
 
 - Reuse `GameCard`, `Timer`, and existing components when they fit.
 - Use large controls and labels; set `tabIndex={-1}` on stall buttons.
+- Use `rem` for layout dimensions, gaps, and fixed component sizes. The root font size scales with the viewport, so fixed `px` dimensions break proportions between Full HD and 4K.
 - Do not modify unrelated or pre-existing user changes.
 
 ## Verify
@@ -83,8 +84,9 @@ After implementation is complete, run once:
 npm run lint && npm run build
 ```
 
-Use one Playwright scripted session at 1920×1080. Accelerate timed states, avoid intermediate screenshots, and take one final screenshot. Verify:
+Use one Playwright scripted session at 1366x768 1920×1080 and 3840×2160. Accelerate timed states, avoid intermediate screenshots, and take one final screenshot. Verify:
 
+- Playwright gotcha: use `page.clock.runFor()`, not `fastForward()`.
 - Home card launches the game.
 - A new session starts cleanly.
 - One happy-path interaction behaves as designed.
@@ -92,6 +94,7 @@ Use one Playwright scripted session at 1920×1080. Accelerate timed states, avoi
 - The completed board remains visible for 4 seconds before results.
 - The 10-second automatic reset returns home.
 - The layout fits a fullscreen monitor without scrolling.
+- Cards, gaps, and typography keep the same relative proportions at both resolutions.
 
 Do not add a test framework solely for the game. Add a small test only if the new game contains non-trivial pure logic that benefits from one and the repository already supports running it.
 

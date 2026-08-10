@@ -7,6 +7,7 @@ interface Props {
   onStartSequence: () => void;
   onStartPuzzle: () => void;
   onStartOddOneOut: () => void;
+  onStartMatchPairs: () => void;
 }
 
 const PARTICLES = Array.from({ length: 20 }, (_, i) => {
@@ -21,7 +22,7 @@ const PARTICLES = Array.from({ length: 20 }, (_, i) => {
   };
 });
 
-export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onStartSequence, onStartPuzzle, onStartOddOneOut }: Props) {
+export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onStartSequence, onStartPuzzle, onStartOddOneOut, onStartMatchPairs }: Props) {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center gap-12 p-8 relative">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
@@ -88,6 +89,13 @@ export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onSta
           emoji="🔍"
           available={true}
           onClick={onStartOddOneOut}
+        />
+        <GameCard
+          title="Match the Pairs"
+          description="Connect characters and symbols"
+          emoji="🔗"
+          available={true}
+          onClick={onStartMatchPairs}
         />
       </div>
     </div>
