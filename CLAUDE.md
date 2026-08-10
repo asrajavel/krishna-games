@@ -21,7 +21,7 @@ Run `npm run build`, then `npm run preview` and open the local URL in a fullscre
 
 Single-page React app with useState-based screen switching (no router). Screen state is `"home" | "quiz" | "dasavatar"` in `App.tsx`.
 
-**Screen flow:** HomeScreen → QuizGame → QuizQuestion (×5) → QuizResult → auto-reset to Home (5s)
+**Screen flow:** HomeScreen → QuizGame → QuizQuestion (×5) → QuizResult → auto-reset to Home (10s)
 
 **Input:** Stall UI is mouse driven only. No need to add keyboard navigation
 
