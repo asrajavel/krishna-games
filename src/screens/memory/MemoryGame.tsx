@@ -6,7 +6,7 @@ interface Props {
 }
 
 const PAIRS = [
-  { key: "krishna", picture: "🦚", name: "Krishna" },
+  { key: "peacock", picture: "🦚", name: "Peacock" },
   { key: "flute", picture: "🪈", name: "Flute" },
   { key: "cow", picture: "🐄", name: "Surabhi Cow" },
   { key: "lotus", picture: "🪷", name: "Lotus" },
