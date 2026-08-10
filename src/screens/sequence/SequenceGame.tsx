@@ -103,8 +103,8 @@ export function SequenceGame({ onExit }: Props) {
           preserveAspectRatio="none"
           className={`absolute inset-y-3 left-24 right-24 w-[calc(100%-12rem)] h-[calc(100%-1.5rem)] transition-colors duration-500 ${
             isComplete
-              ? "text-game-correct drop-shadow-[0_0_6px_rgba(34,197,94,0.45)]"
-              : "text-game-accent drop-shadow-[0_0_4px_rgba(245,158,11,0.25)]"
+              ? "drop-glow-correct text-game-correct"
+              : "drop-glow-accent text-game-accent"
           }`}
           aria-hidden="true"
         >
@@ -170,13 +170,13 @@ export function SequenceGame({ onExit }: Props) {
               className={`
                 relative w-full h-full max-w-64 max-h-64 place-self-center overflow-hidden rounded-3xl border-2 p-5 flex flex-col items-center justify-center text-center transition-all shadow-xl
                 ${isComplete
-                  ? "border-game-correct bg-game-panel shadow-[0_16px_40px_rgba(34,197,94,0.2)]"
+                  ? "glow-correct border-game-correct bg-game-panel"
                   : swappedIndexes.includes(index)
                     ? "swap-pop border-game-accent bg-game-accent/20"
                   : draggingIndex === index
                   ? "opacity-40 border-game-accent bg-game-accent/10 scale-95"
                   : hoveredIndex === index && draggingIndex !== null
-                    ? "border-game-accent bg-game-accent/20 scale-[1.04] shadow-[0_18px_45px_rgba(245,158,11,0.22)]"
+                    ? "glow-accent border-game-accent bg-game-accent/20 scale-[1.04]"
                     : "border-slate-700 bg-game-panel hover:border-game-accent hover:bg-game-panel-hover hover:-translate-y-1"
                 }
               `}

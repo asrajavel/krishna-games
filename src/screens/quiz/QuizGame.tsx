@@ -32,7 +32,7 @@ export function QuizGame({ onExit }: Props) {
         }
         return { ...prev, currentIndex: nextIndex, answered: false, selectedIndex: null };
       });
-    }, 4000);
+    }, 2000);
   }, [currentQuestion]);
 
   if (showResult) {

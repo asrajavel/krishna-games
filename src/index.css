@@ -32,7 +32,11 @@ body {
   overflow: hidden;
   user-select: none;
   -webkit-user-select: none;
-  cursor: default;
+}
+
+body,
+body * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M3 2v24l6.5-6.2L15 30l5-2.7-5.5-9.8H24z' fill='%23ffc857' stroke='%23080521' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 3 2, default;
 }
 
 @keyframes shimmer {
@@ -140,4 +144,20 @@ body {
 
 .game-card:hover {
   box-shadow: 0 24px 58px rgba(31, 199, 182, 0.2);
+}
+
+.glow-correct {
+  box-shadow: 0 0 40px color-mix(in srgb, var(--color-game-correct) 28%, transparent);
+}
+
+.glow-accent {
+  box-shadow: 0 0 40px color-mix(in srgb, var(--color-game-accent) 24%, transparent);
+}
+
+.drop-glow-correct {
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--color-game-correct) 45%, transparent));
+}
+
+.drop-glow-accent {
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--color-game-accent) 30%, transparent));
 }

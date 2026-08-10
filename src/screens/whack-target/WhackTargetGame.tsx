@@ -144,7 +144,7 @@ export function WhackTargetGame({ onExit }: Props) {
                 ${item.feedback === "correct"
                   ? "border-game-correct bg-game-correct/30"
                   : item.feedback === "wrong"
-                    ? "border-red-500 bg-red-500/30"
+                    ? "border-game-wrong bg-game-wrong/30"
                     : "border-game-accent/70 bg-game-panel-hover transition-transform duration-150 hover:scale-110"
                 }`}
               style={{
@@ -157,7 +157,7 @@ export function WhackTargetGame({ onExit }: Props) {
             </span>
             {item.feedback && (
               <strong className={`absolute -right-4 -top-4 text-3xl font-black drop-shadow-lg ${
-                item.feedback === "correct" ? "text-game-correct-soft" : "text-red-400"
+                item.feedback === "correct" ? "text-game-correct-soft" : "text-game-wrong-soft"
               }`}>
                 {item.feedback === "correct" ? "+10" : "-5"}
               </strong>

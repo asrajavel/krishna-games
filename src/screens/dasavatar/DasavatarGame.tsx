@@ -108,9 +108,9 @@ export function DasavatarGame({ onExit }: Props) {
               className={`
                 rounded-2xl border bg-game-panel p-3 flex flex-col min-h-0 transition-all shadow-lg
                 ${matchedName
-                  ? "border-game-correct shadow-[0_12px_28px_rgba(34,197,94,0.2)]"
+                  ? "glow-correct border-game-correct"
                   : isHovered
-                      ? "scale-[1.03] border-game-accent bg-game-panel-hover shadow-[0_16px_36px_rgba(245,158,11,0.22)]"
+                      ? "glow-accent scale-[1.03] border-game-accent bg-game-panel-hover"
                       : "border-slate-700 hover:border-slate-500"
                 }
               `}

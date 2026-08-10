@@ -25,7 +25,7 @@ const PARTICLES = Array.from({ length: 20 }, (_, i) => {
 
 export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onStartSequence, onStartPuzzle, onStartOddOneOut, onStartMatchPairs, onStartWhackTarget }: Props) {
   return (
-    <div className="festival-stage w-full h-full flex flex-col items-center justify-center gap-10 p-8 relative">
+    <div className="festival-stage relative flex h-full w-full flex-col items-center justify-center gap-6 p-6">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         {PARTICLES.map((p) => (
           <div
@@ -53,7 +53,7 @@ export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onSta
           Eight joyful challenges · One divine adventure
         </p>
       </header>
-      <div className="flex gap-8 flex-wrap justify-center">
+      <div className="relative z-10 grid h-[34rem] max-h-full w-full max-w-[64rem] grid-cols-4 grid-rows-2 gap-8">
         <GameCard
           title="Krishna Quiz"
           description="Test your knowledge!"

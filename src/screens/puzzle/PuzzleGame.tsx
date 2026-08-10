@@ -91,7 +91,7 @@ export function PuzzleGame({ onExit }: Props) {
         <div
           className={`grid h-[46rem] w-[34.5rem] grid-cols-2 grid-rows-3 overflow-hidden rounded-2xl border-4 bg-game-panel shadow-2xl transition-all ${
             isComplete
-              ? "gap-0 border-game-correct shadow-[0_0_45px_rgba(34,197,94,0.35)]"
+              ? "glow-correct gap-0 border-game-correct"
               : "gap-1 border-slate-700"
           }`}
         >

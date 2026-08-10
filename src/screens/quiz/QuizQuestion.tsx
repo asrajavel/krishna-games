@@ -88,7 +88,7 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
             )}
           </div>
         </div>
-        <NextQuestionTimer durationMs={4000} active={answered} />
+        <NextQuestionTimer durationMs={2000} active={answered} />
       </div>
     </div>
   );
