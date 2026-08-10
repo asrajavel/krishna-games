@@ -40,10 +40,14 @@ Defaults unless the request requires otherwise:
 
 ## UI defaults
 
-- Keep the title at the top.
+- Center the title block at the top with `shrink-0 text-center`.
+- Use `text-5xl font-extrabold text-game-accent` for the game title.
+- When instructions are needed, place them directly under the title with `mt-1 text-xl text-slate-300`.
 - Center the game board.
-- Put the question directly above the board.
-- Do not show live scores, instructions, or bottom feedback text.
+- Put questions directly above the board and center them.
+- Use `text-6xl font-extrabold text-game-accent` for overlay result headings, or `text-5xl font-extrabold text-game-accent` inside result cards.
+- Use `text-8xl font-bold` for result scores.
+- Do not show live scores or bottom feedback text.
 - Show interaction feedback through the game elements themselves, such as border and background colors.
 
 ## Implement

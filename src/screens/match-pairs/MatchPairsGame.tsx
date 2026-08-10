@@ -73,9 +73,9 @@ export function MatchPairsGame({ onExit }: Props) {
   if (phase === "result") {
     return (
       <div className="w-full h-full bg-game-bg text-game-text flex flex-col items-center justify-center gap-8 p-8 text-center">
-        <h1 className="text-7xl font-extrabold text-game-accent">
+        <h2 className="text-6xl font-extrabold text-game-accent">
           {timedOut ? "Time's Up!" : "Perfect Match!"}
-        </h1>
+        </h2>
         <div className="text-8xl font-bold">{matched.length} / {PAIRS.length}</div>
         <p className="text-3xl text-slate-300">
           {timedOut ? "Good try! Match every character next time." : "Hare Krishna! You connected every pair."}
@@ -91,13 +91,12 @@ export function MatchPairsGame({ onExit }: Props) {
         <Timer durationMs={GAME_DURATION_MS} onExpire={handleExpire} paused={phase !== "playing"} variant="edge" />
       </div>
 
-      <header className="text-center">
+      <header className="shrink-0 text-center">
         <h1 className="text-5xl font-extrabold text-game-accent">Match the Pairs</h1>
+        <p className="mt-1 text-xl text-slate-300">
+          Choose a character, then choose what belongs to them.
+        </p>
       </header>
-
-      <p className="text-2xl text-slate-300 text-center">
-        Choose a character, then choose what belongs to them.
-      </p>
 
       <main className="grid grid-cols-[26.25rem_25rem_26.25rem] flex-1 min-h-0 max-w-[77.5rem] w-full mx-auto">
         <svg className="col-start-2 row-start-1 z-10 h-full w-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">

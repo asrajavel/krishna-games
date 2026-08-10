@@ -91,12 +91,10 @@ export function MemoryGame({ onExit }: Props) {
         <Timer durationMs={GAME_DURATION_MS} onExpire={handleExpire} paused={isFinished} variant="edge" />
       </div>
 
-      <header className="flex items-center justify-between gap-8">
-        <div>
-          <h1 className="text-5xl font-extrabold text-game-accent">Memory Match</h1>
-          <p className="text-xl text-slate-300 mt-1">Flip two cards and find all six matching pairs.</p>
-        </div>
-        <div className="text-2xl font-bold text-slate-300">
+      <header className="shrink-0 text-center">
+        <h1 className="text-5xl font-extrabold text-game-accent">Memory Match</h1>
+        <p className="mt-1 text-xl text-slate-300">Flip two cards and find all six matching pairs.</p>
+        <div className="mt-2 text-2xl font-bold text-slate-300">
           Pairs <span className="text-game-accent">{matched.length} / {PAIRS.length}</span>
           <span className="mx-5 text-slate-600">•</span>
           Moves <span className="text-game-accent">{moves}</span>

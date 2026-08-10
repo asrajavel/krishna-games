@@ -85,11 +85,9 @@ export function DasavatarGame({ onExit }: Props) {
         />
       </div>
 
-      <header>
-        <div className="flex-1">
-          <h1 className="text-5xl font-extrabold text-game-accent">Match the Dasavatar</h1>
-          <p className="text-xl text-slate-300 mt-1">Drag each name to the correct picture.</p>
-        </div>
+      <header className="shrink-0 text-center">
+        <h1 className="text-5xl font-extrabold text-game-accent">Match the Dasavatar</h1>
+        <p className="mt-1 text-xl text-slate-300">Drag each name to the correct picture.</p>
       </header>
 
       <main className="grid grid-cols-5 grid-rows-2 gap-3 flex-1 min-h-0">
@@ -173,7 +171,7 @@ export function DasavatarGame({ onExit }: Props) {
 
       {(isComplete || isTimedOut) && (
         <div className="absolute inset-0 bg-game-bg flex flex-col items-center justify-center gap-8 p-8 text-center">
-          <h2 className="text-5xl font-bold text-game-accent">
+          <h2 className="text-6xl font-extrabold text-game-accent">
             {isComplete ? "Dasavatar Complete!" : "Time's Up!"}
           </h2>
           <div className="text-8xl font-bold text-game-text">{matchedCount} / {TOTAL_AVATARS}</div>

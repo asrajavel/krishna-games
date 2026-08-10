@@ -34,7 +34,7 @@ export function QuizResult({ score, total, onDone }: Props) {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center gap-8 p-8 bg-game-bg text-game-text">
       <div className="rounded-3xl border border-slate-700 bg-game-panel p-12 text-center shadow-2xl">
-        <h2 className="text-5xl font-bold text-game-accent">Quiz Complete!</h2>
+        <h2 className="text-5xl font-extrabold text-game-accent">Quiz Complete!</h2>
         <div className="mt-8 text-8xl font-bold">
           {score} / {total}
         </div>

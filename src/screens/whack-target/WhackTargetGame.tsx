@@ -96,7 +96,7 @@ export function WhackTargetGame({ onExit }: Props) {
   const handleExpire = useCallback(() => setPhase("frozen"), []);
 
   return (
-    <div className="w-full h-full flex flex-col gap-4 p-8 pt-10 bg-game-bg text-game-text">
+    <div className="relative w-full h-full flex flex-col gap-4 p-8 pt-10 bg-game-bg text-game-text">
       <style>{`
         @keyframes favorite-fall {
           from { transform: translate3d(0, -9rem, 0); }
@@ -116,13 +116,12 @@ export function WhackTargetGame({ onExit }: Props) {
         <Timer durationMs={GAME_DURATION_MS} onExpire={handleExpire} paused={phase !== "playing"} variant="edge" />
       </div>
 
-      <header className="text-center">
+      <header className="shrink-0 text-center">
         <h1 className="text-5xl font-extrabold text-game-accent">Krishna&apos;s Favorites</h1>
+        <p className="mt-1 text-xl text-slate-300">
+          Click butter, flutes, peacock feathers, and cows!
+        </p>
       </header>
-
-      <p className="text-3xl font-bold text-center text-slate-200">
-        Click butter, flutes, peacock feathers, and cows!
-      </p>
 
       <main className="relative flex-1 min-h-0 max-w-6xl w-full mx-auto overflow-hidden">
         {items.map((item) => (
@@ -171,7 +170,7 @@ export function WhackTargetGame({ onExit }: Props) {
         <div className="absolute inset-0 z-30 bg-game-bg flex flex-col items-center justify-center gap-8 p-8 text-center">
           <h2 className="text-6xl font-extrabold text-game-accent">Time&apos;s Up!</h2>
           <div className="text-3xl text-slate-300">Score</div>
-          <div className="text-9xl font-extrabold text-game-correct-soft">{score}</div>
+          <div className="text-8xl font-bold text-game-correct-soft">{score}</div>
           <div className="text-xl text-slate-500">Next player in {countdown}...</div>
         </div>
       )}

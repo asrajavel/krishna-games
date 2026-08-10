@@ -143,6 +143,7 @@ export function OddOneOutGame({ onExit }: Props) {
 
       <header className="shrink-0 text-center">
         <h1 className="text-5xl font-extrabold text-game-accent">Pick the Odd One Out</h1>
+        <p className="mt-1 text-xl text-slate-300">Choose the item that does not belong.</p>
       </header>
 
       <main className="flex flex-1 flex-col items-center justify-center gap-6">
