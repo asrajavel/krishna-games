@@ -59,6 +59,12 @@ const ROUNDS = [
 ] as const;
 
 const GAME_TIME_MS = 75_000;
+const POSITIONS = [
+  "col-start-2 row-start-1",
+  "col-start-1 row-start-2",
+  "col-start-3 row-start-2",
+  "col-start-2 row-start-3",
+];
 
 export function OddOneOutGame({ onExit }: Props) {
   const [roundIndex, setRoundIndex] = useState(0);
@@ -139,20 +145,20 @@ export function OddOneOutGame({ onExit }: Props) {
         <h1 className="text-5xl font-extrabold text-game-accent">Pick the Odd One Out</h1>
       </header>
 
-      <main className="pointer-events-none absolute inset-0">
-        <h2 className="absolute inset-x-0 top-1/2 -translate-y-56 text-center text-3xl font-bold">{round.prompt}</h2>
-        <div className="pointer-events-auto absolute left-1/2 top-1/2 grid w-full max-w-7xl -translate-x-1/2 -translate-y-1/2 grid-cols-4 gap-6">
+      <main className="flex flex-1 flex-col items-center justify-center gap-6">
+        <h2 className="text-center text-3xl font-bold">{round.prompt}</h2>
+        <div className="grid w-full max-w-4xl grid-cols-3 grid-rows-3 gap-2">
           {round.items.map((item, index) => {
             const isOdd = index === round.oddIndex;
             const isSelected = index === selectedIndex;
             const revealed = selectedIndex !== null;
             const style = revealed
               ? isOdd
-                ? "border-game-correct bg-game-correct/15 text-game-correct-soft scale-105"
+                ? "border-game-correct bg-game-correct/15 scale-110"
                 : isSelected
-                  ? "border-game-wrong bg-game-wrong/15 text-game-wrong-soft"
-                  : "border-slate-800 bg-slate-900 text-slate-500"
-              : "border-slate-700 bg-game-panel hover:border-game-accent hover:bg-game-panel-hover hover:scale-105";
+                  ? "border-game-wrong bg-game-wrong/15"
+                  : "border-slate-800 bg-slate-900 opacity-45"
+              : "border-slate-600 bg-game-panel group-hover:border-game-accent group-hover:bg-game-panel-hover group-hover:scale-110";
 
             return (
               <button
@@ -160,10 +166,14 @@ export function OddOneOutGame({ onExit }: Props) {
                 onClick={() => handlePick(index)}
                 disabled={revealed}
                 tabIndex={-1}
-                className={`flex h-80 flex-col items-center justify-center gap-6 rounded-3xl border-2 p-6 text-center shadow-xl transition-all duration-300 ${style}`}
+                className={`group flex flex-col items-center justify-center gap-3 ${POSITIONS[index]}`}
               >
-                <span className="text-8xl">{item.icon}</span>
-                <span className="text-3xl font-extrabold leading-snug">{item.label}</span>
+                <span className={`flex h-52 w-52 items-center justify-center rounded-full border-4 text-8xl shadow-xl transition-all duration-300 ${style}`}>
+                  {item.icon}
+                </span>
+                <span className="text-2xl font-extrabold leading-snug text-game-text transition-colors group-hover:text-game-accent">
+                  {item.label}
+                </span>
               </button>
             );
           })}
