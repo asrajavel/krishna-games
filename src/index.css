@@ -5,28 +5,30 @@ html {
 }
 
 @theme {
-  --color-krishna-bg: #111827;
-  --color-krishna-gold: #f59e0b;
-  --color-krishna-green: #64748b;
-  --color-krishna-correct: #22c55e;
-  --color-krishna-wrong: #ef4444;
-  --color-krishna-cream: #f9fafb;
-  --color-game-bg: #111827;
-  --color-game-panel: #1f2937;
-  --color-game-panel-hover: #273244;
-  --color-game-accent: #f59e0b;
-  --color-game-accent-soft: #fcd34d;
-  --color-game-correct: #22c55e;
-  --color-game-correct-soft: #86efac;
-  --color-game-wrong: #ef4444;
-  --color-game-wrong-soft: #fca5a5;
-  --color-game-text: #f9fafb;
+  --color-krishna-bg: #080521;
+  --color-krishna-gold: #ffc857;
+  --color-krishna-green: #1fc7b6;
+  --color-krishna-correct: #45e0a8;
+  --color-krishna-wrong: #ff5f7e;
+  --color-krishna-cream: #fff8e8;
+  --color-game-bg: #080521;
+  --color-game-panel: #17103d;
+  --color-game-panel-hover: #25165b;
+  --color-game-accent: #ffc857;
+  --color-game-accent-soft: #ffe49b;
+  --color-game-correct: #45e0a8;
+  --color-game-correct-soft: #a0f4d4;
+  --color-game-wrong: #ff5f7e;
+  --color-game-wrong-soft: #ffb2c1;
+  --color-game-text: #fff8e8;
 }
 
 body {
-  background-color: var(--color-krishna-bg);
+  background:
+    radial-gradient(circle at 50% -10%, rgba(139, 92, 246, 0.42), transparent 42%),
+    linear-gradient(145deg, #06031a 0%, var(--color-krishna-bg) 46%, #041e2d 100%);
   color: var(--color-krishna-cream);
-  font-family: system-ui, sans-serif;
+  font-family: "Avenir Next", "Trebuchet MS", system-ui, sans-serif;
   overflow: hidden;
   user-select: none;
   -webkit-user-select: none;
@@ -47,7 +49,7 @@ body {
 
 @keyframes pulse-glow {
   0%, 100% { box-shadow: 0 16px 32px rgba(0, 0, 0, 0.22); }
-  50% { box-shadow: 0 20px 40px rgba(245, 158, 11, 0.18); }
+  50% { box-shadow: 0 20px 48px rgba(31, 199, 182, 0.22); }
 }
 
 @keyframes shake {
@@ -67,10 +69,10 @@ body {
 .shimmer-text {
   background: linear-gradient(
     90deg,
-    var(--color-krishna-gold) 0%,
-    #f9fafb 24%,
-    #d97706 50%,
-    #f9fafb 76%,
+    #ff6fb5 0%,
+    var(--color-krishna-gold) 24%,
+    #fff8e8 50%,
+    #1fc7b6 76%,
     var(--color-krishna-gold) 100%
   );
   background-size: 200% auto;
@@ -98,4 +100,44 @@ body {
 
 .swap-pop {
   animation: swap-pop 0.6s ease-out;
+}
+
+.festival-stage {
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 111, 181, 0.18), transparent 24%),
+    radial-gradient(circle at 88% 76%, rgba(31, 199, 182, 0.18), transparent 28%);
+}
+
+.festival-stage::before,
+.festival-stage::after {
+  position: absolute;
+  width: 42rem;
+  height: 42rem;
+  border: 1px solid rgba(255, 200, 87, 0.16);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.festival-stage::before {
+  top: -25rem;
+  left: -13rem;
+  box-shadow: 0 0 0 4rem rgba(255, 200, 87, 0.025), 0 0 0 8rem rgba(255, 200, 87, 0.02);
+}
+
+.festival-stage::after {
+  right: -14rem;
+  bottom: -27rem;
+  box-shadow: 0 0 0 4rem rgba(31, 199, 182, 0.025), 0 0 0 8rem rgba(31, 199, 182, 0.02);
+}
+
+.game-card {
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.075), transparent 42%),
+    var(--color-game-panel);
+  box-shadow: 0 20px 45px rgba(2, 1, 18, 0.42);
+}
+
+.game-card:hover {
+  box-shadow: 0 24px 58px rgba(31, 199, 182, 0.2);
 }

@@ -19,13 +19,13 @@ const PARTICLES = Array.from({ length: 20 }, (_, i) => {
     size: Math.random() * 4 + 2,
     duration,
     delay: -(Math.random() * duration),
-    color: Math.random() > 0.5 ? "rgba(245,158,11,0.65)" : "rgba(148,163,184,0.45)",
+    color: Math.random() > 0.5 ? "rgba(255,200,87,0.65)" : "rgba(31,199,182,0.5)",
   };
 });
 
 export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onStartSequence, onStartPuzzle, onStartOddOneOut, onStartMatchPairs, onStartWhackTarget }: Props) {
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center gap-12 p-8 relative">
+    <div className="festival-stage w-full h-full flex flex-col items-center justify-center gap-10 p-8 relative">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         {PARTICLES.map((p) => (
           <div
@@ -42,12 +42,17 @@ export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onSta
           />
         ))}
       </div>
-      <h1 className="shimmer-text text-9xl font-extrabold tracking-wide text-center drop-shadow-lg">
-        Krishna Leela Games
-      </h1>
-      <p className="text-xl text-krishna-cream/50 -mt-6 tracking-widest uppercase">
-        Test your knowledge of Lord Krishna
-      </p>
+      <header className="relative z-10 text-center">
+        <p className="mb-3 text-lg font-bold uppercase tracking-[0.55em] text-krishna-green">
+          Enter the world of
+        </p>
+        <h1 className="shimmer-text text-8xl font-black tracking-tight drop-shadow-lg">
+          Krishna Leela
+        </h1>
+        <p className="mt-3 text-xl tracking-[0.2em] text-krishna-cream/55">
+          Eight joyful challenges · One divine adventure
+        </p>
+      </header>
       <div className="flex gap-8 flex-wrap justify-center">
         <GameCard
           title="Krishna Quiz"
