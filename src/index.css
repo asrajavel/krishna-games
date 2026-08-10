@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+html {
+  font-size: min(1.4815vh, 0.8333vw);
+}
+
 @theme {
   --color-krishna-bg: #111827;
   --color-krishna-gold: #f59e0b;
