@@ -1,7 +1,6 @@
 ---
 name: add-krishna-game
 description: Adds a game to the Krishna festival stall app using its existing React screen flow, home card, assets, theme, and player reset conventions. Use when creating, scaffolding, or integrating a new game in this repository.
-disable-model-invocation: true
 ---
 
 # Add a Krishna Game
@@ -38,7 +37,7 @@ Defaults unless the request requires otherwise:
 - Use a 75-second game timer.
 - On success, freeze and highlight the completed board for 4 seconds before showing results.
 - Show results for 10 seconds, then call `onExit`.
-- Use an emoji or simple local SVG for imagery; do not research or download assets by default.
+- Create or download assets if required, or use emojis
 
 ## Implement
 
@@ -61,6 +60,8 @@ Defaults unless the request requires otherwise:
    - Add the launch callback prop.
    - Add an available `GameCard` with title, description, icon, and click handler.
 
+Complete one working implementation before visual verification. Do not take intermediate screenshots.
+
 ## Stall requirements
 
 - After completion or timeout, show the result and automatically call `onExit` after 10 seconds.
@@ -80,18 +81,14 @@ npm run lint
 npm run build
 ```
 
-Use Playwright against the running app at 1440×900 and 1920×1080. Take screenshots and fix detected issues before responding. Verify:
+Use Playwright against the running app at 1920×1080. Use browser scripting to reach timed states instead of waiting through timers. Take one final screenshot and verify:
 
 - Home card launches the game.
 - A new session starts cleanly.
-- Correct and incorrect interactions behave as designed.
+- One happy-path interaction behaves as designed.
 - Completion and timeout both reach a result state.
 - The completed board remains visible for 4 seconds before results.
 - The 10-second automatic reset returns home.
 - The layout fits a fullscreen monitor without scrolling.
 
 Do not add a test framework solely for the game. Add a small test only if the new game contains non-trivial pure logic that benefits from one and the repository already supports running it.
-
-ask me no questions, do the best way you think, you can do web serch etc if requried, 
-can also download images from internet if requried, dont worry much about copyrigth etc for now, 
-we will replace all images at the end of the project before launch

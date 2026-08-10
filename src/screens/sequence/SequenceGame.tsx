@@ -31,6 +31,7 @@ export function SequenceGame({ onExit }: Props) {
   const [events, setEvents] = useState(shuffledEvents);
   const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [swappedIndexes, setSwappedIndexes] = useState<number[]>([]);
   const [timedOut, setTimedOut] = useState(false);
   const [showCompleteResult, setShowCompleteResult] = useState(false);
   const [countdown, setCountdown] = useState(AUTO_RESET_SECONDS);
@@ -45,6 +46,12 @@ export function SequenceGame({ onExit }: Props) {
     const timeout = window.setTimeout(() => setShowCompleteResult(true), COMPLETION_REVEAL_MS);
     return () => window.clearTimeout(timeout);
   }, [isComplete, timedOut]);
+
+  useEffect(() => {
+    if (swappedIndexes.length === 0) return;
+    const timeout = window.setTimeout(() => setSwappedIndexes([]), 600);
+    return () => window.clearTimeout(timeout);
+  }, [swappedIndexes]);
 
   useEffect(() => {
     if (!showResult) return;
@@ -63,6 +70,7 @@ export function SequenceGame({ onExit }: Props) {
 
   const handleDrop = (targetIndex: number) => {
     if (draggingIndex === null || draggingIndex === targetIndex || isFinished) return;
+    setSwappedIndexes([draggingIndex, targetIndex]);
     setEvents((current) => {
       const next = [...current];
       [next[draggingIndex], next[targetIndex]] = [next[targetIndex], next[draggingIndex]];
@@ -126,10 +134,10 @@ export function SequenceGame({ onExit }: Props) {
           />
         </svg>
 
-        <span className="absolute left-0 top-[22%] rounded-full border border-game-correct/40 bg-game-correct/10 px-3 py-1 text-base font-extrabold tracking-wider text-game-correct-soft">
+        <span className="absolute left-0 top-[calc(25%+6px)] -translate-y-1/2 rounded-full border border-game-correct/40 bg-game-correct/10 px-3 py-1 text-base font-extrabold tracking-wider text-game-correct-soft">
           START
         </span>
-        <span className="absolute left-0 bottom-[22%] rounded-full border border-game-accent/40 bg-game-accent/10 px-3 py-1 text-base font-extrabold tracking-wider text-game-accent-soft">
+        <span className="absolute left-0 bottom-[calc(25%+6px)] translate-y-1/2 rounded-full border border-game-accent/40 bg-game-accent/10 px-3 py-1 text-base font-extrabold tracking-wider text-game-accent-soft">
           FINISH
         </span>
 
@@ -162,7 +170,9 @@ export function SequenceGame({ onExit }: Props) {
               className={`
                 relative w-full h-full max-w-64 max-h-64 place-self-center overflow-hidden rounded-3xl border-2 p-5 flex flex-col items-center justify-center text-center transition-all shadow-xl
                 ${isComplete
-                  ? "border-game-correct bg-game-correct/15 shadow-[0_16px_40px_rgba(34,197,94,0.2)]"
+                  ? "border-game-correct bg-game-panel shadow-[0_16px_40px_rgba(34,197,94,0.2)]"
+                  : swappedIndexes.includes(index)
+                    ? "swap-pop border-game-accent bg-game-accent/20"
                   : draggingIndex === index
                   ? "opacity-40 border-game-accent bg-game-accent/10 scale-95"
                   : hoveredIndex === index && draggingIndex !== null
