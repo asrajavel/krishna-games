@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Krishna-themed web games for an ISKCON Krishna Janmashtami festival stall. Runs on a **Pi Zero 2 W** in Chromium kiosk mode (`file://` protocol) on a large monitor. Visitors cycle through quickly — UX must be dead simple with no login, auto-reset between players.
+Krishna-themed web games for an ISKCON Krishna Janmashtami festival stall. Runs on a laptop connected to a large monitor. Visitors cycle through quickly — UX must be dead simple with no login, auto-reset between players.
 
 ## Commands
 
@@ -13,9 +13,9 @@ Krishna-themed web games for an ISKCON Krishna Janmashtami festival stall. Runs 
 - `npm run lint` — ESLint
 - `npm run preview` — Preview production build
 
-## Deployment
+## Running at the Stall
 
-Build locally, copy `dist/` to Pi, open with `chromium-browser --kiosk file:///path/to/dist/index.html`. Vite `base: "./"` ensures relative asset paths work over `file://`.
+Run `npm run build`, then `npm run preview` and open the local URL in a fullscreen browser.
 
 ## Architecture
 
@@ -23,7 +23,7 @@ Single-page React app with useState-based screen switching (no router). Screen s
 
 **Screen flow:** HomeScreen → QuizGame → QuizQuestion (×5) → QuizResult → auto-reset to Home (5s)
 
-**Input:** Kiosk UI is mouse driven only. No need to add keyboard navigation
+**Input:** Stall UI is mouse driven only. No need to add keyboard navigation
 
 ## Tailwind CSS v4
 
@@ -37,7 +37,7 @@ Visual direction is a professional game UI: dark slate backgrounds, raised dark 
 
 ## Constraints
 
-- No backend, no audio, no server on the Pi
+- No backend or audio
 - Large text sizes throughout — readable from 3+ feet away
-- `overflow: hidden` and `user-select: none` on body for kiosk use
+- `overflow: hidden` and `user-select: none` on body for stall use
 - Keep the project small. Prefer simple local state and small focused components over adding abstractions early.
