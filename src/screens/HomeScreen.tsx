@@ -8,6 +8,7 @@ interface Props {
   onStartPuzzle: () => void;
   onStartOddOneOut: () => void;
   onStartMatchPairs: () => void;
+  onStartWhackTarget: () => void;
 }
 
 const PARTICLES = Array.from({ length: 20 }, (_, i) => {
@@ -22,7 +23,7 @@ const PARTICLES = Array.from({ length: 20 }, (_, i) => {
   };
 });
 
-export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onStartSequence, onStartPuzzle, onStartOddOneOut, onStartMatchPairs }: Props) {
+export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onStartSequence, onStartPuzzle, onStartOddOneOut, onStartMatchPairs, onStartWhackTarget }: Props) {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center gap-12 p-8 relative">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
@@ -96,6 +97,13 @@ export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onSta
           emoji="🔗"
           available={true}
           onClick={onStartMatchPairs}
+        />
+        <GameCard
+          title="Krishna's Favorites"
+          description="Catch Krishna's favorite things"
+          emoji="🧈"
+          available={true}
+          onClick={onStartWhackTarget}
         />
       </div>
     </div>
