@@ -4,6 +4,7 @@ interface Props {
   onStartQuiz: () => void;
   onStartDasavatar: () => void;
   onStartMemory: () => void;
+  onStartSequence: () => void;
 }
 
 const PARTICLES = Array.from({ length: 20 }, (_, i) => {
@@ -18,7 +19,7 @@ const PARTICLES = Array.from({ length: 20 }, (_, i) => {
   };
 });
 
-export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory }: Props) {
+export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onStartSequence }: Props) {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center gap-12 p-8 relative">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
@@ -64,6 +65,13 @@ export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory }: Pro
           imageSrc="./memory/memory-icon.svg"
           available={true}
           onClick={onStartMemory}
+        />
+        <GameCard
+          title="Lila Sequence"
+          description="Put Krishna's pastimes in order"
+          imageSrc="./sequence/sequence-icon.svg"
+          available={true}
+          onClick={onStartSequence}
         />
       </div>
     </div>
