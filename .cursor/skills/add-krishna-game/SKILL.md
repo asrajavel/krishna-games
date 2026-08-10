@@ -37,7 +37,7 @@ Defaults unless the request requires otherwise:
 - Use a 75-second game timer.
 - On success, freeze and highlight the completed board for 4 seconds before showing results.
 - Show results for 10 seconds, then call `onExit`.
-- Create or download assets if required, or use emojis
+- Create or download assets if required, or use emojis. Dont worry about copyright images, we will replace all images at the end.
 
 ## Implement
 
