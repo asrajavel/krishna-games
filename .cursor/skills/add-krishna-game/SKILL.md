@@ -1,11 +1,24 @@
 ---
 name: add-krishna-game
 description: Adds a game to the Krishna festival stall app using its existing React screen flow, home card, assets, theme, and player reset conventions. Use when creating, scaffolding, or integrating a new game in this repository.
+disable-model-invocation: true
 ---
 
 # Add a Krishna Game
 
-Build the smallest complete game that matches the existing app. Inspect the current files before editing because the game list and patterns may have changed.
+Build the smallest complete game that matches the existing app.
+
+## Inspect only what is needed
+
+Read:
+
+- `src/App.tsx`
+- `src/types.ts`
+- `src/screens/HomeScreen.tsx`
+- `src/components/Timer.tsx` and `GameCard.tsx`
+- One existing game closest to the requested interaction
+
+Do not inspect unrelated games or search the web unless required content cannot be produced locally.
 
 ## Establish the game
 
@@ -17,7 +30,15 @@ Determine from the request:
 - Rules, input method, completion condition, score, and timeout
 - Required content and assets
 
-Ask only for details that materially change the game and cannot be inferred. Keep the interaction mouse-driven and readable from 3+ feet away.
+Infer sensible details and proceed without questions unless implementation is impossible without a user decision. Keep the interaction mouse-driven and readable from 3+ feet away.
+
+Defaults unless the request requires otherwise:
+
+- Keep the game and small datasets in one component file.
+- Use a 75-second game timer.
+- On success, freeze and highlight the completed board for 4 seconds before showing results.
+- Show results for 10 seconds, then call `onExit`.
+- Use an emoji or simple local SVG for imagery; do not research or download assets by default.
 
 ## Implement
 
@@ -52,20 +73,25 @@ Ask only for details that materially change the game and cannot be inferred. Kee
 
 ## Verify
 
-Run:
+After implementation is complete, run once:
 
 ```sh
 npm run lint
 npm run build
 ```
 
-Manually verify:
+Use Playwright against the running app at 1440×900 and 1920×1080. Take screenshots and fix detected issues before responding. Verify:
 
 - Home card launches the game.
 - A new session starts cleanly.
 - Correct and incorrect interactions behave as designed.
 - Completion and timeout both reach a result state.
+- The completed board remains visible for 4 seconds before results.
 - The 10-second automatic reset returns home.
 - The layout fits a fullscreen monitor without scrolling.
 
 Do not add a test framework solely for the game. Add a small test only if the new game contains non-trivial pure logic that benefits from one and the repository already supports running it.
+
+ask me no questions, do the best way you think, you can do web serch etc if requried, 
+can also download images from internet if requried, dont worry much about copyrigth etc for now, 
+we will replace all images at the end of the project before launch
