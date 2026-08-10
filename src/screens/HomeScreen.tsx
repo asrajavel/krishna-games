@@ -3,6 +3,7 @@ import { GameCard } from "../components/GameCard";
 interface Props {
   onStartQuiz: () => void;
   onStartDasavatar: () => void;
+  onStartMemory: () => void;
 }
 
 const PARTICLES = Array.from({ length: 20 }, (_, i) => {
@@ -17,7 +18,7 @@ const PARTICLES = Array.from({ length: 20 }, (_, i) => {
   };
 });
 
-export function HomeScreen({ onStartQuiz, onStartDasavatar }: Props) {
+export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory }: Props) {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center gap-12 p-8 relative">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
@@ -56,6 +57,13 @@ export function HomeScreen({ onStartQuiz, onStartDasavatar }: Props) {
           imageSrc="./dasavatar/dasavatar-icon.svg"
           available={true}
           onClick={onStartDasavatar}
+        />
+        <GameCard
+          title="Memory Match"
+          description="Flip cards to find pairs"
+          imageSrc="./memory/memory-icon.svg"
+          available={true}
+          onClick={onStartMemory}
         />
       </div>
     </div>

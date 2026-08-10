@@ -42,7 +42,6 @@ Ask only for details that materially change the game and cannot be inferred. Kee
 
 ## Stall requirements
 
-- Provide a visible `Back to Home` action.
 - After completion or timeout, show the result and automatically call `onExit` after 10 seconds.
 - Reuse `GameCard`, `Timer`, and existing components when they fit.
 - Use existing theme tokens from `src/index.css`; add a named token only if necessary.
@@ -66,7 +65,7 @@ Manually verify:
 - A new session starts cleanly.
 - Correct and incorrect interactions behave as designed.
 - Completion and timeout both reach a result state.
-- Manual exit and the 10-second automatic reset return home.
+- The 10-second automatic reset returns home.
 - The layout fits a fullscreen monitor without scrolling.
 
 Do not add a test framework solely for the game. Add a small test only if the new game contains non-trivial pure logic that benefits from one and the repository already supports running it.
