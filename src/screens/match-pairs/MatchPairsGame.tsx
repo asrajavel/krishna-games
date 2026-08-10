@@ -19,10 +19,11 @@ const CELEBRATION_MS = 4_000;
 const AUTO_RESET_SECONDS = 10;
 
 type Phase = "playing" | "celebrating" | "result";
+type Side = "left" | "right";
 
 export function MatchPairsGame({ onExit }: Props) {
   const [matches] = useState(() => [...PAIRS].sort(() => Math.random() - 0.5));
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<{ id: string; side: Side } | null>(null);
   const [matched, setMatched] = useState<string[]>([]);
   const [wrong, setWrong] = useState<string | null>(null);
   const [phase, setPhase] = useState<Phase>("playing");
@@ -50,9 +51,13 @@ export function MatchPairsGame({ onExit }: Props) {
     return () => window.clearInterval(interval);
   }, [phase, onExit]);
 
-  const handleMatch = (id: string) => {
-    if (phase !== "playing" || !selected || matched.includes(id)) return;
-    if (selected === id) {
+  const handlePick = (side: Side, id: string) => {
+    if (phase !== "playing" || matched.includes(id)) return;
+    if (!selected || selected.side === side) {
+      setSelected({ id, side });
+      return;
+    }
+    if (selected.id === id) {
       const nextMatched = [...matched, id];
       setMatched(nextMatched);
       setSelected(null);
@@ -60,7 +65,7 @@ export function MatchPairsGame({ onExit }: Props) {
       return;
     }
 
-    setWrong(id);
+    setWrong(`${side}:${id}`);
     window.setTimeout(() => setWrong(null), 500);
   };
 
@@ -94,7 +99,7 @@ export function MatchPairsGame({ onExit }: Props) {
       <header className="shrink-0 text-center">
         <h1 className="text-5xl font-extrabold text-game-accent">Match the Pairs</h1>
         <p className="mt-1 text-xl text-slate-300">
-          Choose a character, then choose what belongs to them.
+          Choose one item, then choose its match on the other side.
         </p>
       </header>
 
@@ -124,11 +129,12 @@ export function MatchPairsGame({ onExit }: Props) {
         <div className="col-start-1 row-start-1 relative z-20 grid grid-rows-6 gap-3">
           {PAIRS.map((pair) => {
             const isMatched = matched.includes(pair.id);
-            const isSelected = selected === pair.id;
+            const isSelected = selected?.side === "left" && selected.id === pair.id;
+            const isWrong = wrong === `left:${pair.id}`;
             return (
               <button
                 key={pair.id}
-                onClick={() => setSelected(pair.id)}
+                onClick={() => handlePick("left", pair.id)}
                 disabled={phase !== "playing" || isMatched}
                 tabIndex={-1}
                 className={`rounded-2xl border-2 px-6 flex items-center gap-5 text-left transition-all shadow-lg ${
@@ -136,6 +142,8 @@ export function MatchPairsGame({ onExit }: Props) {
                     ? "border-game-correct bg-game-correct/15"
                     : isSelected
                       ? "border-game-accent bg-game-panel-hover scale-[1.02]"
+                      : isWrong
+                        ? "border-game-wrong bg-game-wrong/15 animate-shake"
                       : "border-slate-600 bg-game-panel hover:border-game-accent"
                 }`}
               >
@@ -149,18 +157,21 @@ export function MatchPairsGame({ onExit }: Props) {
         <div className="col-start-3 row-start-1 relative z-20 grid grid-rows-6 gap-3">
           {matches.map((pair) => {
             const isMatched = matched.includes(pair.id);
-            const isWrong = wrong === pair.id;
+            const isSelected = selected?.side === "right" && selected.id === pair.id;
+            const isWrong = wrong === `right:${pair.id}`;
             return (
               <button
                 key={pair.id}
-                onClick={() => handleMatch(pair.id)}
+                onClick={() => handlePick("right", pair.id)}
                 disabled={phase !== "playing" || isMatched}
                 tabIndex={-1}
                 className={`rounded-2xl border-2 px-6 flex items-center gap-5 text-left transition-all shadow-lg ${
                   isMatched
                     ? "border-game-correct bg-game-correct/15"
-                    : isWrong
-                      ? "border-game-wrong bg-game-wrong/15 animate-shake"
+                    : isSelected
+                      ? "border-game-accent bg-game-panel-hover scale-[1.02]"
+                      : isWrong
+                        ? "border-game-wrong bg-game-wrong/15 animate-shake"
                       : "border-slate-600 bg-game-panel hover:border-game-accent"
                 }`}
               >
