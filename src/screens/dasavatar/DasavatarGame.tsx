@@ -6,6 +6,10 @@ interface Props {
   onExit: () => void;
 }
 
+function targetAtPoint(x: number, y: number) {
+  return document.elementFromPoint(x, y)?.closest<HTMLElement>("[data-avatar-target]")?.dataset.avatarTarget ?? null;
+}
+
 const GAME_DURATION_SECONDS = 60;
 const GAME_DURATION_MS = GAME_DURATION_SECONDS * 1000;
 const AUTO_RESET_SECONDS = 10;
@@ -15,6 +19,7 @@ export function DasavatarGame({ onExit }: Props) {
   const [nameCards] = useState(() => shuffleDasavatarItems());
   const [placements, setPlacements] = useState<Record<string, string>>({});
   const [draggingId, setDraggingId] = useState<string | null>(null);
+  const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
   const [hoveredTargetId, setHoveredTargetId] = useState<string | null>(null);
   const [wrongId, setWrongId] = useState<string | null>(null);
   const [timedOut, setTimedOut] = useState(false);
@@ -43,21 +48,18 @@ export function DasavatarGame({ onExit }: Props) {
     return () => clearInterval(interval);
   }, [isComplete, isTimedOut, onExit]);
 
-  const handleDragStart = useCallback((event: React.DragEvent<HTMLButtonElement>, avatarId: string) => {
-    event.dataTransfer.effectAllowed = "move";
-    event.dataTransfer.setData("text/plain", avatarId);
+  const handleDragStart = useCallback((event: React.PointerEvent<HTMLButtonElement>, avatarId: string) => {
+    event.preventDefault();
+    setDragPosition({ x: event.clientX, y: event.clientY });
     setDraggingId(avatarId);
     setWrongId(null);
   }, []);
 
-  const handleDrop = useCallback((event: React.DragEvent<HTMLDivElement>, targetId: string) => {
-    event.preventDefault();
-
-    const droppedId = event.dataTransfer.getData("text/plain") || draggingId;
+  const handleDrop = useCallback((droppedId: string, targetId: string | null) => {
     setDraggingId(null);
     setHoveredTargetId(null);
 
-    if (!isGameActive || !droppedId || placedIds.has(droppedId)) return;
+    if (!isGameActive || !targetId || placedIds.has(droppedId)) return;
 
     if (droppedId === targetId) {
       setPlacements((prev) => ({ ...prev, [targetId]: droppedId }));
@@ -66,7 +68,26 @@ export function DasavatarGame({ onExit }: Props) {
 
     setWrongId(droppedId);
     window.setTimeout(() => setWrongId(null), 500);
-  }, [draggingId, isGameActive, placedIds]);
+  }, [isGameActive, placedIds]);
+
+  useEffect(() => {
+    if (!draggingId) return;
+
+    const handlePointerMove = (event: PointerEvent) => {
+      setDragPosition({ x: event.clientX, y: event.clientY });
+      setHoveredTargetId(targetAtPoint(event.clientX, event.clientY));
+    };
+    const handlePointerUp = (event: PointerEvent) => {
+      handleDrop(draggingId, targetAtPoint(event.clientX, event.clientY));
+    };
+
+    document.addEventListener("pointermove", handlePointerMove);
+    document.addEventListener("pointerup", handlePointerUp, { once: true });
+    return () => {
+      document.removeEventListener("pointermove", handlePointerMove);
+      document.removeEventListener("pointerup", handlePointerUp);
+    };
+  }, [draggingId, handleDrop]);
 
   const handleExpire = useCallback(() => {
     setTimedOut(true);
@@ -98,13 +119,7 @@ export function DasavatarGame({ onExit }: Props) {
           return (
             <div
               key={avatar.id}
-              onDrop={(event) => handleDrop(event, avatar.id)}
-              onDragEnter={() => setHoveredTargetId(avatar.id)}
-              onDragLeave={() => setHoveredTargetId((current) => current === avatar.id ? null : current)}
-              onDragOver={(event) => {
-                event.preventDefault();
-                setHoveredTargetId(avatar.id);
-              }}
+              data-avatar-target={avatar.id}
               className={`
                 rounded-2xl border bg-game-panel p-3 flex flex-col min-h-0 transition-all shadow-lg
                 ${matchedName
@@ -146,20 +161,15 @@ export function DasavatarGame({ onExit }: Props) {
           return (
             <button
               key={avatar.id}
-              draggable={!isPlaced && isGameActive}
-              onDragStart={(event) => handleDragStart(event, avatar.id)}
-              onDragEnd={() => {
-                setDraggingId(null);
-                setHoveredTargetId(null);
-              }}
+              onPointerDown={(event) => handleDragStart(event, avatar.id)}
               disabled={isPlaced || !isGameActive}
               tabIndex={-1}
               className={`
-                px-6 py-3 rounded-xl border text-2xl font-extrabold transition-all shadow-sm
+                px-6 py-3 rounded-xl border text-2xl font-extrabold transition-all shadow-sm touch-none
                 ${wrongId === avatar.id ? "shake border-game-wrong bg-game-wrong/20 text-white" : ""}
                 ${isPlaced
                   ? "opacity-25 border-slate-700 bg-slate-900 text-slate-400"
-                  : "cursor-grab active:cursor-grabbing border-slate-500 bg-slate-800 text-slate-100 hover:border-game-accent hover:bg-game-panel-hover hover:text-game-accent-soft hover:scale-105"
+                  : `${draggingId === avatar.id ? "opacity-40" : ""} border-slate-500 bg-slate-800 text-slate-100 hover:border-game-accent hover:bg-game-panel-hover hover:text-game-accent-soft hover:scale-105`
                 }
               `}
             >
@@ -168,6 +178,15 @@ export function DasavatarGame({ onExit }: Props) {
           );
         })}
       </section>
+
+      {draggingId && (
+        <div
+          className="fixed z-50 pointer-events-none -translate-x-1/2 -translate-y-1/2 px-6 py-3 rounded-xl border border-game-accent bg-slate-800 text-game-accent-soft text-2xl font-extrabold shadow-lg"
+          style={{ left: dragPosition.x, top: dragPosition.y }}
+        >
+          {nameCards.find((avatar) => avatar.id === draggingId)?.name}
+        </div>
+      )}
 
       {(isComplete || isTimedOut) && (
         <div className="absolute inset-0 bg-game-bg flex flex-col items-center justify-center gap-8 p-8 text-center">
