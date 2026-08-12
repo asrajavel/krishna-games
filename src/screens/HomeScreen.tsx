@@ -9,6 +9,7 @@ interface Props {
   onStartOddOneOut: () => void;
   onStartMatchPairs: () => void;
   onStartWhackTarget: () => void;
+  onStartRouteToVrindavan: () => void;
 }
 
 const PARTICLES = Array.from({ length: 20 }, (_, i) => {
@@ -23,7 +24,7 @@ const PARTICLES = Array.from({ length: 20 }, (_, i) => {
   };
 });
 
-export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onStartSequence, onStartPuzzle, onStartOddOneOut, onStartMatchPairs, onStartWhackTarget }: Props) {
+export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onStartSequence, onStartPuzzle, onStartOddOneOut, onStartMatchPairs, onStartWhackTarget, onStartRouteToVrindavan }: Props) {
   return (
     <div className="festival-stage relative flex h-full w-full flex-col items-center justify-center gap-6 p-6">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
@@ -50,10 +51,10 @@ export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onSta
           Krishna Leela
         </h1>
         <p className="mt-3 text-xl tracking-[0.2em] text-krishna-cream/55">
-          Eight joyful challenges · One divine adventure
+          Nine joyful challenges · One divine adventure
         </p>
       </header>
-      <div className="relative z-10 grid h-[34rem] max-h-full w-full max-w-[64rem] grid-cols-4 grid-rows-2 gap-8">
+      <div className="relative z-10 grid h-[34rem] max-h-full w-full max-w-[54rem] grid-cols-3 grid-rows-3 gap-5">
         <GameCard
           title="Krishna Quiz"
           description="Test your knowledge!"
@@ -109,6 +110,13 @@ export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onSta
           emoji="🧈"
           available={true}
           onClick={onStartWhackTarget}
+        />
+        <GameCard
+          title="Route to Vrindavan"
+          description="Guide the pilgrimage bus"
+          imageSrc="./route-to-vrindavan/icon.svg"
+          available={true}
+          onClick={onStartRouteToVrindavan}
         />
       </div>
     </div>

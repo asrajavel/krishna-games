@@ -161,3 +161,155 @@ body * {
 .drop-glow-accent {
   filter: drop-shadow(0 0 4px color-mix(in srgb, var(--color-game-accent) 30%, transparent));
 }
+
+@keyframes route-scenery {
+  from { transform: translate3d(5%, 0, 0); }
+  to { transform: translate3d(-5%, 0, 0); }
+}
+
+@keyframes route-road {
+  to { background-position-x: -60rem; }
+}
+
+@keyframes route-sign {
+  from { transform: translate3d(12vw, 0, 0); }
+  to { transform: translate3d(-140vw, 0, 0); }
+}
+
+@keyframes route-bus {
+  0% { transform: translate3d(-100vw, 0, 0); }
+  25%, 85% { transform: translate3d(0, 0, 0); }
+  35%, 55%, 75% { transform: translate3d(0, -.35rem, 0); }
+  45%, 65% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(80vw, 0, 0); }
+}
+
+@keyframes route-life-lost {
+  0% { opacity: 0; }
+  20%, 65% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes route-life-hit {
+  25%, 75% { transform: scale(1.45); color: var(--color-game-wrong); }
+}
+
+.route-life-lost {
+  background: radial-gradient(circle, transparent 30%, rgba(245, 158, 11, .48));
+  animation: route-life-lost 2s ease-out both;
+}
+
+.route-life-lost > div {
+  padding: 1rem 2rem;
+  border: .25rem solid var(--color-game-accent);
+  border-radius: 1rem;
+  background: rgba(45, 28, 8, .92);
+  color: white;
+  box-shadow: 0 0 3rem rgba(245, 158, 11, .75);
+  text-align: center;
+}
+
+.route-life-lost strong {
+  display: block;
+  font-size: 5rem;
+}
+
+.route-life-lost span {
+  display: block;
+  margin-top: .25rem;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.route-lives-hit {
+  animation: route-life-hit .45s ease-in-out 2;
+}
+
+.route-game {
+  background: url("/vrindavan-forked-road.png") center / cover;
+}
+
+.route-game::before {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(8, 5, 33, .74), rgba(8, 5, 33, .25) 65%, rgba(8, 5, 33, .55));
+  content: "";
+}
+
+.route-drive-scene {
+  overflow: hidden;
+  background: #7dd3fc;
+}
+
+.route-drive-scene::before {
+  position: absolute;
+  inset: -6% -12%;
+  background: url("/vrindavan-highway-background.png") center 72% / cover;
+  animation: route-scenery 5s ease-in-out infinite alternate;
+  content: "";
+}
+
+.route-road {
+  position: absolute;
+  inset: 78% 0 0;
+  background: url("/vrindavan-road-generated.png") 0 center / 60rem 100% repeat-x;
+  animation: route-road 5s linear infinite;
+}
+
+.route-drive-message {
+  position: absolute;
+  z-index: 5;
+  top: 7%;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 34rem;
+  padding: 1rem 2.4rem;
+  border: .2rem solid var(--color-game-correct);
+  border-radius: 999px;
+  background: rgba(15, 23, 42, .9);
+  color: var(--color-game-text);
+  box-shadow: 0 1rem 3rem rgba(15, 23, 42, .35);
+  font-size: 3rem;
+  font-weight: 900;
+  text-align: center;
+}
+
+.route-passing-sign {
+  position: absolute;
+  z-index: 3;
+  bottom: 21%;
+  left: 100%;
+  width: 12rem;
+  color: white;
+  text-align: center;
+  backface-visibility: hidden;
+  will-change: transform;
+  animation: route-sign 8s linear infinite;
+}
+
+.route-passing-sign img {
+  display: block;
+  width: 100%;
+}
+
+.route-passing-sign strong {
+  position: absolute;
+  top: 8%;
+  left: 6%;
+  display: flex;
+  width: 88%;
+  height: 34%;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+}
+
+.route-bus {
+  position: absolute;
+  z-index: 4;
+  bottom: 9%;
+  left: 36%;
+  width: min(34rem, 44vw);
+  filter: drop-shadow(0 1.2rem 1rem rgba(15, 23, 42, .4));
+  animation: route-bus 5s ease-in-out both;
+}
