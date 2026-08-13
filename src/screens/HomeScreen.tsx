@@ -10,6 +10,7 @@ interface Props {
   onStartMatchPairs: () => void;
   onStartWhackTarget: () => void;
   onStartRouteToVrindavan: () => void;
+  onStartMaze: () => void;
 }
 
 const PARTICLES = Array.from({ length: 20 }, (_, i) => {
@@ -24,7 +25,7 @@ const PARTICLES = Array.from({ length: 20 }, (_, i) => {
   };
 });
 
-export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onStartSequence, onStartPuzzle, onStartOddOneOut, onStartMatchPairs, onStartWhackTarget, onStartRouteToVrindavan }: Props) {
+export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onStartSequence, onStartPuzzle, onStartOddOneOut, onStartMatchPairs, onStartWhackTarget, onStartRouteToVrindavan, onStartMaze }: Props) {
   return (
     <div className="festival-stage relative flex h-full w-full flex-col items-center justify-center gap-6 p-6">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
@@ -51,10 +52,10 @@ export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onSta
           Krishna Leela
         </h1>
         <p className="mt-3 text-xl tracking-[0.2em] text-krishna-cream/55">
-          Nine joyful challenges · One divine adventure
+          Ten joyful challenges · One divine adventure
         </p>
       </header>
-      <div className="relative z-10 grid h-[34rem] max-h-full w-full max-w-[54rem] grid-cols-3 grid-rows-3 gap-5">
+      <div className="relative z-10 grid h-[28rem] max-h-full w-full max-w-[90rem] grid-cols-5 grid-rows-2 gap-5">
         <GameCard
           title="Krishna Quiz"
           description="Test your knowledge!"
@@ -117,6 +118,13 @@ export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onSta
           imageSrc="./route-to-vrindavan/icon.svg"
           available={true}
           onClick={onStartRouteToVrindavan}
+        />
+        <GameCard
+          title="Krishna’s Forest Maze"
+          description="Trace the path to the cows"
+          imageSrc="./maze/icon.svg"
+          available={true}
+          onClick={onStartMaze}
         />
       </div>
     </div>

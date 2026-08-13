@@ -10,6 +10,7 @@ import { OddOneOutGame } from "./screens/odd-one-out/OddOneOutGame";
 import { MatchPairsGame } from "./screens/match-pairs/MatchPairsGame";
 import { WhackTargetGame } from "./screens/whack-target/WhackTargetGame";
 import { RouteToVrindavanGame } from "./screens/route-to-vrindavan/RouteToVrindavanGame";
+import { MazeGame } from "./screens/maze/MazeGame";
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>("home");
@@ -24,6 +25,7 @@ export default function App() {
   const goMatchPairs = useCallback(() => setScreen("match-pairs"), []);
   const goWhackTarget = useCallback(() => setScreen("whack-target"), []);
   const goRouteToVrindavan = useCallback(() => setScreen("route-to-vrindavan"), []);
+  const goMaze = useCallback(() => setScreen("maze"), []);
 
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-krishna-bg">
@@ -50,6 +52,7 @@ export default function App() {
           onStartMatchPairs={goMatchPairs}
           onStartWhackTarget={goWhackTarget}
           onStartRouteToVrindavan={goRouteToVrindavan}
+          onStartMaze={goMaze}
         />
       ) : screen === "quiz" ? (
         <QuizGame onExit={goHome} />
@@ -69,6 +72,8 @@ export default function App() {
         <WhackTargetGame onExit={goHome} />
       ) : screen === "route-to-vrindavan" ? (
         <RouteToVrindavanGame onExit={goHome} />
+      ) : screen === "maze" ? (
+        <MazeGame onExit={goHome} />
       ) : (
         null
       )}
