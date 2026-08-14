@@ -124,9 +124,9 @@ export function MazeGame({ onExit }: Props) {
     return (
       <main className="flex h-full flex-col items-center justify-center gap-7 overflow-hidden bg-game-bg p-8 text-center">
         <div className="flex h-32 items-end justify-center">
-          <img className="h-full w-32 object-contain drop-shadow-2xl" src="/maze/krishna-token.webp" alt="" />
+          <img className="h-full w-32 object-contain drop-shadow-2xl" src="./maze/krishna-token.webp" alt="" />
           {outcome === "complete" && (
-            <img className="-ml-5 h-full w-36 object-contain drop-shadow-2xl" src="/maze/cows-goal.webp" alt="" />
+            <img className="-ml-5 h-full w-36 object-contain drop-shadow-2xl" src="./maze/cows-goal.webp" alt="" />
           )}
         </div>
         <h1 className="text-6xl font-extrabold text-game-accent">
@@ -179,7 +179,7 @@ export function MazeGame({ onExit }: Props) {
           onPointerCancel={() => { draggingRef.current = false; }}
         >
           <img
-            src="/maze/garden-background.webp"
+            src="./maze/garden-background.webp"
             alt=""
             className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-80"
           />
@@ -233,7 +233,7 @@ export function MazeGame({ onExit }: Props) {
             className="pointer-events-none absolute z-10 h-[4.25rem] w-[4.25rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-game-bg/70 p-0.5 ring-2 ring-game-accent shadow-lg shadow-game-accent/70"
             style={{ left: `${((endpoint.col + 0.5) / COLS) * 100}%`, top: `${((endpoint.row + 0.5) / ROWS) * 100}%` }}
           >
-            <img className="h-full w-full object-contain drop-shadow-2xl" src="/maze/krishna-token.webp" alt="" />
+            <img className="h-full w-full object-contain drop-shadow-2xl" src="./maze/krishna-token.webp" alt="" />
           </div>
           <div
             aria-label="Krishna's cows"
@@ -244,7 +244,7 @@ export function MazeGame({ onExit }: Props) {
             }`}
             style={{ left: `${((TARGET.col + 0.5) / COLS) * 100}%`, top: `${((TARGET.row + 0.5) / ROWS) * 100}%` }}
           >
-            <img className="h-full w-full object-contain drop-shadow-2xl" src="/maze/cows-goal.webp" alt="" />
+            <img className="h-full w-full object-contain drop-shadow-2xl" src="./maze/cows-goal.webp" alt="" />
           </div>
         </div>
       </div>
