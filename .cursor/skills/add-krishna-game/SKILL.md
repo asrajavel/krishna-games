@@ -7,14 +7,15 @@ description: Adds a game to the Krishna festival stall app using its existing Re
 
 Build the smallest complete game that matches the existing app.
 
-## Inspect only what is needed
+## Understand the existing flow
 
 Read:
 
 - `src/games.ts`
+- `src/screens/HomeScreen.tsx`
 - One existing game closest to the requested interaction
 
-Do not inspect shared components unless their API is unclear or TypeScript fails. Do not inspect unrelated games, glob broadly, or search the web unless required content cannot be produced locally. Implement after these reads.
+Inspect the shared components, helpers, theme, and related games needed to understand the full registration, gameplay, result, and reset flow before implementing.
 
 ## Establish the game
 
@@ -54,6 +55,8 @@ Defaults unless the request requires otherwise:
    - Accept `onExit: () => void`.
    - Keep game state local so remounting starts a fresh session.
    - Keep simple games in one file and reuse `GameResultScreen` for results.
+   - Pass a stable `useCallback` handler to `Timer.onExpire`.
+   - Reuse `src/shuffle.ts` when randomizing content.
 2. Add static content to `src/data/<game-id>.ts` only when separating it improves readability.
 3. Put the icon and game assets in `public/<game-id>/`.
    - Reference them with relative paths such as `./<game-id>/icon.svg`.
@@ -66,7 +69,7 @@ Complete one working implementation before visual verification. Do not take inte
 
 ## Stall requirements
 
-- Reuse `GameCard`, `Timer`, and `GameResultScreen`.
+- Reuse `Timer` and `GameResultScreen`.
 - Use large controls and labels; set `tabIndex={-1}` on stall buttons.
 - Use `rem` for layout dimensions, gaps, and fixed component sizes. The root font size scales with the viewport, so fixed `px` dimensions break proportions between Full HD and 4K.
 - Do not modify unrelated or pre-existing user changes.
@@ -79,7 +82,7 @@ After implementation is complete, run once:
 npm run lint && npm run build
 ```
 
-Use one Playwright scripted session at 1366x768 1920×1080 and 3840×2160. Accelerate timed states, avoid intermediate screenshots, and take one final screenshot. Verify:
+Use one Playwright scripted session at 1366×768, 1920×1080, and 3840×2160. Accelerate timed states, avoid intermediate screenshots, and take one final screenshot. Verify:
 
 - Playwright gotcha: use `page.clock.runFor()`, not `fastForward()`.
 - Home card launches the game.
@@ -89,7 +92,7 @@ Use one Playwright scripted session at 1366x768 1920×1080 and 3840×2160. Accel
 - The completed board remains visible for 4 seconds before results.
 - The 10-second automatic reset returns home.
 - The layout fits a fullscreen monitor without scrolling.
-- Cards, gaps, and typography keep the same relative proportions at both resolutions.
+- Cards, gaps, and typography keep the same relative proportions at all resolutions.
 
 Do not add a test framework solely for the game. Add a small test only if the new game contains non-trivial pure logic that benefits from one and the repository already supports running it.
 
