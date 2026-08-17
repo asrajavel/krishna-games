@@ -16,7 +16,7 @@ export function GameCard({ title, description, emoji, imageSrc, onClick }: Props
       <span className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-game-accent to-transparent" />
       {imageSrc ? (
         <span className="flex h-20 w-20 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/10 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
-          <img src={imageSrc} alt="" className="h-14 w-14 object-contain drop-shadow-[0_8px_18px_rgba(255,200,87,0.3)]" />
+          <img src={imageSrc} alt="" className="h-14 w-14 object-contain drop-shadow-[0_0.5rem_1.125rem_rgba(255,200,87,0.3)]" />
         </span>
       ) : (
         <span className="flex h-20 w-20 items-center justify-center rounded-full bg-white/5 text-5xl ring-1 ring-white/10 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3">{emoji}</span>

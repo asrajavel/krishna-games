@@ -99,9 +99,8 @@ export function MatchPairsGame({ onExit }: Props) {
                 x2="100"
                 y2={y2}
                 className="stroke-game-correct opacity-75"
-                strokeWidth="3"
+                strokeWidth="0.1875rem"
                 strokeLinecap="round"
-                vectorEffect="non-scaling-stroke"
               />
             );
           })}

@@ -30,7 +30,7 @@ export function Timer({ durationMs, onExpire, paused = false }: Props) {
     "bg-krishna-wrong";
 
   return (
-    <div className="relative h-3 w-full overflow-visible bg-white/10 shadow-[0_4px_18px_rgba(0,0,0,0.35)]">
+    <div className="relative h-3 w-full overflow-visible bg-white/10 shadow-[0_0.25rem_1.125rem_rgba(0,0,0,0.35)]">
       <div
         className={`h-full ${color} transition-all duration-100`}
         style={{ width: `${progress * 100}%` }}

@@ -92,21 +92,6 @@ export function WhackTargetGame({ onExit }: Props) {
 
   return (
     <div className="relative w-full h-full flex flex-col gap-4 p-8 pt-10 bg-game-bg text-game-text">
-      <style>{`
-        @keyframes favorite-fall {
-          from { transform: translate3d(0, -9rem, 0); }
-          50% { transform: translate3d(var(--drift-mid), calc(50vh - 4rem), 0); }
-          to { transform: translate3d(var(--drift-end), calc(100vh - 8rem), 0); }
-        }
-        @keyframes favorite-hit {
-          50% { transform: scale(1.3); filter: brightness(1.5); }
-        }
-        @keyframes favorite-wrong {
-          25%, 75% { transform: translateX(-0.5rem); }
-          50% { transform: translateX(0.5rem); }
-        }
-      `}</style>
-
       <div className="absolute inset-x-0 top-0 z-20">
         <Timer durationMs={GAME_DURATION_MS} onExpire={handleExpire} paused={phase !== "playing"} />
       </div>
@@ -137,16 +122,11 @@ export function WhackTargetGame({ onExit }: Props) {
             <span
               className={`w-full h-full rounded-full border-4 flex items-center justify-center text-7xl shadow-xl
                 ${item.feedback === "correct"
-                  ? "border-game-correct bg-game-correct/30"
+                  ? "favorite-hit border-game-correct bg-game-correct/30"
                   : item.feedback === "wrong"
-                    ? "border-game-wrong bg-game-wrong/30"
+                    ? "shake border-game-wrong bg-game-wrong/30"
                     : "border-game-accent/70 bg-game-panel-hover transition-transform duration-150 hover:scale-110"
                 }`}
-              style={{
-                animation: item.feedback
-                  ? `${item.feedback === "correct" ? "favorite-hit" : "favorite-wrong"} 550ms ease-out`
-                  : undefined,
-              }}
             >
               {item.emoji}
             </span>

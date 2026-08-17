@@ -126,10 +126,10 @@ export function SequenceGame({ onExit }: Props) {
           />
         </svg>
 
-        <span className="absolute left-0 top-[calc(25%+6px)] -translate-y-1/2 rounded-full border border-game-correct/40 bg-game-correct/10 px-3 py-1 text-base font-extrabold tracking-wider text-game-correct-soft">
+        <span className="absolute left-0 top-[calc(25%+0.375rem)] -translate-y-1/2 rounded-full border border-game-correct/40 bg-game-correct/10 px-3 py-1 text-base font-extrabold tracking-wider text-game-correct-soft">
           START
         </span>
-        <span className="absolute left-0 bottom-[calc(25%+6px)] translate-y-1/2 rounded-full border border-game-accent/40 bg-game-accent/10 px-3 py-1 text-base font-extrabold tracking-wider text-game-accent-soft">
+        <span className="absolute left-0 bottom-[calc(25%+0.375rem)] translate-y-1/2 rounded-full border border-game-accent/40 bg-game-accent/10 px-3 py-1 text-base font-extrabold tracking-wider text-game-accent-soft">
           FINISH
         </span>
 

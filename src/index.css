@@ -5,11 +5,7 @@ html {
 }
 
 @theme {
-  --color-krishna-bg: #080521;
-  --color-krishna-gold: #ffc857;
   --color-krishna-green: #1fc7b6;
-  --color-krishna-wrong: #ff5f7e;
-  --color-krishna-cream: #fff8e8;
   --color-game-bg: #080521;
   --color-game-panel: #17103d;
   --color-game-panel-hover: #25165b;
@@ -20,6 +16,10 @@ html {
   --color-game-wrong: #ff5f7e;
   --color-game-wrong-soft: #ffb2c1;
   --color-game-text: #fff8e8;
+  --color-krishna-bg: var(--color-game-bg);
+  --color-krishna-gold: var(--color-game-accent);
+  --color-krishna-wrong: var(--color-game-wrong);
+  --color-krishna-cream: var(--color-game-text);
 }
 
 body {
@@ -52,8 +52,18 @@ body * {
 
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-8px); }
-  40%, 80% { transform: translateX(8px); }
+  20%, 60% { transform: translateX(-.5rem); }
+  40%, 80% { transform: translateX(.5rem); }
+}
+
+@keyframes favorite-fall {
+  from { top: -7rem; transform: translate3d(0, 0, 0); }
+  50% { top: 50%; transform: translate3d(var(--drift-mid), -50%, 0); }
+  to { top: 100%; transform: translate3d(var(--drift-end), -100%, 0); }
+}
+
+@keyframes favorite-hit {
+  50% { transform: scale(1.3); filter: brightness(1.5); }
 }
 
 @keyframes swap-pop {
@@ -90,6 +100,10 @@ body * {
 
 .shake {
   animation: shake 0.45s ease-in-out;
+}
+
+.favorite-hit {
+  animation: favorite-hit .55s ease-out;
 }
 
 .swap-pop {
@@ -299,7 +313,7 @@ body * {
   z-index: 4;
   bottom: 9%;
   left: 36%;
-  width: min(34rem, 44vw);
+  width: 34rem;
   filter: drop-shadow(0 1.2rem 1rem rgba(15, 23, 42, .4));
   animation: route-bus 5s ease-in-out both;
 }

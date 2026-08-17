@@ -10,10 +10,12 @@ const PARTICLES = Array.from({ length: 20 }, (_, i) => {
   return {
     id: i,
     left: `${Math.random() * 100}%`,
-    size: Math.random() * 4 + 2,
+    size: `${(Math.random() * 4 + 2) / 16}rem`,
     duration,
     delay: -(Math.random() * duration),
-    color: Math.random() > 0.5 ? "rgba(255,200,87,0.65)" : "rgba(31,199,182,0.5)",
+    color: Math.random() > 0.5
+      ? "color-mix(in srgb, var(--color-game-accent) 65%, transparent)"
+      : "color-mix(in srgb, var(--color-krishna-green) 50%, transparent)",
   };
 });
 

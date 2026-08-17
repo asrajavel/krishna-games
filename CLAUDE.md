@@ -35,6 +35,12 @@ Visual direction is a professional game UI: dark slate backgrounds, raised dark 
 
 **Key gotcha:** Tailwind v4 CSS Cascade Layers — non-layered styles (like `body {}`) beat `@layer` styles. When overriding Tailwind utilities in plain CSS, keep this in mind.
 
+## Responsive scaling
+
+The UI is designed at 1920×1080 and scales through `html { font-size: min(1.4815vh, 0.8333vw) }`. Use `rem` for component dimensions, offsets, motion distances, and SVG stroke widths so Full HD and 4K keep the same proportions. Percentage positioning is fine inside a scaled container.
+
+`npm run lint` rejects `px`, `vw`, `vh`, non-scaling SVG strokes, and numeric inline width/height values in TSX. Keep legitimate viewport-filling shells, pointer coordinates, hairlines, shadows, and full-screen decorative animation in shared CSS.
+
 ## Constraints
 
 - No backend or audio

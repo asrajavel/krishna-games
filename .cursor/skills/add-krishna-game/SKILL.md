@@ -72,6 +72,9 @@ Complete one working implementation before visual verification. Do not take inte
 - Reuse `Timer` and `GameResultScreen`.
 - Use large controls and labels; set `tabIndex={-1}` on stall buttons.
 - Use `rem` for layout dimensions, gaps, and fixed component sizes. The root font size scales with the viewport, so fixed `px` dimensions break proportions between Full HD and 4K.
+- Use percentages only relative to a scaled container; do not use `vw` or `vh` for component motion or sizing.
+- Size SVG strokes in `rem`; do not use `non-scaling-stroke`.
+- `npm run lint` enforces these rules in TSX. Pointer coordinates and full-screen decorative motion are valid exceptions and belong in shared CSS.
 - Do not modify unrelated or pre-existing user changes.
 
 ## Verify
