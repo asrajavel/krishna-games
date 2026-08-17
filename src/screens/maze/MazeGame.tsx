@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type PointerEvent } from "react";
+import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 
 interface Props {
@@ -64,12 +65,6 @@ export function MazeGame({ onExit }: Props) {
     return () => window.clearTimeout(timeout);
   }, [phase]);
 
-  useEffect(() => {
-    if (phase !== "result") return;
-    const timeout = window.setTimeout(onExit, 10000);
-    return () => window.clearTimeout(timeout);
-  }, [onExit, phase]);
-
   useEffect(() => () => {
     if (bumpTimeoutRef.current !== null) window.clearTimeout(bumpTimeoutRef.current);
   }, []);
@@ -122,34 +117,12 @@ export function MazeGame({ onExit }: Props) {
 
   if (phase === "result") {
     return (
-      <main className="flex h-full flex-col items-center justify-center gap-7 overflow-hidden bg-game-bg p-8 text-center">
-        <div className="flex h-32 items-end justify-center">
-          <img className="h-full w-32 object-contain drop-shadow-2xl" src="./maze/krishna-token.webp" alt="" />
-          {outcome === "complete" && (
-            <img className="-ml-5 h-full w-36 object-contain drop-shadow-2xl" src="./maze/cows-goal.webp" alt="" />
-          )}
-        </div>
-        <h1 className="text-6xl font-extrabold text-game-accent">
-          {outcome === "complete" ? "Maze Complete!" : "Time’s Up!"}
-        </h1>
-        <p className="text-3xl text-slate-300">
-          {outcome === "complete" ? "Krishna found his cows!" : "The cows are still waiting."}
-        </p>
-        {outcome === "timeout" && (
-          <>
-            <div className="text-8xl font-bold text-game-text">{path.length}</div>
-            <p className="text-xl font-bold uppercase tracking-[.25em] text-krishna-green">maze cells explored</p>
-          </>
-        )}
-        <div className="text-xl text-slate-400">Next player shortly...</div>
-        <button
-          onClick={onExit}
-          tabIndex={-1}
-          className="rounded-xl border border-game-accent bg-game-panel px-8 py-4 text-xl text-game-accent shadow-lg hover:bg-game-panel-hover"
-        >
-          Back to Home
-        </button>
-      </main>
+      <GameResultScreen
+        title={outcome === "complete" ? "Maze Complete!" : "Time's Up!"}
+        score={outcome === "timeout" ? path.length : undefined}
+        message={outcome === "complete" ? "Krishna found his cows!" : "The cows are still waiting."}
+        onExit={onExit}
+      />
     );
   }
 

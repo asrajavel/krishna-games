@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
+import { GameResultScreen } from "../../components/GameResultScreen";
 import { getQuestions, QUESTIONS } from "../../data/questions";
 import { QuizQuestion } from "./QuizQuestion";
-import { QuizResult } from "./QuizResult";
 
 interface Props {
   onExit: () => void;
@@ -36,7 +36,19 @@ export function QuizGame({ onExit }: Props) {
   }, [currentQuestion]);
 
   if (showResult) {
-    return <QuizResult score={state.score} total={QUESTIONS.length} onDone={onExit} />;
+    const message = state.score === QUESTIONS.length
+      ? "Hare Krishna! Perfect!"
+      : state.score >= QUESTIONS.length * 0.6
+        ? "Well played! Jai Shri Krishna!"
+        : "Keep learning about Krishna!";
+    return (
+      <GameResultScreen
+        title="Quiz Complete!"
+        score={`${state.score} / ${QUESTIONS.length}`}
+        message={message}
+        onExit={onExit}
+      />
+    );
   }
 
   return (

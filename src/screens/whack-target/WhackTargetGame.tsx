@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
+import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 
 interface Props {
@@ -19,13 +20,11 @@ const FAVORITES = ["🧈", "🪈", "🦚", "🐄"];
 const DISTRACTORS = ["🍕", "🚗", "⚽", "📱"];
 const GAME_DURATION_MS = 75_000;
 const FREEZE_MS = 4_000;
-const AUTO_RESET_SECONDS = 10;
 
 export function WhackTargetGame({ onExit }: Props) {
   const [items, setItems] = useState<FallingItem[]>([]);
   const [score, setScore] = useState(0);
   const [phase, setPhase] = useState<"playing" | "frozen" | "results">("playing");
-  const [countdown, setCountdown] = useState(AUTO_RESET_SECONDS);
   const nextId = useRef(0);
 
   useEffect(() => {
@@ -62,21 +61,6 @@ export function WhackTargetGame({ onExit }: Props) {
     return () => window.clearTimeout(timeout);
   }, [phase]);
 
-  useEffect(() => {
-    if (phase !== "results") return;
-    const interval = window.setInterval(() => {
-      setCountdown((current) => {
-        if (current <= 1) {
-          window.clearInterval(interval);
-          onExit();
-          return 0;
-        }
-        return current - 1;
-      });
-    }, 1000);
-    return () => window.clearInterval(interval);
-  }, [phase, onExit]);
-
   const removeItem = (id: number) => {
     setItems((current) => current.filter((item) => item.id !== id));
   };
@@ -94,6 +78,17 @@ export function WhackTargetGame({ onExit }: Props) {
   };
 
   const handleExpire = useCallback(() => setPhase("frozen"), []);
+
+  if (phase === "results") {
+    return (
+      <GameResultScreen
+        title="Time's Up!"
+        score={score}
+        message="You found Krishna's favorites!"
+        onExit={onExit}
+      />
+    );
+  }
 
   return (
     <div className="relative w-full h-full flex flex-col gap-4 p-8 pt-10 bg-game-bg text-game-text">
@@ -166,14 +161,6 @@ export function WhackTargetGame({ onExit }: Props) {
         ))}
       </main>
 
-      {phase === "results" && (
-        <div className="absolute inset-0 z-30 bg-game-bg flex flex-col items-center justify-center gap-8 p-8 text-center">
-          <h2 className="text-6xl font-extrabold text-game-accent">Time&apos;s Up!</h2>
-          <div className="text-3xl text-slate-300">Score</div>
-          <div className="text-8xl font-bold text-game-correct-soft">{score}</div>
-          <div className="text-xl text-slate-500">Next player in {countdown}...</div>
-        </div>
-      )}
     </div>
   );
 }

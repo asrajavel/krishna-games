@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 
 interface Props {
@@ -71,7 +72,6 @@ export function OddOneOutGame({ onExit }: Props) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [score, setScore] = useState(0);
   const [phase, setPhase] = useState<"playing" | "result">("playing");
-  const [countdown, setCountdown] = useState(10);
   const round = ROUNDS[roundIndex];
   const isLastRound = roundIndex === ROUNDS.length - 1;
 
@@ -92,20 +92,6 @@ export function OddOneOutGame({ onExit }: Props) {
     return () => clearTimeout(timeout);
   }, [isLastRound, phase, selectedIndex]);
 
-  useEffect(() => {
-    if (phase !== "result") return;
-
-    const interval = setInterval(() => {
-      setCountdown((current) => Math.max(0, current - 1));
-    }, 1000);
-    const timeout = setTimeout(onExit, 10_000);
-
-    return () => {
-      clearInterval(interval);
-      clearTimeout(timeout);
-    };
-  }, [onExit, phase]);
-
   const handlePick = (index: number) => {
     if (selectedIndex !== null) return;
     setSelectedIndex(index);
@@ -114,24 +100,12 @@ export function OddOneOutGame({ onExit }: Props) {
 
   if (phase === "result") {
     return (
-      <div className="w-full h-full flex flex-col items-center justify-center gap-8 bg-game-bg p-8 text-game-text">
-        <div className="rounded-3xl border border-slate-700 bg-game-panel p-12 text-center shadow-2xl">
-          <div className="text-7xl">🔍</div>
-          <h2 className="mt-5 text-5xl font-extrabold text-game-accent">Odd One Out Complete!</h2>
-          <div className="mt-8 text-8xl font-bold">{score} / {ROUNDS.length}</div>
-          <p className="mt-6 text-3xl text-slate-300">
-            {score === ROUNDS.length ? "Perfect! You know Krishna's pastimes!" : "Well played! Keep learning about Krishna!"}
-          </p>
-        </div>
-        <p className="text-xl text-slate-500">Next player in {countdown}...</p>
-        <button
-          onClick={onExit}
-          tabIndex={-1}
-          className="rounded-xl border border-game-accent bg-game-panel px-8 py-4 text-xl text-game-accent shadow-lg hover:bg-game-panel-hover"
-        >
-          Back to Home
-        </button>
-      </div>
+      <GameResultScreen
+        title="Odd One Out Complete!"
+        score={`${score} / ${ROUNDS.length}`}
+        message={score === ROUNDS.length ? "Perfect! You know Krishna's pastimes!" : "Well played! Keep learning about Krishna!"}
+        onExit={onExit}
+      />
     );
   }
 

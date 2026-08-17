@@ -35,7 +35,7 @@ Defaults unless the request requires otherwise:
 - Keep the game and small datasets in one component file.
 - Use a 75-second game timer.
 - On success, freeze and highlight the completed board for 4 seconds before showing results.
-- Show results for 10 seconds, then call `onExit`.
+- Show results with `GameResultScreen`; it returns home after 10 seconds.
 - Create or download assets if required, or use emojis. Dont worry about copyright images, we will replace all images at the end.
 
 ## UI defaults
@@ -45,8 +45,7 @@ Defaults unless the request requires otherwise:
 - When instructions are needed, place them directly under the title with `mt-1 text-xl text-slate-300`.
 - Center the game board.
 - Put questions directly above the board and center them.
-- Use `text-6xl font-extrabold text-game-accent` for overlay result headings, or `text-5xl font-extrabold text-game-accent` inside result cards.
-- Use `text-8xl font-bold` for result scores.
+- Pass a title, optional score, and message to `GameResultScreen`; do not build a custom result layout.
 - Do not show live scores or bottom feedback text.
 - Show interaction feedback through the game elements themselves, such as border and background colors.
 
@@ -56,7 +55,7 @@ Defaults unless the request requires otherwise:
    - Export the root component.
    - Accept `onExit: () => void`.
    - Keep game state local so remounting starts a fresh session.
-   - Keep simple games in one file; split phases or results only when that makes the code clearer.
+   - Keep simple games in one file and reuse `GameResultScreen` for results.
 2. Add static content to `src/data/<game-id>.ts` only when separating it improves readability.
 3. Put the icon and game assets in `public/<game-id>/`.
    - Reference them with relative paths such as `./<game-id>/icon.svg`.
@@ -75,7 +74,7 @@ Complete one working implementation before visual verification. Do not take inte
 
 ## Stall requirements
 
-- Reuse `GameCard`, `Timer`, and existing components when they fit.
+- Reuse `GameCard`, `Timer`, and `GameResultScreen`.
 - Use large controls and labels; set `tabIndex={-1}` on stall buttons.
 - Use `rem` for layout dimensions, gaps, and fixed component sizes. The root font size scales with the viewport, so fixed `px` dimensions break proportions between Full HD and 4K.
 - Do not modify unrelated or pre-existing user changes.

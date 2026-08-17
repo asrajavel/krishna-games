@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 
 interface Props {
@@ -15,7 +16,6 @@ const PAIRS = [
 ];
 
 const GAME_DURATION_MS = 75_000;
-const AUTO_RESET_SECONDS = 10;
 
 interface Card {
   id: string;
@@ -36,7 +36,6 @@ export function MemoryGame({ onExit }: Props) {
   const [matched, setMatched] = useState<string[]>([]);
   const [moves, setMoves] = useState(0);
   const [timedOut, setTimedOut] = useState(false);
-  const [countdown, setCountdown] = useState(AUTO_RESET_SECONDS);
 
   const isComplete = matched.length === PAIRS.length;
   const isFinished = isComplete || timedOut;
@@ -46,21 +45,6 @@ export function MemoryGame({ onExit }: Props) {
     const timeout = window.setTimeout(() => setSelected([]), 800);
     return () => window.clearTimeout(timeout);
   }, [selected]);
-
-  useEffect(() => {
-    if (!isFinished) return;
-    const interval = window.setInterval(() => {
-      setCountdown((current) => {
-        if (current <= 1) {
-          window.clearInterval(interval);
-          onExit();
-          return 0;
-        }
-        return current - 1;
-      });
-    }, 1000);
-    return () => window.clearInterval(interval);
-  }, [isFinished, onExit]);
 
   const handleCardClick = (card: Card) => {
     if (isFinished || selected.length === 2 || selected.includes(card.id) || matched.includes(card.pairKey)) return;
@@ -84,6 +68,17 @@ export function MemoryGame({ onExit }: Props) {
     setTimedOut(true);
     setSelected([]);
   }, []);
+
+  if (isFinished) {
+    return (
+      <GameResultScreen
+        title={isComplete ? "All Pairs Found!" : "Time's Up!"}
+        score={`${matched.length} / ${PAIRS.length}`}
+        message={isComplete ? `Hare Krishna! Completed in ${moves} moves.` : "Good try! Find all the pairs next time."}
+        onExit={onExit}
+      />
+    );
+  }
 
   return (
     <div className="w-full h-full flex flex-col gap-5 p-8 pt-10 relative bg-game-bg text-game-text">
@@ -140,18 +135,6 @@ export function MemoryGame({ onExit }: Props) {
         })}
       </main>
 
-      {isFinished && (
-        <div className="absolute inset-0 z-30 bg-game-bg flex flex-col items-center justify-center gap-8 p-8 text-center">
-          <h2 className="text-6xl font-extrabold text-game-accent">
-            {isComplete ? "All Pairs Found!" : "Time's Up!"}
-          </h2>
-          <div className="text-8xl font-bold">{matched.length} / {PAIRS.length}</div>
-          <p className="text-3xl text-slate-300">
-            {isComplete ? `Hare Krishna! Completed in ${moves} moves.` : "Good try! Find all the pairs next time."}
-          </p>
-          <div className="text-xl text-slate-500">Next player in {countdown}...</div>
-        </div>
-      )}
     </div>
   );
 }

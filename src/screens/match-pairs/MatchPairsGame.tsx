@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 
 interface Props {
@@ -16,7 +17,6 @@ const PAIRS = [
 
 const GAME_DURATION_MS = 75_000;
 const CELEBRATION_MS = 4_000;
-const AUTO_RESET_SECONDS = 10;
 
 type Phase = "playing" | "celebrating" | "result";
 type Side = "left" | "right";
@@ -28,28 +28,12 @@ export function MatchPairsGame({ onExit }: Props) {
   const [wrong, setWrong] = useState<string | null>(null);
   const [phase, setPhase] = useState<Phase>("playing");
   const [timedOut, setTimedOut] = useState(false);
-  const [countdown, setCountdown] = useState(AUTO_RESET_SECONDS);
 
   useEffect(() => {
     if (phase !== "celebrating") return;
     const timeout = window.setTimeout(() => setPhase("result"), CELEBRATION_MS);
     return () => window.clearTimeout(timeout);
   }, [phase]);
-
-  useEffect(() => {
-    if (phase !== "result") return;
-    const interval = window.setInterval(() => {
-      setCountdown((current) => {
-        if (current <= 1) {
-          window.clearInterval(interval);
-          onExit();
-          return 0;
-        }
-        return current - 1;
-      });
-    }, 1000);
-    return () => window.clearInterval(interval);
-  }, [phase, onExit]);
 
   const handlePick = (side: Side, id: string) => {
     if (phase !== "playing" || matched.includes(id)) return;
@@ -77,16 +61,12 @@ export function MatchPairsGame({ onExit }: Props) {
 
   if (phase === "result") {
     return (
-      <div className="w-full h-full bg-game-bg text-game-text flex flex-col items-center justify-center gap-8 p-8 text-center">
-        <h2 className="text-6xl font-extrabold text-game-accent">
-          {timedOut ? "Time's Up!" : "Perfect Match!"}
-        </h2>
-        <div className="text-8xl font-bold">{matched.length} / {PAIRS.length}</div>
-        <p className="text-3xl text-slate-300">
-          {timedOut ? "Good try! Match every character next time." : "Hare Krishna! You connected every pair."}
-        </p>
-        <div className="text-xl text-slate-500">Next player in {countdown}...</div>
-      </div>
+      <GameResultScreen
+        title={timedOut ? "Time's Up!" : "Perfect Match!"}
+        score={`${matched.length} / ${PAIRS.length}`}
+        message={timedOut ? "Good try! Match every character next time." : "Hare Krishna! You connected every pair."}
+        onExit={onExit}
+      />
     );
   }
 

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 import { DASAVATAR_ITEMS, shuffleDasavatarItems } from "../../data/dasavatar";
 
@@ -12,7 +13,6 @@ function targetAtPoint(x: number, y: number) {
 
 const GAME_DURATION_SECONDS = 60;
 const GAME_DURATION_MS = GAME_DURATION_SECONDS * 1000;
-const AUTO_RESET_SECONDS = 10;
 const TOTAL_AVATARS = DASAVATAR_ITEMS.length;
 
 export function DasavatarGame({ onExit }: Props) {
@@ -23,30 +23,12 @@ export function DasavatarGame({ onExit }: Props) {
   const [hoveredTargetId, setHoveredTargetId] = useState<string | null>(null);
   const [wrongId, setWrongId] = useState<string | null>(null);
   const [timedOut, setTimedOut] = useState(false);
-  const [countdown, setCountdown] = useState(AUTO_RESET_SECONDS);
 
   const placedIds = useMemo(() => new Set(Object.values(placements)), [placements]);
   const matchedCount = placedIds.size;
   const isComplete = matchedCount === TOTAL_AVATARS;
   const isTimedOut = timedOut && !isComplete;
   const isGameActive = !isComplete && !isTimedOut;
-
-  useEffect(() => {
-    if (!isComplete && !isTimedOut) return;
-
-    const interval = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          onExit();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [isComplete, isTimedOut, onExit]);
 
   const handleDragStart = useCallback((event: React.PointerEvent<HTMLButtonElement>, avatarId: string) => {
     event.preventDefault();
@@ -94,6 +76,17 @@ export function DasavatarGame({ onExit }: Props) {
     setDraggingId(null);
     setHoveredTargetId(null);
   }, []);
+
+  if (isComplete || isTimedOut) {
+    return (
+      <GameResultScreen
+        title={isComplete ? "Dasavatar Complete!" : "Time's Up!"}
+        score={`${matchedCount} / ${TOTAL_AVATARS}`}
+        message={isComplete ? "Hare Krishna! Perfect match!" : "Try again and match all avatars!"}
+        onExit={onExit}
+      />
+    );
+  }
 
   return (
     <div className="w-full h-full flex flex-col gap-5 p-8 pt-10 relative bg-game-bg text-game-text">
@@ -188,27 +181,6 @@ export function DasavatarGame({ onExit }: Props) {
         </div>
       )}
 
-      {(isComplete || isTimedOut) && (
-        <div className="absolute inset-0 bg-game-bg flex flex-col items-center justify-center gap-8 p-8 text-center">
-          <h2 className="text-6xl font-extrabold text-game-accent">
-            {isComplete ? "Dasavatar Complete!" : "Time's Up!"}
-          </h2>
-          <div className="text-8xl font-bold text-game-text">{matchedCount} / {TOTAL_AVATARS}</div>
-          <p className="text-3xl text-slate-300">
-            {isComplete ? "Hare Krishna! Perfect match!" : "Try again and match all avatars!"}
-          </p>
-          <div className="text-xl text-slate-500 mt-8">
-            Next player in {countdown}...
-          </div>
-          <button
-            onClick={onExit}
-            tabIndex={-1}
-            className="mt-4 px-8 py-4 bg-slate-800 border border-game-accent rounded-xl text-game-accent text-xl hover:bg-game-panel-hover shadow-lg"
-          >
-            Back to Home
-          </button>
-        </div>
-      )}
     </div>
   );
 }

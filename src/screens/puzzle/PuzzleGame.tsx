@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 
 interface Props {
@@ -8,7 +9,6 @@ interface Props {
 const PIECES = [0, 1, 2, 3, 4, 5];
 const GAME_DURATION_MS = 75_000;
 const COMPLETION_REVEAL_MS = 4_000;
-const AUTO_RESET_SECONDS = 10;
 
 function shuffledPieces() {
   const pieces = [...PIECES];
@@ -27,7 +27,6 @@ export function PuzzleGame({ onExit }: Props) {
   const [draggingSlot, setDraggingSlot] = useState<number | null>(null);
   const [timedOut, setTimedOut] = useState(false);
   const [showCompleteResult, setShowCompleteResult] = useState(false);
-  const [countdown, setCountdown] = useState(AUTO_RESET_SECONDS);
 
   const correctCount = board.filter((piece, index) => piece === index).length;
   const isComplete = correctCount === PIECES.length;
@@ -39,19 +38,6 @@ export function PuzzleGame({ onExit }: Props) {
     const timeout = window.setTimeout(() => setShowCompleteResult(true), COMPLETION_REVEAL_MS);
     return () => window.clearTimeout(timeout);
   }, [isComplete, timedOut]);
-
-  useEffect(() => {
-    if (!showResult) return;
-    const interval = window.setInterval(
-      () => setCountdown((current) => Math.max(0, current - 1)),
-      1000,
-    );
-    return () => window.clearInterval(interval);
-  }, [showResult]);
-
-  useEffect(() => {
-    if (showResult && countdown === 0) onExit();
-  }, [countdown, onExit, showResult]);
 
   const placePiece = (piece: number, sourceSlot: number | null, targetSlot: number) => {
     if (isFinished) return;
@@ -75,6 +61,17 @@ export function PuzzleGame({ onExit }: Props) {
     setDraggingPiece(null);
     setDraggingSlot(null);
   }, []);
+
+  if (showResult) {
+    return (
+      <GameResultScreen
+        title={isComplete ? "Puzzle Complete!" : "Time's Up!"}
+        score={`${correctCount} / ${PIECES.length}`}
+        message={isComplete ? "Hare Krishna! You restored the picture." : "Pieces placed correctly."}
+        onExit={onExit}
+      />
+    );
+  }
 
   return (
     <div className="relative flex h-full w-full flex-col bg-game-bg p-8 pt-10 text-game-text">
@@ -195,29 +192,6 @@ export function PuzzleGame({ onExit }: Props) {
         </aside>
       </main>
 
-      {showResult && (
-        <div className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-7 bg-game-bg p-8 text-center">
-          <h2 className="text-6xl font-extrabold text-game-accent">
-            {isComplete ? "Puzzle Complete!" : "Time's Up!"}
-          </h2>
-          <img
-            src="./puzzle/yashoda-krishna.jpg"
-            alt="Yashoda holding baby Krishna"
-            className="h-[28rem] rounded-2xl border-4 border-game-accent object-contain shadow-2xl"
-          />
-          <p className="text-3xl text-slate-300">
-            {isComplete ? "Hare Krishna! You restored the picture." : `${correctCount} of ${PIECES.length} pieces were in place.`}
-          </p>
-          <div className="text-xl text-slate-500">Next player in {countdown}...</div>
-          <button
-            onClick={onExit}
-            tabIndex={-1}
-            className="rounded-xl border border-game-accent bg-game-panel px-8 py-4 text-xl text-game-accent shadow-lg hover:bg-game-panel-hover"
-          >
-            Back to Home
-          </button>
-        </div>
-      )}
     </div>
   );
 }

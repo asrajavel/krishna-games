@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
+import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 
 interface Props {
@@ -58,46 +59,15 @@ export function RouteToVrindavanGame({ onExit }: Props) {
     }, 5000);
   };
 
-  useEffect(() => {
-    if (phase !== "result") return;
-    const timeout = setTimeout(onExit, 10000);
-    return () => clearTimeout(timeout);
-  }, [onExit, phase]);
-
   if (phase === "result") {
     const completed = outcome === "complete" ? ROUTES.length : routeIndex;
     return (
-      <main className="flex h-full flex-col items-center justify-center gap-6 overflow-hidden bg-game-bg p-8 text-center">
-        {outcome === "complete" ? (
-          <img
-            src="./vrindavan-entrance.png"
-            alt="Entrance gate welcoming pilgrims to Vrindavan"
-            className="h-[36rem] max-w-[70rem] rounded-3xl border-4 border-game-accent object-contain shadow-2xl"
-          />
-        ) : (
-          <div className="text-8xl">🚌</div>
-        )}
-        <div className="flex flex-col items-center gap-6">
-          <h1 className="text-6xl font-extrabold text-game-accent">
-            {outcome === "complete" ? "Welcome to Vrindavan!" : outcome === "lost" ? "Journey Paused" : "Time’s Up!"}
-          </h1>
-          {outcome !== "complete" && <p className="mt-5 text-2xl text-slate-300">A fresh journey begins shortly.</p>}
-          {outcome !== "complete" && (
-            <>
-              <div className="text-8xl font-bold text-game-text">{completed} / {ROUTES.length}</div>
-              <p className="text-xl font-bold uppercase tracking-[.25em] text-krishna-green">routes completed</p>
-            </>
-          )}
-          <div className="text-xl text-slate-400">Next player shortly...</div>
-          <button
-            onClick={onExit}
-            tabIndex={-1}
-            className="rounded-xl border border-game-accent bg-game-panel px-8 py-4 text-xl text-game-accent shadow-lg hover:bg-game-panel-hover"
-          >
-            Back to Home
-          </button>
-        </div>
-      </main>
+      <GameResultScreen
+        title={outcome === "complete" ? "Welcome to Vrindavan!" : outcome === "lost" ? "Journey Paused" : "Time's Up!"}
+        score={`${completed} / ${ROUTES.length}`}
+        message={outcome === "complete" ? "Hare Krishna! You reached Vrindavan." : "A fresh journey begins shortly."}
+        onExit={onExit}
+      />
     );
   }
 

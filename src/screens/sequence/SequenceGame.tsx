@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 
 interface Props {
@@ -15,7 +16,6 @@ const EVENTS = [
 ];
 
 const GAME_DURATION_MS = 75_000;
-const AUTO_RESET_SECONDS = 10;
 const COMPLETION_REVEAL_MS = 4_000;
 
 function shuffledEvents() {
@@ -34,7 +34,6 @@ export function SequenceGame({ onExit }: Props) {
   const [swappedIndexes, setSwappedIndexes] = useState<number[]>([]);
   const [timedOut, setTimedOut] = useState(false);
   const [showCompleteResult, setShowCompleteResult] = useState(false);
-  const [countdown, setCountdown] = useState(AUTO_RESET_SECONDS);
 
   const correctCount = events.filter((event, index) => event.id === EVENTS[index].id).length;
   const isComplete = correctCount === EVENTS.length;
@@ -53,21 +52,6 @@ export function SequenceGame({ onExit }: Props) {
     return () => window.clearTimeout(timeout);
   }, [swappedIndexes]);
 
-  useEffect(() => {
-    if (!showResult) return;
-    const interval = window.setInterval(() => {
-      setCountdown((current) => {
-        if (current <= 1) {
-          window.clearInterval(interval);
-          onExit();
-          return 0;
-        }
-        return current - 1;
-      });
-    }, 1000);
-    return () => window.clearInterval(interval);
-  }, [showResult, onExit]);
-
   const handleDrop = (targetIndex: number) => {
     if (draggingIndex === null || draggingIndex === targetIndex || isFinished) return;
     setSwappedIndexes([draggingIndex, targetIndex]);
@@ -85,6 +69,17 @@ export function SequenceGame({ onExit }: Props) {
     setDraggingIndex(null);
     setHoveredIndex(null);
   }, []);
+
+  if (showResult) {
+    return (
+      <GameResultScreen
+        title={isComplete ? "Perfect Sequence!" : "Time's Up!"}
+        score={`${correctCount} / ${EVENTS.length}`}
+        message={isComplete ? "Hare Krishna! Every event is in order." : "Events placed in the correct position."}
+        onExit={onExit}
+      />
+    );
+  }
 
   return (
     <div className="w-full h-full flex flex-col gap-4 p-8 pt-10 relative bg-game-bg text-game-text">
@@ -200,25 +195,6 @@ export function SequenceGame({ onExit }: Props) {
         }
       </p>
 
-      {showResult && (
-        <div className="absolute inset-0 z-30 bg-game-bg flex flex-col items-center justify-center gap-8 p-8 text-center">
-          <h2 className="text-6xl font-extrabold text-game-accent">
-            {isComplete ? "Perfect Sequence!" : "Time's Up!"}
-          </h2>
-          <div className="text-8xl font-bold">{correctCount} / {EVENTS.length}</div>
-          <p className="text-3xl text-slate-300">
-            {isComplete ? "Hare Krishna! Every event is in order." : "Events placed in the correct position."}
-          </p>
-          <div className="text-xl text-slate-500">Next player in {countdown}...</div>
-          <button
-            onClick={onExit}
-            tabIndex={-1}
-            className="mt-4 px-8 py-4 bg-game-panel border border-game-accent rounded-xl text-game-accent text-xl hover:bg-game-panel-hover shadow-lg"
-          >
-            Back to Home
-          </button>
-        </div>
-      )}
     </div>
   );
 }
