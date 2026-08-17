@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Organizer working documents
+organizer-questions.md
+organizer-questions-print.html
