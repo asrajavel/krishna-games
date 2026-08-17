@@ -112,7 +112,7 @@ export function OddOneOutGame({ onExit }: Props) {
   return (
     <div className="relative flex h-full w-full flex-col bg-game-bg p-8 pt-10 text-game-text">
       <div className="absolute inset-x-0 top-0 z-20">
-        <Timer durationMs={GAME_TIME_MS} onExpire={handleExpire} variant="edge" />
+        <Timer durationMs={GAME_TIME_MS} onExpire={handleExpire} />
       </div>
 
       <header className="shrink-0 text-center">

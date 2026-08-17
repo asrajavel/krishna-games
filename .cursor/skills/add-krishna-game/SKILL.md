@@ -11,9 +11,7 @@ Build the smallest complete game that matches the existing app.
 
 Read:
 
-- `src/App.tsx`
-- `src/types.ts`
-- `src/screens/HomeScreen.tsx`
+- `src/games.ts`
 - One existing game closest to the requested interaction
 
 Do not inspect shared components unless their API is unclear or TypeScript fails. Do not inspect unrelated games, glob broadly, or search the web unless required content cannot be produced locally. Implement after these reads.
@@ -59,16 +57,10 @@ Defaults unless the request requires otherwise:
 2. Add static content to `src/data/<game-id>.ts` only when separating it improves readability.
 3. Put the icon and game assets in `public/<game-id>/`.
    - Reference them with relative paths such as `./<game-id>/icon.svg`.
-4. Add the game ID to the `Screen` union in `src/types.ts`.
-5. Wire the game into `src/App.tsx`.
+4. Add one entry to `GAMES` in `src/games.ts`.
    - Import the root component.
-   - Add a launch callback.
-   - Pass the callback to `HomeScreen`.
-   - Render the game for an explicit screen value and pass `onExit={goHome}`.
-   - Do not rely on a final fallback branch to identify a particular game.
-6. Update `src/screens/HomeScreen.tsx`.
-   - Add the launch callback prop.
-   - Add an available `GameCard` with title, description, icon, and click handler.
+   - Add its ID, title, description, icon or emoji, and component.
+   - Keep the entry in the intended home-screen order.
 
 Complete one working implementation before visual verification. Do not take intermediate screenshots.
 

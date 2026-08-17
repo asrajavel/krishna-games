@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
+import { shuffle } from "../../shuffle";
 
 interface Props {
   onExit: () => void;
@@ -22,7 +23,7 @@ type Phase = "playing" | "celebrating" | "result";
 type Side = "left" | "right";
 
 export function MatchPairsGame({ onExit }: Props) {
-  const [matches] = useState(() => [...PAIRS].sort(() => Math.random() - 0.5));
+  const [matches] = useState(() => shuffle(PAIRS));
   const [selected, setSelected] = useState<{ id: string; side: Side } | null>(null);
   const [matched, setMatched] = useState<string[]>([]);
   const [wrong, setWrong] = useState<string | null>(null);
@@ -73,7 +74,7 @@ export function MatchPairsGame({ onExit }: Props) {
   return (
     <div className="w-full h-full flex flex-col gap-5 p-8 pt-10 relative bg-game-bg text-game-text">
       <div className="absolute inset-x-0 top-0 z-20">
-        <Timer durationMs={GAME_DURATION_MS} onExpire={handleExpire} paused={phase !== "playing"} variant="edge" />
+        <Timer durationMs={GAME_DURATION_MS} onExpire={handleExpire} paused={phase !== "playing"} />
       </div>
 
       <header className="shrink-0 text-center">
@@ -123,7 +124,7 @@ export function MatchPairsGame({ onExit }: Props) {
                     : isSelected
                       ? "border-game-accent bg-game-panel-hover scale-[1.02]"
                       : isWrong
-                        ? "border-game-wrong bg-game-wrong/15 animate-shake"
+                        ? "border-game-wrong bg-game-wrong/15 shake"
                       : "border-slate-600 bg-game-panel hover:border-game-accent"
                 }`}
               >
@@ -151,7 +152,7 @@ export function MatchPairsGame({ onExit }: Props) {
                     : isSelected
                       ? "border-game-accent bg-game-panel-hover scale-[1.02]"
                       : isWrong
-                        ? "border-game-wrong bg-game-wrong/15 animate-shake"
+                        ? "border-game-wrong bg-game-wrong/15 shake"
                       : "border-slate-600 bg-game-panel hover:border-game-accent"
                 }`}
               >

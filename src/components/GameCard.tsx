@@ -3,24 +3,15 @@ interface Props {
   description: string;
   emoji?: string;
   imageSrc?: string;
-  available: boolean;
   onClick: () => void;
 }
 
-export function GameCard({ title, description, emoji, imageSrc, available, onClick }: Props) {
+export function GameCard({ title, description, emoji, imageSrc, onClick }: Props) {
   return (
     <button
-      onClick={available ? onClick : undefined}
-      disabled={!available}
+      onClick={onClick}
       tabIndex={-1}
-      className={`
-        group relative h-full min-h-0 w-full overflow-hidden rounded-[2rem] border flex flex-col items-center justify-center gap-3 p-4
-        text-center transition-all duration-300
-        ${available
-          ? "game-card border-white/10 hover:border-krishna-green hover:-translate-y-2 cursor-pointer"
-          : "border-white/5 bg-game-panel opacity-40 cursor-not-allowed"
-        }
-      `}
+      className="game-card group relative flex h-full min-h-0 w-full cursor-pointer flex-col items-center justify-center gap-3 overflow-hidden rounded-[2rem] border border-white/10 p-4 text-center transition-all duration-300 hover:-translate-y-2 hover:border-krishna-green"
     >
       <span className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-game-accent to-transparent" />
       {imageSrc ? (
@@ -32,11 +23,7 @@ export function GameCard({ title, description, emoji, imageSrc, available, onCli
       )}
       <h2 className="text-2xl font-extrabold text-krishna-cream">{title}</h2>
       <p className="text-lg leading-snug text-krishna-cream/60">{description}</p>
-      {available ? (
-        <span className="text-game-accent text-base font-bold uppercase tracking-widest">Play now →</span>
-      ) : (
-        <span className="text-gray-500 text-lg">🔒 Locked</span>
-      )}
+      <span className="text-game-accent text-base font-bold uppercase tracking-widest">Play now →</span>
     </button>
   );
 }

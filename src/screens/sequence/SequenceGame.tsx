@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
+import { shuffle } from "../../shuffle";
 
 interface Props {
   onExit: () => void;
@@ -19,11 +20,7 @@ const GAME_DURATION_MS = 75_000;
 const COMPLETION_REVEAL_MS = 4_000;
 
 function shuffledEvents() {
-  const events = [...EVENTS];
-  for (let i = events.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [events[i], events[j]] = [events[j], events[i]];
-  }
+  const events = shuffle(EVENTS);
   return events.every((event, index) => event.id === EVENTS[index].id) ? events.reverse() : events;
 }
 
@@ -84,7 +81,7 @@ export function SequenceGame({ onExit }: Props) {
   return (
     <div className="w-full h-full flex flex-col gap-4 p-8 pt-10 relative bg-game-bg text-game-text">
       <div className="absolute inset-x-0 top-0 z-20">
-        <Timer durationMs={GAME_DURATION_MS} onExpire={handleExpire} paused={isFinished} variant="edge" />
+        <Timer durationMs={GAME_DURATION_MS} onExpire={handleExpire} paused={isFinished} />
       </div>
 
       <header className="text-center shrink-0">

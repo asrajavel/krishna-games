@@ -1,4 +1,5 @@
 import type { Question } from "../types";
+import { shuffle } from "../shuffle";
 
 export const QUESTIONS: Question[] = [
   {
@@ -41,7 +42,7 @@ export const QUESTIONS: Question[] = [
 export function getQuestions(): Question[] {
   return QUESTIONS.map((q) => {
     const correctAnswer = q.options[q.correctIndex];
-    const shuffledOptions = [...q.options].sort(() => Math.random() - 0.5) as [string, string, string, string];
+    const shuffledOptions = shuffle(q.options) as [string, string, string, string];
     return { ...q, options: shuffledOptions, correctIndex: shuffledOptions.indexOf(correctAnswer) };
   });
 }

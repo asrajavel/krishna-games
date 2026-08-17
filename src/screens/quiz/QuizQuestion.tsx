@@ -37,7 +37,6 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
           durationMs={TIME_PER_QUESTION_MS}
           onExpire={handleExpire}
           paused={answered}
-          variant="edge"
         />
       </div>
       {question.image && (

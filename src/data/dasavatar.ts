@@ -16,7 +16,3 @@ export const DASAVATAR_ITEMS: DasavatarItem[] = [
   { id: "buddha", name: "Buddha", image: "./dasavatar/buddha.png" },
   { id: "kalki", name: "Kalki", image: "./dasavatar/kalki.png" },
 ];
-
-export function shuffleDasavatarItems(): DasavatarItem[] {
-  return [...DASAVATAR_ITEMS].sort(() => Math.random() - 0.5);
-}

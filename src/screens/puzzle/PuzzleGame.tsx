@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
+import { shuffle } from "../../shuffle";
 
 interface Props {
   onExit: () => void;
@@ -11,11 +12,7 @@ const GAME_DURATION_MS = 75_000;
 const COMPLETION_REVEAL_MS = 4_000;
 
 function shuffledPieces() {
-  const pieces = [...PIECES];
-  for (let i = pieces.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [pieces[i], pieces[j]] = [pieces[j], pieces[i]];
-  }
+  const pieces = shuffle(PIECES);
   return pieces.every((piece, index) => piece === index) ? pieces.reverse() : pieces;
 }
 
@@ -76,7 +73,7 @@ export function PuzzleGame({ onExit }: Props) {
   return (
     <div className="relative flex h-full w-full flex-col bg-game-bg p-8 pt-10 text-game-text">
       <div className="absolute inset-x-0 top-0 z-20">
-        <Timer durationMs={GAME_DURATION_MS} onExpire={handleExpire} paused={isFinished} variant="edge" />
+        <Timer durationMs={GAME_DURATION_MS} onExpire={handleExpire} paused={isFinished} />
       </div>
 
       <header className="shrink-0 text-center">

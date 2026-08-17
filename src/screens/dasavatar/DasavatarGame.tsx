@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
-import { DASAVATAR_ITEMS, shuffleDasavatarItems } from "../../data/dasavatar";
+import { DASAVATAR_ITEMS } from "../../data/dasavatar";
+import { shuffle } from "../../shuffle";
 
 interface Props {
   onExit: () => void;
@@ -16,7 +17,7 @@ const GAME_DURATION_MS = GAME_DURATION_SECONDS * 1000;
 const TOTAL_AVATARS = DASAVATAR_ITEMS.length;
 
 export function DasavatarGame({ onExit }: Props) {
-  const [nameCards] = useState(() => shuffleDasavatarItems());
+  const [nameCards] = useState(() => shuffle(DASAVATAR_ITEMS));
   const [placements, setPlacements] = useState<Record<string, string>>({});
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
@@ -95,7 +96,6 @@ export function DasavatarGame({ onExit }: Props) {
           durationMs={GAME_DURATION_MS}
           onExpire={handleExpire}
           paused={!isGameActive}
-          variant="edge"
         />
       </div>
 

@@ -76,7 +76,7 @@ export function RouteToVrindavanGame({ onExit }: Props) {
 
   return (
     <main className="route-game relative flex h-full flex-col overflow-hidden">
-      <Timer durationMs={75000} onExpire={() => finish("timeout")} paused={phase !== "playing"} variant="edge" />
+      <Timer durationMs={75000} onExpire={() => finish("timeout")} paused={phase !== "playing"} />
       {choseWrong && (
         <div className="route-life-lost pointer-events-none absolute inset-0 z-30 flex items-center justify-center">
           <div>
@@ -124,7 +124,7 @@ export function RouteToVrindavanGame({ onExit }: Props) {
                   tabIndex={-1}
                   className={`relative w-[28rem] transition-transform duration-200 hover:scale-105 disabled:hover:scale-100 ${wrong ? "shake" : ""}`}
                 >
-                  <img src="./vrindavan-highway-sign.png" alt="" className={`w-full drop-shadow-2xl ${wrong ? "brightness-75 saturate-150" : ""}`} />
+                  <img src="./vrindavan-highway-sign.webp" alt="" className={`w-full drop-shadow-2xl ${wrong ? "brightness-75 saturate-150" : ""}`} />
                   <span className={`absolute left-[6%] top-[8%] flex h-[34%] w-[88%] items-center justify-center text-4xl font-black uppercase text-white ${wrong ? "text-game-wrong-soft" : ""}`}>
                     {index === 0 ? "← " : ""}{option}{index === 1 ? " →" : ""}
                   </span>
@@ -140,10 +140,10 @@ export function RouteToVrindavanGame({ onExit }: Props) {
             Correct! Onward to {route.options[route.correct]} ✓
           </div>
           <div className="route-passing-sign">
-            <img src="./vrindavan-highway-sign.png" alt="" />
+            <img src="./vrindavan-highway-sign.webp" alt="" />
             <strong>{route.options[route.correct]} ↑</strong>
           </div>
-          <img className="route-bus" src="./vrindavan-pilgrimage-bus.png" alt="Pilgrimage bus travelling toward Vrindavan" />
+          <img className="route-bus" src="./vrindavan-pilgrimage-bus.webp" alt="Pilgrimage bus travelling toward Vrindavan" />
         </div>
       )}
     </main>

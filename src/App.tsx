@@ -1,31 +1,15 @@
 import { useState, useCallback } from "react";
-import type { Screen } from "./types";
+import { GAMES, type GameId } from "./games";
 import { HomeScreen } from "./screens/HomeScreen";
-import { QuizGame } from "./screens/quiz/QuizGame";
-import { DasavatarGame } from "./screens/dasavatar/DasavatarGame";
-import { MemoryGame } from "./screens/memory/MemoryGame";
-import { SequenceGame } from "./screens/sequence/SequenceGame";
-import { PuzzleGame } from "./screens/puzzle/PuzzleGame";
-import { OddOneOutGame } from "./screens/odd-one-out/OddOneOutGame";
-import { MatchPairsGame } from "./screens/match-pairs/MatchPairsGame";
-import { WhackTargetGame } from "./screens/whack-target/WhackTargetGame";
-import { RouteToVrindavanGame } from "./screens/route-to-vrindavan/RouteToVrindavanGame";
-import { MazeGame } from "./screens/maze/MazeGame";
 
 export default function App() {
-  const [screen, setScreen] = useState<Screen>("home");
+  const [screen, setScreen] = useState<"home" | GameId>("home");
 
   const goHome = useCallback(() => setScreen("home"), []);
-  const goQuiz = useCallback(() => setScreen("quiz"), []);
-  const goDasavatar = useCallback(() => setScreen("dasavatar"), []);
-  const goMemory = useCallback(() => setScreen("memory"), []);
-  const goSequence = useCallback(() => setScreen("sequence"), []);
-  const goPuzzle = useCallback(() => setScreen("puzzle"), []);
-  const goOddOneOut = useCallback(() => setScreen("odd-one-out"), []);
-  const goMatchPairs = useCallback(() => setScreen("match-pairs"), []);
-  const goWhackTarget = useCallback(() => setScreen("whack-target"), []);
-  const goRouteToVrindavan = useCallback(() => setScreen("route-to-vrindavan"), []);
-  const goMaze = useCallback(() => setScreen("maze"), []);
+  const startGame = useCallback((game: GameId) => setScreen(game), []);
+  const ActiveGame = screen === "home"
+    ? null
+    : GAMES.find((game) => game.id === screen)?.Component;
 
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-krishna-bg">
@@ -42,38 +26,9 @@ export default function App() {
         </button>
       )}
       {screen === "home" ? (
-        <HomeScreen
-          onStartQuiz={goQuiz}
-          onStartDasavatar={goDasavatar}
-          onStartMemory={goMemory}
-          onStartSequence={goSequence}
-          onStartPuzzle={goPuzzle}
-          onStartOddOneOut={goOddOneOut}
-          onStartMatchPairs={goMatchPairs}
-          onStartWhackTarget={goWhackTarget}
-          onStartRouteToVrindavan={goRouteToVrindavan}
-          onStartMaze={goMaze}
-        />
-      ) : screen === "quiz" ? (
-        <QuizGame onExit={goHome} />
-      ) : screen === "dasavatar" ? (
-        <DasavatarGame onExit={goHome} />
-      ) : screen === "memory" ? (
-        <MemoryGame onExit={goHome} />
-      ) : screen === "sequence" ? (
-        <SequenceGame onExit={goHome} />
-      ) : screen === "puzzle" ? (
-        <PuzzleGame onExit={goHome} />
-      ) : screen === "odd-one-out" ? (
-        <OddOneOutGame onExit={goHome} />
-      ) : screen === "match-pairs" ? (
-        <MatchPairsGame onExit={goHome} />
-      ) : screen === "whack-target" ? (
-        <WhackTargetGame onExit={goHome} />
-      ) : screen === "route-to-vrindavan" ? (
-        <RouteToVrindavanGame onExit={goHome} />
-      ) : screen === "maze" ? (
-        <MazeGame onExit={goHome} />
+        <HomeScreen onStart={startGame} />
+      ) : ActiveGame ? (
+        <ActiveGame onExit={goHome} />
       ) : (
         null
       )}

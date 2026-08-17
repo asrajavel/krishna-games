@@ -8,7 +8,6 @@ html {
   --color-krishna-bg: #080521;
   --color-krishna-gold: #ffc857;
   --color-krishna-green: #1fc7b6;
-  --color-krishna-correct: #45e0a8;
   --color-krishna-wrong: #ff5f7e;
   --color-krishna-cream: #fff8e8;
   --color-game-bg: #080521;
@@ -51,11 +50,6 @@ body * {
   100% { transform: translateY(-10vh) scale(1); opacity: 0; }
 }
 
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 16px 32px rgba(0, 0, 0, 0.22); }
-  50% { box-shadow: 0 20px 48px rgba(31, 199, 182, 0.22); }
-}
-
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
   20%, 60% { transform: translateX(-8px); }
@@ -84,10 +78,6 @@ body * {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: shimmer 4s linear infinite;
-}
-
-.pulse-card {
-  animation: pulse-glow 2.5s ease-in-out infinite;
 }
 
 .particle {
@@ -226,7 +216,7 @@ body * {
 }
 
 .route-game {
-  background: url("/vrindavan-forked-road.png") center / cover;
+  background: url("/vrindavan-forked-road.webp") center / cover;
 }
 
 .route-game::before {
@@ -244,7 +234,7 @@ body * {
 .route-drive-scene::before {
   position: absolute;
   inset: -6% -12%;
-  background: url("/vrindavan-highway-background.png") center 72% / cover;
+  background: url("/vrindavan-highway-background.webp") center 72% / cover;
   animation: route-scenery 5s ease-in-out infinite alternate;
   content: "";
 }
@@ -252,7 +242,7 @@ body * {
 .route-road {
   position: absolute;
   inset: 78% 0 0;
-  background: url("/vrindavan-road-generated.png") 0 center / 60rem 100% repeat-x;
+  background: url("/vrindavan-road-generated.webp") 0 center / 60rem 100% repeat-x;
   animation: route-road 5s linear infinite;
 }
 

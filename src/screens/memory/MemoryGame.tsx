@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
+import { shuffle } from "../../shuffle";
 
 interface Props {
   onExit: () => void;
@@ -25,9 +26,9 @@ interface Card {
 }
 
 function makeDeck(): Card[] {
-  return PAIRS
-    .flatMap((pair) => [0, 1].map((copy) => ({ ...pair, id: `${pair.key}-${copy}`, pairKey: pair.key })))
-    .sort(() => Math.random() - 0.5);
+  return shuffle(
+    PAIRS.flatMap((pair) => [0, 1].map((copy) => ({ ...pair, id: `${pair.key}-${copy}`, pairKey: pair.key }))),
+  );
 }
 
 export function MemoryGame({ onExit }: Props) {
@@ -83,7 +84,7 @@ export function MemoryGame({ onExit }: Props) {
   return (
     <div className="w-full h-full flex flex-col gap-5 p-8 pt-10 relative bg-game-bg text-game-text">
       <div className="absolute inset-x-0 top-0 z-20">
-        <Timer durationMs={GAME_DURATION_MS} onExpire={handleExpire} paused={isFinished} variant="edge" />
+        <Timer durationMs={GAME_DURATION_MS} onExpire={handleExpire} paused={isFinished} />
       </div>
 
       <header className="shrink-0 text-center">

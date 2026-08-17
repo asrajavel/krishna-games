@@ -108,7 +108,7 @@ export function WhackTargetGame({ onExit }: Props) {
       `}</style>
 
       <div className="absolute inset-x-0 top-0 z-20">
-        <Timer durationMs={GAME_DURATION_MS} onExpire={handleExpire} paused={phase !== "playing"} variant="edge" />
+        <Timer durationMs={GAME_DURATION_MS} onExpire={handleExpire} paused={phase !== "playing"} />
       </div>
 
       <header className="shrink-0 text-center">

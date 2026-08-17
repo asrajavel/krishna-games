@@ -1,16 +1,8 @@
 import { GameCard } from "../components/GameCard";
+import { GAMES, type GameId } from "../games";
 
 interface Props {
-  onStartQuiz: () => void;
-  onStartDasavatar: () => void;
-  onStartMemory: () => void;
-  onStartSequence: () => void;
-  onStartPuzzle: () => void;
-  onStartOddOneOut: () => void;
-  onStartMatchPairs: () => void;
-  onStartWhackTarget: () => void;
-  onStartRouteToVrindavan: () => void;
-  onStartMaze: () => void;
+  onStart: (game: GameId) => void;
 }
 
 const PARTICLES = Array.from({ length: 20 }, (_, i) => {
@@ -25,7 +17,7 @@ const PARTICLES = Array.from({ length: 20 }, (_, i) => {
   };
 });
 
-export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onStartSequence, onStartPuzzle, onStartOddOneOut, onStartMatchPairs, onStartWhackTarget, onStartRouteToVrindavan, onStartMaze }: Props) {
+export function HomeScreen({ onStart }: Props) {
   return (
     <div className="festival-stage relative flex h-full w-full flex-col items-center justify-center gap-6 p-6">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
@@ -56,76 +48,16 @@ export function HomeScreen({ onStartQuiz, onStartDasavatar, onStartMemory, onSta
         </p>
       </header>
       <div className="relative z-10 grid h-[28rem] max-h-full w-full max-w-[90rem] grid-cols-5 grid-rows-2 gap-5">
-        <GameCard
-          title="Krishna Quiz"
-          description="Test your knowledge!"
-          imageSrc="./quiz/quiz-icon.svg"
-          available={true}
-          onClick={onStartQuiz}
-        />
-        <GameCard
-          title="Dasavatar Match"
-          description="Drag names to pictures"
-          imageSrc="./dasavatar/dasavatar-icon.svg"
-          available={true}
-          onClick={onStartDasavatar}
-        />
-        <GameCard
-          title="Memory Match"
-          description="Flip cards to find pairs"
-          imageSrc="./memory/memory-icon.svg"
-          available={true}
-          onClick={onStartMemory}
-        />
-        <GameCard
-          title="Lila Sequence"
-          description="Put Krishna's pastimes in order"
-          imageSrc="./sequence/sequence-icon.svg"
-          available={true}
-          onClick={onStartSequence}
-        />
-        <GameCard
-          title="Picture Puzzle"
-          description="Reassemble Krishna's picture"
-          imageSrc="./puzzle/yashoda-krishna.jpg"
-          available={true}
-          onClick={onStartPuzzle}
-        />
-        <GameCard
-          title="Odd One Out"
-          description="Find what does not belong"
-          emoji="🔍"
-          available={true}
-          onClick={onStartOddOneOut}
-        />
-        <GameCard
-          title="Match the Pairs"
-          description="Connect characters and symbols"
-          emoji="🔗"
-          available={true}
-          onClick={onStartMatchPairs}
-        />
-        <GameCard
-          title="Krishna's Favorites"
-          description="Catch Krishna's favorite things"
-          emoji="🧈"
-          available={true}
-          onClick={onStartWhackTarget}
-        />
-        <GameCard
-          title="Route to Vrindavan"
-          description="Guide the pilgrimage bus"
-          imageSrc="./route-to-vrindavan/icon.svg"
-          available={true}
-          onClick={onStartRouteToVrindavan}
-        />
-        <GameCard
-          title="Krishna’s Forest Maze"
-          description="Trace the path to the cows"
-          imageSrc="./maze/icon.svg"
-          available={true}
-          onClick={onStartMaze}
-        />
+        {GAMES.map((game) => (
+          <GameCard
+            key={game.id}
+            title={game.title}
+            description={game.description}
+            imageSrc={"imageSrc" in game ? game.imageSrc : undefined}
+            emoji={"emoji" in game ? game.emoji : undefined}
+            onClick={() => onStart(game.id)}
+          />
+        ))}
       </div>
     </div>
   );

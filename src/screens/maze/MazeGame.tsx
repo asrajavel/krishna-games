@@ -132,7 +132,7 @@ export function MazeGame({ onExit }: Props) {
   return (
     <main className="relative flex h-full w-full flex-col overflow-hidden bg-game-bg p-8 pt-10 text-game-text">
       <div className="absolute inset-x-0 top-0 z-20">
-        <Timer durationMs={75000} onExpire={() => finish("timeout")} paused={phase !== "playing"} variant="edge" />
+        <Timer durationMs={75000} onExpire={() => finish("timeout")} paused={phase !== "playing"} />
       </div>
       <header className="shrink-0 text-center">
         <h1 className="text-5xl font-extrabold text-game-accent">Krishna’s Forest Maze</h1>
