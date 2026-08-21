@@ -8,12 +8,12 @@ interface Props {
 }
 
 const EVENTS = [
-  { id: "birth", icon: "🪷", title: "Krishna is born in Mathura" },
-  { id: "gokula", icon: "🌊", title: "Vasudeva carries Krishna to Gokula" },
-  { id: "putana", icon: "👶", title: "Baby Krishna defeats Putana" },
-  { id: "kaliya", icon: "🐍", title: "Krishna dances on Kaliya" },
-  { id: "govardhan", icon: "⛰️", title: "Krishna lifts Govardhan Hill" },
-  { id: "kamsa", icon: "🏹", title: "Krishna defeats Kamsa" },
+  { id: "birth", title: "Krishna is born in Mathura" },
+  { id: "gokula", title: "Vasudeva carries Krishna to Gokula" },
+  { id: "trinavarta", title: "Baby Krishna defeats Trinavarta" },
+  { id: "kaliya", title: "Krishna dances on Kaliya" },
+  { id: "govardhan", title: "Krishna lifts Govardhan Hill" },
+  { id: "kamsa", title: "Krishna defeats Kamsa" },
 ];
 
 const GAME_DURATION_MS = 75_000;
@@ -160,7 +160,7 @@ export function SequenceGame({ onExit }: Props) {
                 gridRow: index < 3 ? 1 : 2,
               }}
               className={`
-                relative w-full h-full max-w-64 max-h-64 place-self-center overflow-hidden rounded-3xl border-2 p-5 flex flex-col items-center justify-center text-center transition-all shadow-xl
+                relative w-full h-full max-w-72 place-self-center rounded-3xl border-2 p-3 flex flex-col text-center transition-all shadow-xl
                 ${isComplete
                   ? "glow-correct border-game-correct bg-game-panel"
                   : swappedIndexes.includes(index)
@@ -173,13 +173,11 @@ export function SequenceGame({ onExit }: Props) {
                 }
               `}
             >
-              <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-game-accent/70 to-transparent" />
-              <span className="absolute left-4 top-4 w-11 h-11 rounded-full bg-game-bg border-2 border-game-accent flex items-center justify-center text-xl font-extrabold text-game-accent shadow-md">
+              <span className="absolute left-3 top-3 w-11 h-11 rounded-full bg-game-bg border-2 border-game-accent flex items-center justify-center text-xl font-extrabold text-game-accent shadow-md">
                 {index + 1}
               </span>
-              <span className="text-6xl leading-none drop-shadow-lg" aria-hidden="true">{event.icon}</span>
-              <span className="mt-4 px-5 text-2xl leading-tight font-extrabold">{event.title}</span>
-              <span className="absolute right-4 top-4 text-slate-500 text-lg" aria-hidden="true">⠿</span>
+              <img src={`./sequence/${event.id}.png`} alt="" draggable={false} className="flex-1 min-h-0 w-full rounded-xl bg-game-text p-2 object-contain" />
+              <span className="mt-2 shrink-0 text-2xl leading-tight font-extrabold">{event.title}</span>
             </button>
           ))}
         </div>
