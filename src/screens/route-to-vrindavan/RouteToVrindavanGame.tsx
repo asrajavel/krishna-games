@@ -76,7 +76,7 @@ export function RouteToVrindavanGame({ onExit }: Props) {
 
   return (
     <main className="route-game relative flex h-full flex-col overflow-hidden">
-      <Timer durationMs={75000} onExpire={() => finish("timeout")} paused={phase !== "playing"} />
+      <Timer durationMs={150000} onExpire={() => finish("timeout")} paused={phase !== "playing"} />
       {choseWrong && (
         <div className="route-life-lost pointer-events-none absolute inset-0 z-30 flex items-center justify-center">
           <div>
