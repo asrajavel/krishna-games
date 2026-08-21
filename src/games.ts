@@ -48,7 +48,17 @@ export const GAMES = [
     ],
     Component: QuizGame,
   },
-  { id: "dasavatar", title: "Dasavatar Match", description: "Drag names to pictures", imageSrc: "./dasavatar/dasavatar-icon.svg", Component: DasavatarGame },
+  {
+    id: "dasavatar",
+    title: "Dasavatar Match",
+    description: "Match the ten avatars",
+    imageSrc: "./dasavatar/dasavatar-icon.svg",
+    variants: [
+      { id: "kids", title: "Match the Names", description: "For Kids", imageSrc: "./dasavatar/kids.png" },
+      { id: "adults", title: "Match the Clues", description: "For Teens and Grown-ups", imageSrc: "./dasavatar/adults.png" },
+    ],
+    Component: DasavatarGame,
+  },
   { id: "memory", title: "Memory Match", description: "Flip cards to find pairs", imageSrc: "./memory/memory-icon.svg", Component: MemoryGame },
   { id: "sequence", title: "Lila Sequence", description: "Put Krishna's pastimes in order", imageSrc: "./sequence/sequence-icon.svg", Component: SequenceGame },
   { id: "puzzle", title: "Picture Puzzle", description: "Reassemble Krishna's picture", imageSrc: "./puzzle/yashoda-krishna.jpg", Component: PuzzleGame },

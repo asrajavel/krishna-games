@@ -1,23 +1,26 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
-import { DASAVATAR_ITEMS } from "../../data/dasavatar";
+import { DASAVATAR_ITEMS, type DasavatarItem } from "../../data/dasavatar";
+import type { GameProps } from "../../games";
 import { shuffle } from "../../shuffle";
-
-interface Props {
-  onExit: () => void;
-}
 
 function targetAtPoint(x: number, y: number) {
   return document.elementFromPoint(x, y)?.closest<HTMLElement>("[data-avatar-target]")?.dataset.avatarTarget ?? null;
 }
 
-const GAME_DURATION_SECONDS = 60;
-const GAME_DURATION_MS = GAME_DURATION_SECONDS * 1000;
-const TOTAL_AVATARS = DASAVATAR_ITEMS.length;
+function Token({ avatar, useClues }: { avatar: DasavatarItem; useClues: boolean }) {
+  if (!useClues) return avatar.name;
+  return <img src={`./dasavatar/clues/${avatar.id}.png`} alt="" draggable={false} className="h-full w-full object-cover" />;
+}
 
-export function DasavatarGame({ onExit }: Props) {
-  const [nameCards] = useState(() => shuffle(DASAVATAR_ITEMS));
+const GAME_DURATION_MS = 60000;
+const TOTAL_AVATARS = DASAVATAR_ITEMS.length;
+const CLUE_TILE = "h-24 w-44 overflow-hidden p-0";
+
+export function DasavatarGame({ onExit, variantId }: GameProps) {
+  const useClues = variantId === "adults";
+  const [tokens] = useState(() => shuffle(DASAVATAR_ITEMS));
   const [placements, setPlacements] = useState<Record<string, string>>({});
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
@@ -30,6 +33,7 @@ export function DasavatarGame({ onExit }: Props) {
   const isComplete = matchedCount === TOTAL_AVATARS;
   const isTimedOut = timedOut && !isComplete;
   const isGameActive = !isComplete && !isTimedOut;
+  const draggingAvatar = tokens.find((avatar) => avatar.id === draggingId);
 
   const handleDragStart = useCallback((event: React.PointerEvent<HTMLButtonElement>, avatarId: string) => {
     event.preventDefault();
@@ -101,7 +105,9 @@ export function DasavatarGame({ onExit }: Props) {
 
       <header className="shrink-0 text-center">
         <h1 className="text-5xl font-extrabold text-game-accent">Match the Dasavatar</h1>
-        <p className="mt-1 text-xl text-slate-300">Drag each name to the correct picture.</p>
+        <p className="mt-1 text-xl text-slate-300">
+          {useClues ? "Drag each clue to the correct avatar." : "Drag each name to the correct picture."}
+        </p>
       </header>
 
       <main className="grid grid-cols-5 grid-rows-2 gap-3 flex-1 min-h-0">
@@ -140,15 +146,15 @@ export function DasavatarGame({ onExit }: Props) {
                   }
                 `}
               >
-                {matchedName ?? "Drop name here"}
+                {matchedName ?? (useClues ? "Drop clue here" : "Drop name here")}
               </div>
             </div>
           );
         })}
       </main>
 
-      <section className="min-h-30 rounded-2xl border border-slate-700 bg-game-panel p-4 flex flex-wrap items-center justify-center gap-3 shadow-lg">
-        {nameCards.map((avatar) => {
+      <section className="min-h-32 rounded-2xl border border-slate-700 bg-game-panel p-4 flex flex-wrap items-center justify-center gap-2 shadow-lg">
+        {tokens.map((avatar) => {
           const isPlaced = placedIds.has(avatar.id);
 
           return (
@@ -158,7 +164,8 @@ export function DasavatarGame({ onExit }: Props) {
               disabled={isPlaced || !isGameActive}
               tabIndex={-1}
               className={`
-                px-6 py-3 rounded-xl border text-2xl font-extrabold transition-all shadow-sm touch-none
+                rounded-xl border text-2xl font-extrabold transition-all shadow-sm touch-none
+                ${useClues ? CLUE_TILE : "px-6 py-3"}
                 ${wrongId === avatar.id ? "shake border-game-wrong bg-game-wrong/20 text-white" : ""}
                 ${isPlaced
                   ? "opacity-25 border-slate-700 bg-slate-900 text-slate-400"
@@ -166,18 +173,18 @@ export function DasavatarGame({ onExit }: Props) {
                 }
               `}
             >
-              {avatar.name}
+              <Token avatar={avatar} useClues={useClues} />
             </button>
           );
         })}
       </section>
 
-      {draggingId && (
+      {draggingAvatar && (
         <div
-          className="fixed z-50 pointer-events-none -translate-x-1/2 -translate-y-1/2 px-6 py-3 rounded-xl border border-game-accent bg-slate-800 text-game-accent-soft text-2xl font-extrabold shadow-lg"
+          className={`fixed z-50 pointer-events-none -translate-x-1/2 -translate-y-1/2 rounded-xl border border-game-accent bg-slate-800 text-game-accent-soft text-2xl font-extrabold shadow-lg ${useClues ? CLUE_TILE : "px-6 py-3"}`}
           style={{ left: dragPosition.x, top: dragPosition.y }}
         >
-          {nameCards.find((avatar) => avatar.id === draggingId)?.name}
+          <Token avatar={draggingAvatar} useClues={useClues} />
         </div>
       )}
 
