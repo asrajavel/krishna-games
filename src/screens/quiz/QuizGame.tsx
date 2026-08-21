@@ -1,15 +1,15 @@
 import { useState, useCallback } from "react";
 import { GameResultScreen } from "../../components/GameResultScreen";
-import { getQuestions, QUESTIONS } from "../../data/questions";
+import { getQuestions, QUESTION_POOLS, type QuizTopic } from "../../data/questions";
+import type { GameProps } from "../../games";
 import { QuizQuestion } from "./QuizQuestion";
 
-interface Props {
-  onExit: () => void;
-}
-
-export function QuizGame({ onExit }: Props) {
+export function QuizGame({ onExit, variantId }: GameProps) {
+  const topic: QuizTopic = variantId && variantId in QUESTION_POOLS
+    ? variantId as QuizTopic
+    : "krishna-lila-kids";
   const [state, setState] = useState(() => ({
-    questions: getQuestions(),
+    questions: getQuestions(topic),
     currentIndex: 0,
     score: 0,
     answered: false,
@@ -36,15 +36,16 @@ export function QuizGame({ onExit }: Props) {
   }, [currentQuestion]);
 
   if (showResult) {
-    const message = state.score === QUESTIONS.length
+    const totalQuestions = state.questions.length;
+    const message = state.score === totalQuestions
       ? "Hare Krishna! Perfect!"
-      : state.score >= QUESTIONS.length * 0.6
+      : state.score >= totalQuestions * 0.6
         ? "Well played! Jai Shri Krishna!"
         : "Keep learning about Krishna!";
     return (
       <GameResultScreen
         title="Quiz Complete!"
-        score={`${state.score} / ${QUESTIONS.length}`}
+        score={`${state.score} / ${totalQuestions}`}
         message={message}
         onExit={onExit}
       />
@@ -55,7 +56,7 @@ export function QuizGame({ onExit }: Props) {
     <QuizQuestion
       question={currentQuestion}
       questionNumber={state.currentIndex + 1}
-      totalQuestions={QUESTIONS.length}
+      totalQuestions={state.questions.length}
       onAnswer={handleAnswer}
       answered={state.answered}
       selectedIndex={state.selectedIndex}

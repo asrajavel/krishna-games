@@ -10,17 +10,43 @@ import { RouteToVrindavanGame } from "./screens/route-to-vrindavan/RouteToVrinda
 import { SequenceGame } from "./screens/sequence/SequenceGame";
 import { WhackTargetGame } from "./screens/whack-target/WhackTargetGame";
 
+export interface GameVariant {
+  id: string;
+  title: string;
+  description: string;
+  imageSrc?: string;
+}
+
+export interface GameProps {
+  onExit: () => void;
+  variantId?: string;
+}
+
 interface Game {
   id: string;
   title: string;
   description: string;
   imageSrc?: string;
   emoji?: string;
-  Component: ComponentType<{ onExit: () => void }>;
+  variants?: readonly GameVariant[];
+  Component: ComponentType<GameProps>;
 }
 
 export const GAMES = [
-  { id: "quiz", title: "Krishna Quiz", description: "Test your knowledge!", imageSrc: "./quiz/quiz-icon.svg", Component: QuizGame },
+  {
+    id: "quiz",
+    title: "Krishna Quiz",
+    description: "Test your knowledge!",
+    imageSrc: "./quiz/quiz-icon.svg",
+    variants: [
+      { id: "krishna-lila-kids", title: "Krishna Lila", description: "For Kids", imageSrc: "./quiz/krishna-lila.png" },
+      { id: "bhagavad-gita-adults", title: "Bhagavad-gita", description: "For Teens and Grown-ups", imageSrc: "./quiz/bhagavad-gita.png" },
+      { id: "mahabharata-adults", title: "Mahabharata", description: "For Teens and Grown-ups", imageSrc: "./quiz/mahabharata.png" },
+      { id: "srimad-bhagavatam-adults", title: "Srimad-Bhagavatam", description: "For Teens and Grown-ups", imageSrc: "./quiz/srimad-bhagavatam.png" },
+      { id: "general-krishna-trivia-adults", title: "General Krishna Trivia", description: "For Teens and Grown-ups", imageSrc: "./quiz/general-trivia.png" },
+    ],
+    Component: QuizGame,
+  },
   { id: "dasavatar", title: "Dasavatar Match", description: "Drag names to pictures", imageSrc: "./dasavatar/dasavatar-icon.svg", Component: DasavatarGame },
   { id: "memory", title: "Memory Match", description: "Flip cards to find pairs", imageSrc: "./memory/memory-icon.svg", Component: MemoryGame },
   { id: "sequence", title: "Lila Sequence", description: "Put Krishna's pastimes in order", imageSrc: "./sequence/sequence-icon.svg", Component: SequenceGame },

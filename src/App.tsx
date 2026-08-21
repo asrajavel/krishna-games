@@ -1,19 +1,33 @@
-import { useState, useCallback } from "react";
-import { GAMES, type GameId } from "./games";
+import { useState, useCallback, type ComponentType } from "react";
+import { GAMES, type GameId, type GameProps } from "./games";
+import { GameVariantScreen } from "./screens/GameVariantScreen";
 import { HomeScreen } from "./screens/HomeScreen";
 
-export default function App() {
-  const [screen, setScreen] = useState<"home" | GameId>("home");
+interface Selection {
+  gameId: GameId;
+  variantId?: string;
+}
 
-  const goHome = useCallback(() => setScreen("home"), []);
-  const startGame = useCallback((game: GameId) => setScreen(game), []);
-  const ActiveGame = screen === "home"
-    ? null
-    : GAMES.find((game) => game.id === screen)?.Component;
+export default function App() {
+  const [selection, setSelection] = useState<Selection | null>(null);
+
+  const goHome = useCallback(() => setSelection(null), []);
+  const startGame = useCallback((gameId: GameId) => setSelection({ gameId }), []);
+  const selectVariant = useCallback((variantId: string) => {
+    setSelection((current) => current ? { ...current, variantId } : current);
+  }, []);
+
+  const activeGame = selection
+    ? GAMES.find((game) => game.id === selection.gameId)
+    : undefined;
+  const variants = activeGame && "variants" in activeGame
+    ? activeGame.variants
+    : undefined;
+  const ActiveGame = activeGame?.Component as ComponentType<GameProps> | undefined;
 
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-krishna-bg">
-      {screen !== "home" && (
+      {selection && (
         <button
           onClick={goHome}
           aria-label="Cancel game and return home"
@@ -25,10 +39,17 @@ export default function App() {
           </svg>
         </button>
       )}
-      {screen === "home" ? (
+      {!selection ? (
         <HomeScreen onStart={startGame} />
+      ) : variants && !selection.variantId ? (
+        <GameVariantScreen
+          gameTitle={activeGame?.title ?? ""}
+          variants={variants}
+          onSelect={selectVariant}
+          onExit={goHome}
+        />
       ) : ActiveGame ? (
-        <ActiveGame onExit={goHome} />
+        <ActiveGame onExit={goHome} variantId={selection.variantId} />
       ) : (
         null
       )}

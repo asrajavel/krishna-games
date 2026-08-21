@@ -32,7 +32,7 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
     <div className="w-full h-full flex bg-game-bg text-game-text relative">
       <div className="absolute inset-x-0 top-0 z-20">
         <Timer
-          key={question.id}
+          key={question.question}
           durationMs={TIME_PER_QUESTION_MS}
           onExpire={handleExpire}
           paused={answered}
