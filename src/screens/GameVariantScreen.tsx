@@ -23,7 +23,7 @@ export function GameVariantScreen({ gameTitle, variants, onSelect, onExit }: Pro
           {gameTitle}
         </h1>
         <p className="mt-3 text-3xl font-bold text-krishna-green">
-          Choose a Topic
+          Choose a Variant
         </p>
       </header>
 
