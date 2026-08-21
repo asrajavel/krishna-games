@@ -57,7 +57,7 @@ body * {
 }
 
 @keyframes favorite-fall {
-  from { top: -7rem; transform: translate3d(0, 0, 0); }
+  from { top: -11rem; transform: translate3d(0, 0, 0); }
   50% { top: 50%; transform: translate3d(var(--drift-mid), -50%, 0); }
   to { top: 100%; transform: translate3d(var(--drift-end), -100%, 0); }
 }
