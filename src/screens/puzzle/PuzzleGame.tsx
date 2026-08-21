@@ -10,6 +10,17 @@ interface Props {
 const PIECES = [0, 1, 2, 3, 4, 5];
 const GAME_DURATION_MS = 75_000;
 const COMPLETION_REVEAL_MS = 4_000;
+const BOARD_MAX_HEIGHT_REM = 46;
+const BOARD_MAX_WIDTH_REM = 54;
+
+const PUZZLES = [
+  "./puzzle/yashoda-krishna.jpg",
+  "./puzzle/rasa-lila.jpg",
+  "./puzzle/kaliya.jpg",
+  "./puzzle/bala-krishna.png",
+  "./puzzle/krishna-calf.jpg",
+  "./puzzle/radha-krishna-swing.png",
+];
 
 function shuffledPieces() {
   const pieces = shuffle(PIECES);
@@ -17,6 +28,8 @@ function shuffledPieces() {
 }
 
 export function PuzzleGame({ onExit }: Props) {
+  const [src] = useState(() => PUZZLES[Math.floor(Math.random() * PUZZLES.length)]);
+  const [aspect, setAspect] = useState(0);
   const [pieces] = useState(shuffledPieces);
   const [board, setBoard] = useState<(number | null)[]>(() => PIECES.map(() => null));
   const [selectedPiece, setSelectedPiece] = useState<{ piece: number; slot: number | null } | null>(null);
@@ -29,6 +42,23 @@ export function PuzzleGame({ onExit }: Props) {
   const isComplete = correctCount === PIECES.length;
   const isFinished = isComplete || timedOut;
   const showResult = timedOut || showCompleteResult;
+
+  const columns = aspect > 1 ? 3 : 2;
+  const rows = aspect > 1 ? 2 : 3;
+  const boardHeight = Math.min(BOARD_MAX_HEIGHT_REM, BOARD_MAX_WIDTH_REM / aspect);
+  const pieceStyle = (piece: number) => ({
+    backgroundImage: `url('${src}')`,
+    backgroundSize: `${columns * 100}% ${rows * 100}%`,
+    backgroundPosition: `${((piece % columns) * 100) / (columns - 1)}% ${
+      (Math.floor(piece / columns) * 100) / (rows - 1)
+    }%`,
+  });
+
+  useEffect(() => {
+    const image = new Image();
+    image.onload = () => setAspect(image.naturalWidth / image.naturalHeight);
+    image.src = src;
+  }, [src]);
 
   useEffect(() => {
     if (!isComplete || timedOut) return;
@@ -70,6 +100,8 @@ export function PuzzleGame({ onExit }: Props) {
     );
   }
 
+  if (!aspect) return <div className="h-full w-full bg-game-bg" />;
+
   return (
     <div className="relative flex h-full w-full flex-col bg-game-bg p-8 pt-10 text-game-text">
       <div className="absolute inset-x-0 top-0 z-20">
@@ -83,15 +115,16 @@ export function PuzzleGame({ onExit }: Props) {
 
       <main className="my-auto flex min-h-0 flex-1 items-center justify-center gap-12 py-4">
         <div
-          className={`grid h-[46rem] w-[34.5rem] grid-cols-2 grid-rows-3 overflow-hidden rounded-2xl border-4 bg-game-panel shadow-2xl transition-all ${
+          style={{ height: `${boardHeight}rem`, width: `${boardHeight * aspect}rem` }}
+          className={`grid shrink-0 overflow-hidden rounded-2xl border-4 bg-game-panel shadow-2xl transition-all ${
+            aspect > 1 ? "grid-cols-3 grid-rows-2" : "grid-cols-2 grid-rows-3"
+          } ${
             isComplete
               ? "glow-correct gap-0 border-game-correct"
               : "gap-1 border-slate-700"
           }`}
         >
           {board.map((piece, slot) => {
-            const column = piece === null ? 0 : piece % 2;
-            const row = piece === null ? 0 : Math.floor(piece / 2);
             return (
               <button
                 key={slot}
@@ -125,31 +158,22 @@ export function PuzzleGame({ onExit }: Props) {
                       ? "scale-95 ring-8 ring-inset ring-game-accent"
                       : "hover:brightness-110"
                 }`}
-                style={piece !== null ? {
-                  backgroundImage: "url('./puzzle/yashoda-krishna.jpg')",
-                  backgroundSize: "200% 300%",
-                  backgroundPosition: `${column * 100}% ${row * 50}%`,
-                } : undefined}
+                style={piece !== null ? pieceStyle(piece) : undefined}
               />
             );
           })}
         </div>
 
         <aside className="w-[48rem] rounded-3xl border border-slate-700 bg-game-panel p-6 text-center shadow-xl">
-          <div className="mb-5 flex items-center justify-center gap-5">
+          <div className="mb-5 flex items-center justify-center">
             <img
-              src="./puzzle/yashoda-krishna.jpg"
-              alt="Yashoda holding baby Krishna"
+              src={src}
+              alt=""
               className="h-52 rounded-xl border-2 border-slate-600"
             />
-            <div>
-              <p className="text-2xl font-bold text-game-accent-soft">Mother Yashoda and Baby Krishna</p>
-            </div>
           </div>
           <div className="grid grid-cols-3 gap-4">
             {pieces.map((piece) => {
-              const column = piece % 2;
-              const row = Math.floor(piece / 2);
               const isPlaced = board.includes(piece);
               return (
                 <button
@@ -168,7 +192,7 @@ export function PuzzleGame({ onExit }: Props) {
                     setDraggingPiece(null);
                     setDraggingSlot(null);
                   }}
-                  className={`h-[11.5rem] bg-no-repeat transition-all ${
+                  className={`bg-no-repeat transition-all ${
                     isPlaced
                       ? "pointer-events-none opacity-0"
                       : selectedPiece?.piece === piece
@@ -177,11 +201,7 @@ export function PuzzleGame({ onExit }: Props) {
                           ? "opacity-40"
                           : "rounded-lg shadow-lg hover:scale-[1.03] hover:brightness-110"
                   }`}
-                  style={{
-                    backgroundImage: "url('./puzzle/yashoda-krishna.jpg')",
-                    backgroundSize: "200% 300%",
-                    backgroundPosition: `${column * 100}% ${row * 50}%`,
-                  }}
+                  style={{ ...pieceStyle(piece), aspectRatio: (aspect * rows) / columns }}
                 />
               );
             })}
