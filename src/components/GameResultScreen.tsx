@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 interface Props {
   title: string;
@@ -7,18 +7,12 @@ interface Props {
   onExit: () => void;
 }
 
-const AUTO_RESET_SECONDS = 10;
+const AUTO_RESET_MS = 120000;
 
 export function GameResultScreen({ title, score, message, onExit }: Props) {
-  const [countdown, setCountdown] = useState(AUTO_RESET_SECONDS);
-
   useEffect(() => {
-    const interval = window.setInterval(() => setCountdown((current) => current - 1), 1000);
-    const timeout = window.setTimeout(onExit, AUTO_RESET_SECONDS * 1000);
-    return () => {
-      window.clearInterval(interval);
-      window.clearTimeout(timeout);
-    };
+    const timeout = window.setTimeout(onExit, AUTO_RESET_MS);
+    return () => window.clearTimeout(timeout);
   }, [onExit]);
 
   return (
@@ -26,7 +20,6 @@ export function GameResultScreen({ title, score, message, onExit }: Props) {
       <h1 className="text-6xl font-extrabold text-game-accent">{title}</h1>
       {score !== undefined && <div className="text-8xl font-bold">{score}</div>}
       <p className="text-3xl text-slate-300">{message}</p>
-      <p className="text-xl text-slate-500">Next player in {countdown}...</p>
       <button
         onClick={onExit}
         tabIndex={-1}

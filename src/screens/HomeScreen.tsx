@@ -21,7 +21,7 @@ const PARTICLES = Array.from({ length: 20 }, (_, i) => {
 
 export function HomeScreen({ onStart }: Props) {
   return (
-    <div className="festival-stage relative flex h-full w-full flex-col items-center justify-center gap-6 p-6">
+    <div className="festival-stage relative flex h-full w-full flex-col items-center justify-center gap-30 p-6">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         {PARTICLES.map((p) => (
           <div
@@ -39,17 +39,11 @@ export function HomeScreen({ onStart }: Props) {
         ))}
       </div>
       <header className="relative z-10 text-center">
-        <p className="mb-3 text-lg font-bold uppercase tracking-[0.55em] text-krishna-green">
-          Enter the world of
-        </p>
         <h1 className="shimmer-text text-8xl font-black tracking-tight drop-shadow-lg">
-          Krishna Leela
+          Krishna Lila Games
         </h1>
-        <p className="mt-3 text-xl tracking-[0.2em] text-krishna-cream/55">
-          Ten joyful challenges · One divine adventure
-        </p>
       </header>
-      <div className="relative z-10 grid h-[28rem] max-h-full w-full max-w-[90rem] grid-cols-5 grid-rows-2 gap-5">
+      <div className="relative z-10 grid h-[36rem] max-h-full w-full max-w-[112rem] grid-cols-5 grid-rows-2 gap-5">
         {GAMES.map((game) => (
           <GameCard
             key={game.id}

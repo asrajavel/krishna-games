@@ -1,7 +1,6 @@
 import { useCallback } from "react";
 import type { Question } from "../../types";
 import { Timer } from "../../components/Timer";
-import { NextQuestionTimer } from "../../components/NextQuestionTimer";
 
 const TIME_PER_QUESTION_MS = 15000;
 
@@ -39,16 +38,7 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
           paused={answered}
         />
       </div>
-      {question.image && (
-        <div className="w-1/4 h-full p-6">
-          <img
-            src={question.image}
-            alt=""
-            className="w-full h-full object-cover rounded-3xl border border-slate-700 shadow-2xl"
-          />
-        </div>
-      )}
-      <div className={`${question.image ? "w-3/4" : "w-full"} h-full flex flex-col items-center justify-center p-8 gap-6`}>
+      <div className="w-full h-full flex flex-col items-center justify-center p-8 gap-6">
         <div className="text-game-accent text-2xl font-semibold">
           Question {questionNumber} of {totalQuestions}
         </div>
@@ -87,7 +77,6 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
             )}
           </div>
         </div>
-        <NextQuestionTimer durationMs={2000} active={answered} />
       </div>
     </div>
   );
