@@ -76,7 +76,17 @@ export const GAMES = [
   { id: "match-pairs", title: "Match the Pairs", description: "Connect characters and symbols", emoji: "🔗", Component: MatchPairsGame },
   { id: "whack-target", title: "Krishna's Favorites", description: "Catch Krishna's favorite things", emoji: "🧈", Component: WhackTargetGame },
   { id: "route-to-vrindavan", title: "Route to Vrindavan", description: "Guide the pilgrimage bus", imageSrc: "./route-to-vrindavan/icon.svg", Component: RouteToVrindavanGame },
-  { id: "maze", title: "Krishna’s Forest Maze", description: "Trace the path to the cows", imageSrc: "./maze/icon.svg", Component: MazeGame },
+  {
+    id: "maze",
+    title: "Krishna’s Forest Maze",
+    description: "Trace the path to the cows",
+    imageSrc: "./maze/icon.svg",
+    variants: [
+      { id: "kids", title: "Easy", description: "For Kids", imageSrc: "./memory/kids.png" },
+      { id: "adults", title: "Hard", description: "For Teens and Grown-ups", imageSrc: "./memory/adults.png" },
+    ],
+    Component: MazeGame,
+  },
 ] as const satisfies readonly Game[];
 
 export type GameId = (typeof GAMES)[number]["id"];

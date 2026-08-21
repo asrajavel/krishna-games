@@ -1,24 +1,27 @@
 import { useCallback, useEffect, useRef, useState, type PointerEvent } from "react";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
-
-interface Props {
-  onExit: () => void;
-}
+import type { GameProps } from "../../games";
+import { shuffle } from "../../shuffle";
 
 type Cell = { row: number; col: number };
 type Phase = "playing" | "complete" | "result";
 type Outcome = "complete" | "timeout";
+type Maze = readonly (readonly number[])[];
 
-const ROWS = 6;
-const COLS = 10;
 const NORTH = 1;
 const EAST = 2;
 const SOUTH = 4;
 const WEST = 8;
+const OPPOSITE: Record<number, number> = { [NORTH]: SOUTH, [EAST]: WEST, [SOUTH]: NORTH, [WEST]: EAST };
+const STEPS = [
+  { bit: NORTH, dr: -1, dc: 0 },
+  { bit: EAST, dr: 0, dc: 1 },
+  { bit: SOUTH, dr: 1, dc: 0 },
+  { bit: WEST, dr: 0, dc: -1 },
+];
 
-// Each bit marks an open passage: north, east, south, west.
-const MAZE = [
+const KIDS_MAZE = [
   [4, 6, 12, 6, 14, 10, 10, 10, 10, 8],
   [5, 5, 5, 1, 3, 10, 14, 10, 10, 12],
   [3, 9, 3, 10, 10, 12, 7, 10, 8, 5],
@@ -27,15 +30,49 @@ const MAZE = [
   [1, 3, 11, 10, 10, 10, 9, 2, 11, 9],
 ] as const;
 
-const START: Cell = { row: 0, col: 0 };
-const TARGET: Cell = { row: 0, col: 9 };
+const KIDS = { maze: KIDS_MAZE, rows: 6, cols: 10, start: { row: 0, col: 0 }, target: { row: 0, col: 9 } };
+
+function generateMaze(rows: number, cols: number): number[][] {
+  const maze = Array.from({ length: rows }, () => Array(cols).fill(0));
+  const seen = Array.from({ length: rows }, () => Array(cols).fill(false));
+  const stack: Cell[] = [{ row: 0, col: 0 }];
+  seen[0][0] = true;
+
+  while (stack.length) {
+    const current = stack[stack.length - 1];
+    const next = shuffle(
+      STEPS.flatMap(({ bit, dr, dc }) => {
+        const row = current.row + dr;
+        const col = current.col + dc;
+        if (row < 0 || col < 0 || row >= rows || col >= cols || seen[row][col]) return [];
+        return [{ bit, row, col }];
+      }),
+    )[0];
+    if (!next) {
+      stack.pop();
+      continue;
+    }
+    maze[current.row][current.col] |= next.bit;
+    maze[next.row][next.col] |= OPPOSITE[next.bit];
+    seen[next.row][next.col] = true;
+    stack.push({ row: next.row, col: next.col });
+  }
+
+  return maze;
+}
+
+function adultLayout() {
+  const rows = 12;
+  const cols = 24;
+  return { maze: generateMaze(rows, cols), rows, cols, start: { row: 0, col: 0 }, target: { row: rows - 1, col: cols - 1 } };
+}
 
 const isSameCell = (a: Cell, b: Cell) => a.row === b.row && a.col === b.col;
 
-function canMove(from: Cell, to: Cell) {
+function canMove(maze: Maze, from: Cell, to: Cell) {
   const rowChange = to.row - from.row;
   const colChange = to.col - from.col;
-  const passage = MAZE[from.row][from.col];
+  const passage = maze[from.row][from.col];
 
   if (rowChange === -1 && colChange === 0) return Boolean(passage & NORTH);
   if (rowChange === 1 && colChange === 0) return Boolean(passage & SOUTH);
@@ -44,12 +81,14 @@ function canMove(from: Cell, to: Cell) {
   return false;
 }
 
-export function MazeGame({ onExit }: Props) {
+export function MazeGame({ onExit, variantId }: GameProps) {
+  const adults = variantId === "adults";
+  const [{ maze, rows, cols, start, target }] = useState(() => (adults ? adultLayout() : KIDS));
   const [phase, setPhase] = useState<Phase>("playing");
   const [outcome, setOutcome] = useState<Outcome>("complete");
-  const [path, setPath] = useState<Cell[]>([START]);
+  const [path, setPath] = useState<Cell[]>([start]);
   const [bumpedCell, setBumpedCell] = useState<string | null>(null);
-  const pathRef = useRef<Cell[]>([START]);
+  const pathRef = useRef<Cell[]>([start]);
   const draggingRef = useRef(false);
   const bumpTimeoutRef = useRef<number | null>(null);
 
@@ -58,6 +97,8 @@ export function MazeGame({ onExit }: Props) {
     setOutcome(result);
     setPhase(result === "complete" ? "complete" : "result");
   }, []);
+
+  const handleExpire = useCallback(() => finish("timeout"), [finish]);
 
   useEffect(() => {
     if (phase !== "complete") return;
@@ -72,8 +113,8 @@ export function MazeGame({ onExit }: Props) {
   const cellFromPointer = (event: PointerEvent<HTMLDivElement>): Cell => {
     const bounds = event.currentTarget.getBoundingClientRect();
     return {
-      row: Math.min(ROWS - 1, Math.max(0, Math.floor(((event.clientY - bounds.top) / bounds.height) * ROWS))),
-      col: Math.min(COLS - 1, Math.max(0, Math.floor(((event.clientX - bounds.left) / bounds.width) * COLS))),
+      row: Math.min(rows - 1, Math.max(0, Math.floor(((event.clientY - bounds.top) / bounds.height) * rows))),
+      col: Math.min(cols - 1, Math.max(0, Math.floor(((event.clientX - bounds.left) / bounds.width) * cols))),
     };
   };
 
@@ -101,7 +142,7 @@ export function MazeGame({ onExit }: Props) {
       return;
     }
 
-    if (!canMove(current, candidate)) {
+    if (!canMove(maze, current, candidate)) {
       if (Math.abs(candidate.row - current.row) + Math.abs(candidate.col - current.col) !== 1) return;
       setBumpedCell(`${candidate.row}-${candidate.col}`);
       if (bumpTimeoutRef.current !== null) window.clearTimeout(bumpTimeoutRef.current);
@@ -112,7 +153,7 @@ export function MazeGame({ onExit }: Props) {
     const nextPath = [...previousPath, candidate];
     pathRef.current = nextPath;
     setPath(nextPath);
-    if (isSameCell(candidate, TARGET)) finish("complete");
+    if (isSameCell(candidate, target)) finish("complete");
   };
 
   if (phase === "result") {
@@ -128,11 +169,13 @@ export function MazeGame({ onExit }: Props) {
 
   const endpoint = path[path.length - 1];
   const pathPoints = path.map(({ row, col }) => `${col + 0.5},${row + 0.5}`).join(" ");
+  const tokenSize = adults ? "h-[2.75rem] w-[2.75rem]" : "h-[4.25rem] w-[4.25rem]";
+  const goalSize = adults ? "h-[2.9rem] w-[2.9rem]" : "h-[4.5rem] w-[4.5rem]";
 
   return (
-    <main className="relative flex h-full w-full flex-col overflow-hidden bg-game-bg p-8 pt-10 text-game-text">
+    <main className={`relative flex h-full w-full flex-col overflow-hidden bg-game-bg pt-10 text-game-text ${adults ? "px-4 pb-4" : "p-8"}`}>
       <div className="absolute inset-x-0 top-0 z-20">
-        <Timer durationMs={75000} onExpire={() => finish("timeout")} paused={phase !== "playing"} />
+        <Timer durationMs={75000} onExpire={handleExpire} paused={phase !== "playing"} />
       </div>
       <header className="shrink-0 text-center">
         <h1 className="text-5xl font-extrabold text-game-accent">Krishna’s Forest Maze</h1>
@@ -143,9 +186,9 @@ export function MazeGame({ onExit }: Props) {
 
       <div className="flex min-h-0 flex-1 items-center justify-center pt-5">
         <div
-          className={`relative h-[34rem] w-[56.67rem] touch-none overflow-hidden rounded-3xl border-4 bg-game-panel shadow-2xl select-none ${
-            phase === "complete" ? "border-game-correct shadow-game-correct/30" : "border-game-accent"
-          }`}
+          className={`relative touch-none overflow-hidden rounded-3xl border-4 bg-game-panel shadow-2xl select-none ${
+            adults ? "h-full w-full" : "h-[34rem] w-[56.67rem]"
+          } ${phase === "complete" ? "border-game-correct shadow-game-correct/30" : "border-game-accent"}`}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={() => { draggingRef.current = false; }}
@@ -158,9 +201,9 @@ export function MazeGame({ onExit }: Props) {
           />
           <div
             className="absolute inset-0 grid"
-            style={{ gridTemplateColumns: `repeat(${COLS}, 1fr)`, gridTemplateRows: `repeat(${ROWS}, 1fr)` }}
+            style={{ gridTemplateColumns: `repeat(${cols}, 1fr)`, gridTemplateRows: `repeat(${rows}, 1fr)` }}
           >
-            {MAZE.flatMap((row, rowIndex) =>
+            {maze.flatMap((row, rowIndex) =>
               row.map((passages, colIndex) => {
                 const cellKey = `${rowIndex}-${colIndex}`;
                 return (
@@ -172,15 +215,15 @@ export function MazeGame({ onExit }: Props) {
                   >
                     {!(passages & NORTH) && <span className="maze-wall maze-wall-top" />}
                     {!(passages & WEST) && <span className="maze-wall maze-wall-left" />}
-                    {colIndex === COLS - 1 && <span className="maze-wall maze-wall-right" />}
-                    {rowIndex === ROWS - 1 && <span className="maze-wall maze-wall-bottom" />}
+                    {colIndex === cols - 1 && <span className="maze-wall maze-wall-right" />}
+                    {rowIndex === rows - 1 && <span className="maze-wall maze-wall-bottom" />}
                   </div>
                 );
               }),
             )}
           </div>
 
-          <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox={`0 0 ${COLS} ${ROWS}`} preserveAspectRatio="none">
+          <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox={`0 0 ${cols} ${rows}`} preserveAspectRatio="none">
             <polyline
               points={pathPoints}
               fill="none"
@@ -203,19 +246,19 @@ export function MazeGame({ onExit }: Props) {
 
           <div
             aria-label="Krishna"
-            className="pointer-events-none absolute z-10 h-[4.25rem] w-[4.25rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-game-bg/70 p-0.5 ring-2 ring-game-accent shadow-lg shadow-game-accent/70"
-            style={{ left: `${((endpoint.col + 0.5) / COLS) * 100}%`, top: `${((endpoint.row + 0.5) / ROWS) * 100}%` }}
+            className={`pointer-events-none absolute z-10 ${tokenSize} -translate-x-1/2 -translate-y-1/2 rounded-full bg-game-bg/70 p-0.5 ring-2 ring-game-accent shadow-lg shadow-game-accent/70`}
+            style={{ left: `${((endpoint.col + 0.5) / cols) * 100}%`, top: `${((endpoint.row + 0.5) / rows) * 100}%` }}
           >
             <img className="h-full w-full object-contain drop-shadow-2xl" src="./maze/krishna-token.webp" alt="" />
           </div>
           <div
             aria-label="Krishna's cows"
-            className={`pointer-events-none absolute z-10 h-[4.5rem] w-[4.5rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-game-bg/70 p-0.5 ring-2 shadow-lg ${
+            className={`pointer-events-none absolute z-10 ${goalSize} -translate-x-1/2 -translate-y-1/2 rounded-full bg-game-bg/70 p-0.5 ring-2 shadow-lg ${
               phase === "complete"
                 ? "animate-pulse ring-game-correct shadow-game-correct/70"
                 : "ring-krishna-green shadow-krishna-green/70"
             }`}
-            style={{ left: `${((TARGET.col + 0.5) / COLS) * 100}%`, top: `${((TARGET.row + 0.5) / ROWS) * 100}%` }}
+            style={{ left: `${((target.col + 0.5) / cols) * 100}%`, top: `${((target.row + 0.5) / rows) * 100}%` }}
           >
             <img className="h-full w-full object-contain drop-shadow-2xl" src="./maze/cows-goal.webp" alt="" />
           </div>
