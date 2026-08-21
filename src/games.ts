@@ -82,8 +82,8 @@ export const GAMES = [
     description: "Trace the path to the cows",
     imageSrc: "./maze/icon.svg",
     variants: [
-      { id: "kids", title: "Easy", description: "For Kids", imageSrc: "./memory/kids.png" },
-      { id: "adults", title: "Hard", description: "For Teens and Grown-ups", imageSrc: "./memory/adults.png" },
+      { id: "kids", title: "Easy Mode", description: "For Kids", imageSrc: "./memory/kids.png" },
+      { id: "adults", title: "Hard Mode", description: "For Teens and Grown-ups", imageSrc: "./memory/adults.png" },
     ],
     Component: MazeGame,
   },
