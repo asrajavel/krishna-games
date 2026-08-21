@@ -1,44 +1,39 @@
 import { useCallback, useEffect, useState } from "react";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
+import type { GameProps } from "../../games";
 import { shuffle } from "../../shuffle";
 
-interface Props {
-  onExit: () => void;
-}
+const KIDS_PAIRS = [
+  { key: "peacock", name: "Peacock" },
+  { key: "flute", name: "Flute" },
+  { key: "cow", name: "Surabhi Cow" },
+  { key: "lotus", name: "Lotus" },
+  { key: "govardhan", name: "Govardhan" },
+  { key: "krishna", name: "Krishna" },
+];
 
-const PAIRS = [
-  { key: "peacock", picture: "🦚", name: "Peacock" },
-  { key: "flute", picture: "🪈", name: "Flute" },
-  { key: "cow", picture: "🐄", name: "Surabhi Cow" },
-  { key: "lotus", picture: "🪷", name: "Lotus" },
-  { key: "govardhan", picture: "⛰️", name: "Govardhan" },
-  { key: "vrindavan", picture: "🛕", name: "Vrindavan" },
+const ADULT_PAIRS = [
+  { key: "butter", name: "Butter" },
+  { key: "sudarshan", name: "Sudarshan" },
+  { key: "tulsi", name: "Tulsi" },
+  { key: "conch", name: "Conch" },
 ];
 
 const GAME_DURATION_MS = 75_000;
 
-interface Card {
-  id: string;
-  pairKey: string;
-  picture: string;
-  name: string;
-}
-
-function makeDeck(): Card[] {
-  return shuffle(
-    PAIRS.flatMap((pair) => [0, 1].map((copy) => ({ ...pair, id: `${pair.key}-${copy}`, pairKey: pair.key }))),
+export function MemoryGame({ onExit, variantId }: GameProps) {
+  const adults = variantId === "adults";
+  const pairs = adults ? [...KIDS_PAIRS, ...ADULT_PAIRS] : KIDS_PAIRS;
+  const [cards] = useState(() =>
+    shuffle(pairs.flatMap((pair) => [0, 1].map((copy) => ({ ...pair, id: `${pair.key}-${copy}` })))),
   );
-}
-
-export function MemoryGame({ onExit }: Props) {
-  const [cards] = useState(makeDeck);
   const [selected, setSelected] = useState<string[]>([]);
   const [matched, setMatched] = useState<string[]>([]);
   const [moves, setMoves] = useState(0);
   const [timedOut, setTimedOut] = useState(false);
 
-  const isComplete = matched.length === PAIRS.length;
+  const isComplete = matched.length === pairs.length;
   const isFinished = isComplete || timedOut;
 
   useEffect(() => {
@@ -47,8 +42,8 @@ export function MemoryGame({ onExit }: Props) {
     return () => window.clearTimeout(timeout);
   }, [selected]);
 
-  const handleCardClick = (card: Card) => {
-    if (isFinished || selected.length === 2 || selected.includes(card.id) || matched.includes(card.pairKey)) return;
+  const handleCardClick = (card: (typeof cards)[number]) => {
+    if (isFinished || selected.length === 2 || selected.includes(card.id) || matched.includes(card.key)) return;
 
     if (selected.length === 0) {
       setSelected([card.id]);
@@ -57,8 +52,8 @@ export function MemoryGame({ onExit }: Props) {
 
     const firstCard = cards.find((candidate) => candidate.id === selected[0]);
     setMoves((current) => current + 1);
-    if (firstCard?.pairKey === card.pairKey) {
-      setMatched((current) => [...current, card.pairKey]);
+    if (firstCard?.key === card.key) {
+      setMatched((current) => [...current, card.key]);
       setSelected([]);
     } else {
       setSelected([selected[0], card.id]);
@@ -74,7 +69,7 @@ export function MemoryGame({ onExit }: Props) {
     return (
       <GameResultScreen
         title={isComplete ? "All Pairs Found!" : "Time's Up!"}
-        score={`${matched.length} / ${PAIRS.length}`}
+        score={`${matched.length} / ${pairs.length}`}
         message={isComplete ? `Hare Krishna! Completed in ${moves} moves.` : "Good try! Find all the pairs next time."}
         onExit={onExit}
       />
@@ -89,18 +84,18 @@ export function MemoryGame({ onExit }: Props) {
 
       <header className="shrink-0 text-center">
         <h1 className="text-5xl font-extrabold text-game-accent">Memory Match</h1>
-        <p className="mt-1 text-xl text-slate-300">Flip two cards and find all six matching pairs.</p>
+        <p className="mt-1 text-xl text-slate-300">Flip two cards and find all {pairs.length} matching pairs.</p>
         <div className="mt-2 text-2xl font-bold text-slate-300">
-          Pairs <span className="text-game-accent">{matched.length} / {PAIRS.length}</span>
+          Pairs <span className="text-game-accent">{matched.length} / {pairs.length}</span>
           <span className="mx-5 text-slate-600">•</span>
           Moves <span className="text-game-accent">{moves}</span>
         </div>
       </header>
 
-      <main className="grid grid-cols-4 grid-rows-3 gap-4 flex-1 min-h-0 max-w-6xl w-full mx-auto">
+      <main className={`grid gap-4 flex-1 min-h-0 w-full mx-auto ${adults ? "grid-cols-5 grid-rows-4 max-w-7xl" : "grid-cols-4 grid-rows-3 max-w-6xl"}`}>
         {cards.map((card) => {
-          const isFaceUp = selected.includes(card.id) || matched.includes(card.pairKey);
-          const isMatched = matched.includes(card.pairKey);
+          const isFaceUp = selected.includes(card.id) || matched.includes(card.key);
+          const isMatched = matched.includes(card.key);
 
           return (
             <button
@@ -109,7 +104,7 @@ export function MemoryGame({ onExit }: Props) {
               disabled={isFinished || isMatched}
               tabIndex={-1}
               className={`
-                rounded-2xl border-2 flex flex-col items-center justify-center transition-all duration-200 shadow-xl
+                rounded-2xl border-2 flex flex-col items-center justify-center p-3 transition-all duration-200 shadow-xl
                 ${isMatched
                   ? "border-game-correct bg-game-correct/15"
                   : isFaceUp
@@ -120,8 +115,10 @@ export function MemoryGame({ onExit }: Props) {
             >
               {isFaceUp ? (
                 <>
-                  <span className="text-9xl leading-none">{card.picture}</span>
-                  <span className={`mt-3 text-2xl font-extrabold ${isMatched ? "text-game-correct-soft" : "text-game-text"}`}>
+                  <div className="flex-1 min-h-0 w-full rounded-xl bg-game-text p-2">
+                    <img src={`./memory/${card.key}.png`} alt="" className="h-full w-full object-contain" />
+                  </div>
+                  <span className={`mt-2 shrink-0 text-2xl font-extrabold ${isMatched ? "text-game-correct-soft" : "text-game-text"}`}>
                     {card.name}
                   </span>
                 </>

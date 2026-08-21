@@ -59,7 +59,17 @@ export const GAMES = [
     ],
     Component: DasavatarGame,
   },
-  { id: "memory", title: "Memory Match", description: "Flip cards to find pairs", imageSrc: "./memory/memory-icon.svg", Component: MemoryGame },
+  {
+    id: "memory",
+    title: "Memory Match",
+    description: "Flip cards to find pairs",
+    imageSrc: "./memory/memory-icon.svg",
+    variants: [
+      { id: "kids", title: "Six Pairs", description: "For Kids", imageSrc: "./memory/kids.png" },
+      { id: "adults", title: "Ten Pairs", description: "For Teens and Grown-ups", imageSrc: "./memory/adults.png" },
+    ],
+    Component: MemoryGame,
+  },
   { id: "sequence", title: "Lila Sequence", description: "Put Krishna's pastimes in order", imageSrc: "./sequence/sequence-icon.svg", Component: SequenceGame },
   { id: "puzzle", title: "Picture Puzzle", description: "Reassemble Krishna's picture", imageSrc: "./puzzle/yashoda-krishna.jpg", Component: PuzzleGame },
   { id: "odd-one-out", title: "Odd One Out", description: "Find what does not belong", emoji: "🔍", Component: OddOneOutGame },
