@@ -2,7 +2,8 @@ import { useState, useCallback } from "react";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { getQuestions, QUESTION_POOLS, type QuizTopic } from "../../data/questions";
 import type { GameProps } from "../../games";
-import { QuizQuestion, FEEDBACK_HOLD_MS, WRONG_HOLD_MS } from "./QuizQuestion";
+import { REVEAL_HOLD_MS } from "../../feedback";
+import { QuizQuestion } from "./QuizQuestion";
 
 const LEAVE_MS = 350;
 
@@ -23,7 +24,6 @@ export function QuizGame({ onExit, variantId, variantImageSrc }: GameProps) {
 
   const handleAnswer = useCallback((selectedIndex: number | null) => {
     const isCorrect = selectedIndex !== null && selectedIndex === currentQuestion.correctIndex;
-    const holdMs = isCorrect ? FEEDBACK_HOLD_MS : WRONG_HOLD_MS;
     setState((prev) => ({ ...prev, answered: true, selectedIndex, score: isCorrect ? prev.score + 1 : prev.score }));
 
     setTimeout(() => {
@@ -35,7 +35,7 @@ export function QuizGame({ onExit, variantId, variantImageSrc }: GameProps) {
         }
         return { ...prev, currentIndex: nextIndex, answered: false, selectedIndex: null };
       });
-    }, holdMs + LEAVE_MS);
+    }, REVEAL_HOLD_MS + LEAVE_MS);
   }, [currentQuestion]);
 
   if (showResult) {

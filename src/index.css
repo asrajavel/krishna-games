@@ -338,10 +338,12 @@ button.game-card:not(:disabled):hover {
 }
 
 .reveal-pop {
+  position: relative;
+  overflow: hidden;
   background:
     linear-gradient(145deg, color-mix(in srgb, var(--pop-color) 22%, transparent), transparent 62%),
     var(--color-game-panel);
-  animation: reveal-pop .65s ease-out, reveal-glow 1.3s ease-in-out .65s infinite;
+  animation: reveal-pop .65s ease-out, reveal-glow 1.3s ease-in-out .65s var(--reveal-glow, infinite);
 }
 
 .reveal-pop::after {
@@ -350,7 +352,11 @@ button.game-card:not(:disabled):hover {
   background: linear-gradient(100deg, transparent 35%, color-mix(in srgb, var(--pop-soft) 45%, transparent), transparent 65%);
   content: "";
   pointer-events: none;
-  animation: reveal-sweep var(--quiz-leave-delay, 1.3s) ease-in-out infinite;
+  animation: reveal-sweep 2s ease-in-out forwards;
+}
+
+.reveal-once {
+  --reveal-glow: 1;
 }
 
 .pop-correct {
@@ -378,7 +384,7 @@ button.game-card:not(:disabled):hover {
 }
 
 .quiz-slide-leaving {
-  animation: quiz-leave .35s ease-in var(--quiz-leave-delay, 1.3s) both;
+  animation: quiz-leave .35s ease-in 2s both;
 }
 
 .quiz-art {

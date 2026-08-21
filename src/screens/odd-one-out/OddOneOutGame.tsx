@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
+import { REVEAL_HOLD_MS } from "../../feedback";
 
 interface Props {
   onExit: () => void;
@@ -87,7 +88,7 @@ export function OddOneOutGame({ onExit }: Props) {
         setRoundIndex((current) => current + 1);
         setSelectedIndex(null);
       }
-    }, isLastRound ? 4000 : 1400);
+    }, isLastRound ? 4000 : REVEAL_HOLD_MS);
 
     return () => clearTimeout(timeout);
   }, [isLastRound, phase, selectedIndex]);
@@ -128,11 +129,13 @@ export function OddOneOutGame({ onExit }: Props) {
             const isSelected = index === selectedIndex;
             const revealed = selectedIndex !== null;
             const style = revealed
-              ? isOdd
-                ? "border-game-correct bg-game-correct/15 scale-110"
-                : isSelected
-                  ? "border-game-wrong bg-game-wrong/15"
-                  : "border-slate-800 bg-slate-900 opacity-45"
+              ? isOdd && isSelected
+                ? "reveal-pop pop-correct border-game-correct"
+                : isOdd
+                  ? "border-game-correct/60 bg-game-correct/15"
+                  : isSelected
+                    ? "reveal-pop pop-wrong border-game-wrong"
+                    : "border-slate-800 bg-slate-900 opacity-45"
               : "border-slate-600 bg-game-panel group-hover:border-game-accent group-hover:bg-game-panel-hover group-hover:scale-110";
 
             return (

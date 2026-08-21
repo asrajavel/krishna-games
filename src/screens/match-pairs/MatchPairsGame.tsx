@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
+import { REVEAL_HOLD_MS } from "../../feedback";
 import { shuffle } from "../../shuffle";
 
 interface Props {
@@ -26,7 +27,7 @@ export function MatchPairsGame({ onExit }: Props) {
   const [matches] = useState(() => shuffle(PAIRS));
   const [selected, setSelected] = useState<{ id: string; side: Side } | null>(null);
   const [matched, setMatched] = useState<string[]>([]);
-  const [wrong, setWrong] = useState<string | null>(null);
+  const [wrong, setWrong] = useState<string[]>([]);
   const [phase, setPhase] = useState<Phase>("playing");
   const [timedOut, setTimedOut] = useState(false);
 
@@ -37,7 +38,7 @@ export function MatchPairsGame({ onExit }: Props) {
   }, [phase]);
 
   const handlePick = (side: Side, id: string) => {
-    if (phase !== "playing" || matched.includes(id)) return;
+    if (phase !== "playing" || matched.includes(id) || wrong.length) return;
     if (!selected || selected.side === side) {
       setSelected({ id, side });
       return;
@@ -50,9 +51,19 @@ export function MatchPairsGame({ onExit }: Props) {
       return;
     }
 
-    setWrong(`${side}:${id}`);
-    window.setTimeout(() => setWrong(null), 500);
+    setWrong([`${selected.side}:${selected.id}`, `${side}:${id}`]);
+    setSelected(null);
+    window.setTimeout(() => setWrong([]), REVEAL_HOLD_MS);
   };
+
+  const cardTone = (isMatched: boolean, isSelected: boolean, isWrong: boolean) =>
+    isMatched
+      ? "reveal-pop pop-correct reveal-once border-game-correct"
+      : isWrong
+        ? "reveal-pop pop-wrong border-game-wrong"
+        : isSelected
+          ? "border-game-accent bg-game-panel-hover scale-[1.02]"
+          : "border-slate-600 bg-game-panel hover:border-game-accent";
 
   const handleExpire = useCallback(() => {
     setTimedOut(true);
@@ -110,22 +121,14 @@ export function MatchPairsGame({ onExit }: Props) {
           {PAIRS.map((pair) => {
             const isMatched = matched.includes(pair.id);
             const isSelected = selected?.side === "left" && selected.id === pair.id;
-            const isWrong = wrong === `left:${pair.id}`;
+            const isWrong = wrong.includes(`left:${pair.id}`);
             return (
               <button
                 key={pair.id}
                 onClick={() => handlePick("left", pair.id)}
-                disabled={phase !== "playing" || isMatched}
+                disabled={phase !== "playing" || isMatched || wrong.length > 0}
                 tabIndex={-1}
-                className={`rounded-2xl border-2 px-6 flex items-center gap-5 text-left transition-all shadow-lg ${
-                  isMatched
-                    ? "border-game-correct bg-game-correct/15"
-                    : isSelected
-                      ? "border-game-accent bg-game-panel-hover scale-[1.02]"
-                      : isWrong
-                        ? "border-game-wrong bg-game-wrong/15 shake"
-                      : "border-slate-600 bg-game-panel hover:border-game-accent"
-                }`}
+                className={`flex items-center gap-5 rounded-2xl border-2 px-6 text-left shadow-lg transition-all ${cardTone(isMatched, isSelected, isWrong)}`}
               >
                 <span className="text-5xl">{pair.characterEmoji}</span>
                 <span className="text-2xl font-extrabold">{pair.character}</span>
@@ -138,22 +141,14 @@ export function MatchPairsGame({ onExit }: Props) {
           {matches.map((pair) => {
             const isMatched = matched.includes(pair.id);
             const isSelected = selected?.side === "right" && selected.id === pair.id;
-            const isWrong = wrong === `right:${pair.id}`;
+            const isWrong = wrong.includes(`right:${pair.id}`);
             return (
               <button
                 key={pair.id}
                 onClick={() => handlePick("right", pair.id)}
-                disabled={phase !== "playing" || isMatched}
+                disabled={phase !== "playing" || isMatched || wrong.length > 0}
                 tabIndex={-1}
-                className={`rounded-2xl border-2 px-6 flex items-center gap-5 text-left transition-all shadow-lg ${
-                  isMatched
-                    ? "border-game-correct bg-game-correct/15"
-                    : isSelected
-                      ? "border-game-accent bg-game-panel-hover scale-[1.02]"
-                      : isWrong
-                        ? "border-game-wrong bg-game-wrong/15 shake"
-                      : "border-slate-600 bg-game-panel hover:border-game-accent"
-                }`}
+                className={`flex items-center gap-5 rounded-2xl border-2 px-6 text-left shadow-lg transition-all ${cardTone(isMatched, isSelected, isWrong)}`}
               >
                 <span className="text-5xl">{pair.matchEmoji}</span>
                 <span className="text-2xl font-extrabold">{pair.match}</span>

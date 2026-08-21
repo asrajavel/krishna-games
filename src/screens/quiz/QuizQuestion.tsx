@@ -1,10 +1,8 @@
 import { useCallback, type CSSProperties } from "react";
-import type { Question } from "../../types";
 import { Timer } from "../../components/Timer";
+import type { Question } from "../../types";
 
 const TIME_PER_QUESTION_MS = 15000;
-export const FEEDBACK_HOLD_MS = 1300;
-export const WRONG_HOLD_MS = 2000;
 
 interface Props {
   question: Question;
@@ -30,7 +28,7 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
     if (answered) {
       if (index === question.correctIndex) {
         return gotItRight
-          ? `${base} reveal-pop pop-correct glow-correct border-game-correct text-game-correct-soft`
+          ? `${base} reveal-pop pop-correct border-game-correct text-game-correct-soft`
           : `${base} border-game-correct/60 text-game-correct-soft`;
       }
       if (index === selectedIndex) return `${base} reveal-pop pop-wrong border-game-wrong text-game-wrong-soft`;
@@ -60,7 +58,6 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
       <div
         key={questionNumber}
         className={`relative z-10 flex w-full flex-col items-center ${answered ? "quiz-slide-leaving" : "quiz-slide"}`}
-        style={{ "--quiz-leave-delay": `${gotItRight ? FEEDBACK_HOLD_MS : WRONG_HOLD_MS}ms` } as CSSProperties}
       >
         <div className="rounded-full border border-white/10 bg-game-panel/70 px-8 py-2 text-xl font-bold uppercase tracking-widest text-game-accent shadow-lg">
           Question {questionNumber} of {totalQuestions}
