@@ -327,6 +327,11 @@ button.game-card:not(:disabled):hover {
   100% { transform: scale(1); }
 }
 
+@keyframes reveal-glow {
+  0%, 100% { box-shadow: 0 0 3rem color-mix(in srgb, var(--pop-color) 30%, transparent); }
+  50% { box-shadow: 0 0 8rem color-mix(in srgb, var(--pop-color) 65%, transparent); }
+}
+
 @keyframes reveal-sweep {
   from { transform: translate3d(-120%, 0, 0); }
   to { transform: translate3d(120%, 0, 0); }
@@ -336,7 +341,7 @@ button.game-card:not(:disabled):hover {
   background:
     linear-gradient(145deg, color-mix(in srgb, var(--pop-color) 22%, transparent), transparent 62%),
     var(--color-game-panel);
-  animation: reveal-pop .65s ease-out;
+  animation: reveal-pop .65s ease-out, reveal-glow 1.3s ease-in-out .65s infinite;
 }
 
 .reveal-pop::after {
@@ -345,7 +350,7 @@ button.game-card:not(:disabled):hover {
   background: linear-gradient(100deg, transparent 35%, color-mix(in srgb, var(--pop-soft) 45%, transparent), transparent 65%);
   content: "";
   pointer-events: none;
-  animation: reveal-sweep .8s ease-out forwards;
+  animation: reveal-sweep 1.2s ease-in-out infinite;
 }
 
 .pop-correct {
@@ -356,7 +361,7 @@ button.game-card:not(:disabled):hover {
 .pop-wrong {
   --pop-color: var(--color-game-wrong);
   --pop-soft: var(--color-game-wrong-soft);
-  animation: reveal-pop .65s ease-out, shake .45s ease-in-out;
+  animation: reveal-pop .65s ease-out, shake .45s ease-in-out, reveal-glow 1.3s ease-in-out .65s infinite;
 }
 
 @keyframes quiz-enter {
