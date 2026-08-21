@@ -56,12 +56,12 @@ export const QUESTION_POOLS = {
   ],
   "bhagavad-gita-adults": [
     {
-      question: "According to the purport to Bhagavad-gita 1.1, why did Dhritarashtra fear losing the battle?",
+      question: "According to Bhagavad-gita 1.1, why did Dhritarashtra fear losing the battle?",
       options: ["Kurukshetra was a sacred place of pilgrimage", "The Pandavas were virtuous by nature", "Both A and B", "Neither A nor B"],
       correctIndex: 2,
     },
     {
-      question: "According to the purport to Bhagavad-gita 1.1, what is the significance of the words dharma-ksetre and kuru-ksetre?",
+      question: "According to Bhagavad-gita 1.1, what is the significance of the words dharma-ksetre and kuru-ksetre?",
       options: ["Krishna, the father of religion, was present at Kurukshetra", "Unwanted persons such as Duryodhana would be destroyed there", "Religious persons headed by Yudhishthira would be established by the Lord", "All of the above"],
       correctIndex: 3,
     },
@@ -71,7 +71,7 @@ export const QUESTION_POOLS = {
       correctIndex: 3,
     },
     {
-      question: "According to the purport to Bhagavad-gita 1.12, what did Bhishma's loud conch-blowing indirectly signal to Duryodhana?",
+      question: "According to Bhagavad-gita 1.12, what did Bhishma's loud conch-blowing indirectly signal to Duryodhana?",
       options: ["Bhishma was simply cheering him", "Duryodhana had no chance of victory", "Duryodhana's victory was certain", "It had no particular meaning"],
       correctIndex: 1,
     },
