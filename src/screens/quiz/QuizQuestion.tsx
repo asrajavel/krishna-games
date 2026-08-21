@@ -1,8 +1,10 @@
-import { useCallback } from "react";
+import { useCallback, type CSSProperties } from "react";
 import type { Question } from "../../types";
 import { Timer } from "../../components/Timer";
 
 const TIME_PER_QUESTION_MS = 15000;
+export const FEEDBACK_HOLD_MS = 1300;
+export const WRONG_HOLD_MS = 2000;
 
 interface Props {
   question: Question;
@@ -11,25 +13,41 @@ interface Props {
   onAnswer: (selectedIndex: number | null) => void;
   answered: boolean;
   selectedIndex: number | null;
+  imageSrc?: string;
 }
 
 const LABELS = ["A", "B", "C", "D"];
 
-export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswer, answered, selectedIndex }: Props) {
+export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswer, answered, selectedIndex, imageSrc }: Props) {
   const handleExpire = useCallback(() => { if (!answered) onAnswer(null); }, [answered, onAnswer]);
 
+  const timedOut = answered && selectedIndex === null;
+  const gotItRight = answered && selectedIndex === question.correctIndex;
+
   const optionStyle = (index: number) => {
-    const base = "w-full py-6 px-10 rounded-2xl text-2xl font-semibold text-left transition-all duration-300 border shadow-sm";
+    const base = "game-card group relative flex cursor-pointer items-center gap-5 overflow-hidden rounded-[2rem] border p-6 text-left text-3xl font-semibold transition-all duration-300";
+    if (timedOut) return `${base} border-white/5 text-krishna-cream/35`;
     if (answered) {
-      if (index === question.correctIndex) return `${base} bg-game-correct/15 border-game-correct text-game-correct-soft`;
-      if (index === selectedIndex) return `${base} bg-game-wrong/15 border-game-wrong text-game-wrong-soft`;
-      return `${base} bg-slate-900 border-slate-800 text-slate-500`;
+      if (index === question.correctIndex) {
+        return gotItRight
+          ? `${base} reveal-pop pop-correct glow-correct border-game-correct text-game-correct-soft`
+          : `${base} border-game-correct/60 text-game-correct-soft`;
+      }
+      if (index === selectedIndex) return `${base} reveal-pop pop-wrong border-game-wrong text-game-wrong-soft`;
+      return `${base} border-white/5 text-krishna-cream/35`;
     }
-    return `${base} bg-game-panel border-slate-700 text-game-text hover:border-slate-500 hover:bg-game-panel-hover`;
+    return `${base} border-white/10 text-krishna-cream hover:-translate-y-2 hover:border-krishna-green`;
   };
 
   return (
-    <div className="w-full h-full flex bg-game-bg text-game-text relative">
+    <div className="festival-stage relative flex h-full w-full flex-col items-center justify-center overflow-hidden p-10 text-game-text">
+      {imageSrc && (
+        <div
+          className="quiz-art"
+          style={{ "--quiz-art": `url("${imageSrc}")` } as CSSProperties}
+        />
+      )}
+
       <div className="absolute inset-x-0 top-0 z-20">
         <Timer
           key={question.question}
@@ -38,45 +56,54 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
           paused={answered}
         />
       </div>
-      <div className="w-full h-full flex flex-col items-center justify-center p-8 gap-6">
-        <div className="text-game-accent text-2xl font-semibold">
+
+      <div
+        key={questionNumber}
+        className={`relative z-10 flex w-full flex-col items-center ${answered ? "quiz-slide-leaving" : "quiz-slide"}`}
+        style={{ "--quiz-leave-delay": `${gotItRight ? FEEDBACK_HOLD_MS : WRONG_HOLD_MS}ms` } as CSSProperties}
+      >
+        <div className="rounded-full border border-white/10 bg-game-panel/70 px-8 py-2 text-xl font-bold uppercase tracking-widest text-game-accent shadow-lg">
           Question {questionNumber} of {totalQuestions}
         </div>
-        <div className="w-full max-w-3xl rounded-3xl border border-slate-700 bg-game-panel p-8 shadow-xl">
-          <h2 className="text-4xl font-bold text-center leading-tight">
+
+        <div className="game-card relative mt-8 w-full max-w-[88rem] overflow-hidden rounded-[2rem] border border-white/10 p-10">
+          <span className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-game-accent to-transparent" />
+          <h2 className="text-center text-5xl font-extrabold leading-tight text-krishna-cream">
             {question.question}
           </h2>
         </div>
-        <div className="w-full max-w-2xl flex flex-col gap-4 rounded-3xl border border-slate-800 bg-slate-950/30 p-4 shadow-lg">
-          {question.options.map((option, index) => (
-            <button
-              key={index}
-              className={optionStyle(index)}
-              onClick={() => !answered && onAnswer(index)}
-              disabled={answered}
-              tabIndex={-1}
-            >
-              <span className="text-game-accent mr-4">{LABELS[index]}.</span>
-              {option}
-            </button>
-          ))}
+
+        <div className="mt-28 grid w-full max-w-[88rem] grid-cols-2 gap-6">
+          {question.options.map((option, index) => {
+            const revealed = answered && !timedOut && index === question.correctIndex;
+            return (
+              <button
+                key={index}
+                className={optionStyle(index)}
+                onClick={() => !answered && onAnswer(index)}
+                disabled={answered}
+                tabIndex={-1}
+              >
+                <span
+                  className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-full text-3xl font-extrabold ring-1 transition-transform duration-300 group-hover:scale-110 ${
+                    revealed
+                      ? "bg-game-correct/25 text-game-correct-soft ring-game-correct/50"
+                      : "bg-white/5 text-game-accent ring-white/10"
+                  }`}
+                >
+                  {revealed ? "✓" : LABELS[index]}
+                </span>
+                {option}
+              </button>
+            );
+          })}
         </div>
-        <div className="w-full max-w-2xl h-20 flex flex-col items-center justify-center gap-1">
-          <div className="text-3xl font-bold flex flex-col items-center gap-1">
-            {answered && (
-              selectedIndex === question.correctIndex ? (
-                <span className="text-game-correct-soft">Correct!</span>
-              ) : selectedIndex === null ? (
-                <span className="text-game-wrong-soft">Time's up!</span>
-              ) : (
-                <>
-                  <span className="text-game-wrong-soft">Wrong!</span>
-                  <span className="text-game-correct-soft text-2xl">Correct: {question.options[question.correctIndex]}</span>
-                </>
-              )
-            )}
+
+        {timedOut && (
+          <div className="mt-10 rounded-full border border-game-wrong/40 bg-game-panel/70 px-10 py-3 text-2xl font-bold uppercase tracking-widest text-game-wrong-soft shadow-lg">
+            Time's up
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

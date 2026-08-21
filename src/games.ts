@@ -20,6 +20,7 @@ export interface GameVariant {
 export interface GameProps {
   onExit: () => void;
   variantId?: string;
+  variantImageSrc?: string;
 }
 
 interface Game {

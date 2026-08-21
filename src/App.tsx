@@ -49,7 +49,11 @@ export default function App() {
           onExit={goHome}
         />
       ) : ActiveGame ? (
-        <ActiveGame onExit={goHome} variantId={selection.variantId} />
+        <ActiveGame
+          onExit={goHome}
+          variantId={selection.variantId}
+          variantImageSrc={variants?.find((v) => v.id === selection.variantId)?.imageSrc}
+        />
       ) : (
         null
       )}

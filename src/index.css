@@ -146,7 +146,7 @@ body * {
   box-shadow: 0 20px 45px rgba(2, 1, 18, 0.42);
 }
 
-.game-card:hover {
+button.game-card:not(:disabled):hover {
   box-shadow: 0 24px 58px rgba(31, 199, 182, 0.2);
 }
 
@@ -316,6 +316,79 @@ body * {
   width: 34rem;
   filter: drop-shadow(0 1.2rem 1rem rgba(15, 23, 42, .4));
   animation: route-bus 5s ease-in-out both;
+}
+
+@keyframes reveal-pop {
+  0% { transform: scale(1); }
+  35% {
+    transform: scale(1.06);
+    box-shadow: 0 0 7rem color-mix(in srgb, var(--pop-color) 60%, transparent);
+  }
+  100% { transform: scale(1); }
+}
+
+@keyframes reveal-sweep {
+  from { transform: translate3d(-120%, 0, 0); }
+  to { transform: translate3d(120%, 0, 0); }
+}
+
+.reveal-pop {
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--pop-color) 22%, transparent), transparent 62%),
+    var(--color-game-panel);
+  animation: reveal-pop .65s ease-out;
+}
+
+.reveal-pop::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 35%, color-mix(in srgb, var(--pop-soft) 45%, transparent), transparent 65%);
+  content: "";
+  pointer-events: none;
+  animation: reveal-sweep .8s ease-out forwards;
+}
+
+.pop-correct {
+  --pop-color: var(--color-game-correct);
+  --pop-soft: var(--color-game-correct-soft);
+}
+
+.pop-wrong {
+  --pop-color: var(--color-game-wrong);
+  --pop-soft: var(--color-game-wrong-soft);
+  animation: reveal-pop .65s ease-out, shake .45s ease-in-out;
+}
+
+@keyframes quiz-enter {
+  from { opacity: 0; transform: translate3d(5rem, 0, 0); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes quiz-leave {
+  to { opacity: 0; transform: translate3d(-5rem, 0, 0); }
+}
+
+.quiz-slide {
+  animation: quiz-enter .45s ease-out both;
+}
+
+.quiz-slide-leaving {
+  animation: quiz-leave .35s ease-in var(--quiz-leave-delay, 1.3s) both;
+}
+
+.quiz-art {
+  --quiz-art-opacity: .3;
+  --quiz-art-blur: 0rem;
+  --quiz-art-tint: .8;
+  position: absolute;
+  inset: calc(var(--quiz-art-blur) * -2);
+  pointer-events: none;
+  background:
+    linear-gradient(150deg, rgba(139, 92, 246, var(--quiz-art-tint)), rgba(31, 199, 182, var(--quiz-art-tint))),
+    var(--quiz-art) center / cover;
+  background-blend-mode: color, normal;
+  opacity: var(--quiz-art-opacity);
+  filter: blur(var(--quiz-art-blur));
 }
 
 .maze-wall {
