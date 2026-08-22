@@ -130,29 +130,31 @@ export function DasavatarGame({ onExit, variantId }: GameProps) {
               key={avatar.id}
               data-avatar-target={avatar.id}
               className={`
-                rounded-2xl border bg-game-panel p-3 flex flex-col min-h-0 transition-all shadow-lg
+                rounded-2xl border-2 bg-game-panel p-3 flex flex-col min-h-0 transition-all shadow-xl
                 ${matchedName
                   ? "glow-correct border-game-correct"
                   : isHovered
                       ? "glow-accent scale-[1.03] border-game-accent bg-game-panel-hover"
-                      : "border-slate-700 hover:border-slate-500"
+                      : "border-slate-700 hover:border-game-accent hover:bg-game-panel-hover"
                 }
               `}
             >
-              <img
-                src={avatar.image}
-                alt={avatar.name}
-                draggable={false}
-                className="w-full flex-1 min-h-0 object-contain rounded-xl bg-game-bg shadow-inner"
-              />
+              <div className="flex-1 min-h-0 w-full rounded-xl bg-game-text p-2">
+                <img
+                  src={avatar.image}
+                  alt={avatar.name}
+                  draggable={false}
+                  className="h-full w-full object-contain"
+                />
+              </div>
               <div
                 className={`
-                  mt-3 h-12 rounded-xl border flex items-center justify-center text-2xl font-bold
+                  mt-3 h-12 rounded-xl border-2 flex items-center justify-center text-2xl font-bold
                   ${matchedName
                     ? "border-game-correct bg-game-correct/15 text-game-correct-soft"
                     : isHovered
                         ? "border-game-accent bg-game-accent/15 text-game-accent-soft"
-                    : "border-slate-700 bg-game-bg text-slate-400"
+                    : "border-slate-600 bg-game-bg text-slate-400"
                   }
                 `}
               >
@@ -174,13 +176,13 @@ export function DasavatarGame({ onExit, variantId }: GameProps) {
               disabled={isPlaced || !isGameActive}
               tabIndex={-1}
               className={`
-                rounded-xl border text-2xl font-extrabold transition-all shadow-sm touch-none
+                rounded-xl border-2 text-2xl font-extrabold transition-all shadow-sm touch-none
                 ${useClues ? CLUE_TILE : "px-6 py-3"}
-                ${wrongId === avatar.id ? "shake border-game-wrong bg-game-wrong/20 text-white" : ""}
                 ${isPlaced
-                  ? "opacity-25 border-slate-700 bg-slate-900 text-slate-400"
-                  : `${draggingId === avatar.id ? "opacity-40" : ""} border-slate-500 bg-slate-800 text-slate-100 hover:border-game-accent hover:bg-game-panel-hover hover:text-game-accent-soft hover:scale-105`
+                  ? "opacity-25 border-slate-700 bg-game-panel text-slate-400"
+                  : `${draggingId === avatar.id ? "opacity-40" : ""} border-slate-600 bg-game-panel text-game-text hover:border-game-accent hover:bg-game-panel-hover hover:text-game-accent-soft hover:scale-105`
                 }
+                ${wrongId === avatar.id ? "shake border-game-wrong bg-game-wrong/20 text-game-wrong-soft" : ""}
               `}
             >
               <Token avatar={avatar} useClues={useClues} />
@@ -191,7 +193,7 @@ export function DasavatarGame({ onExit, variantId }: GameProps) {
 
       {draggingAvatar && (
         <div
-          className={`fixed z-50 pointer-events-none -translate-x-1/2 -translate-y-1/2 rounded-xl border border-game-accent bg-slate-800 text-game-accent-soft text-2xl font-extrabold shadow-lg ${useClues ? CLUE_TILE : "px-6 py-3"}`}
+          className={`fixed z-50 pointer-events-none -translate-x-1/2 -translate-y-1/2 rounded-xl border-2 border-game-accent bg-game-panel text-game-accent-soft text-2xl font-extrabold shadow-lg ${useClues ? CLUE_TILE : "px-6 py-3"}`}
           style={{ left: dragPosition.x, top: dragPosition.y }}
         >
           <Token avatar={draggingAvatar} useClues={useClues} />
