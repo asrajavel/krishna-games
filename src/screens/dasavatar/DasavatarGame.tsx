@@ -40,11 +40,12 @@ export function DasavatarGame({ onExit, variantId }: GameProps) {
   const draggingAvatar = tokens.find((avatar) => avatar.id === draggingId);
 
   const handleDragStart = useCallback((event: React.PointerEvent<HTMLButtonElement>, avatarId: string) => {
+    if (!isGameActive || placedIds.has(avatarId)) return;
     event.preventDefault();
     setDragPosition({ x: event.clientX, y: event.clientY });
     setDraggingId(avatarId);
     setWrongId(null);
-  }, []);
+  }, [isGameActive, placedIds]);
 
   const handleDrop = useCallback((droppedId: string, targetId: string | null) => {
     setDraggingId(null);
@@ -177,7 +178,7 @@ export function DasavatarGame({ onExit, variantId }: GameProps) {
               disabled={isPlaced || !isGameActive}
               tabIndex={-1}
               className={`
-                rounded-xl border-2 text-2xl font-extrabold transition-all shadow-sm touch-none
+                rounded-xl border-2 text-2xl font-extrabold transition-all shadow-sm touch-none disabled:pointer-events-none
                 ${useClues ? CLUE_TILE : "px-6 py-3"}
                 ${isPlaced
                   ? "opacity-25 border-slate-700 bg-game-panel text-slate-400"
