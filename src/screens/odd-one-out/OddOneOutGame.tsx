@@ -61,6 +61,7 @@ const ROUNDS = [
 ] as const;
 
 const GAME_TIME_MS = 75_000;
+const LEAVE_MS = 350;
 const POSITIONS = [
   "col-start-2 row-start-1",
   "col-start-1 row-start-2",
@@ -88,7 +89,7 @@ export function OddOneOutGame({ onExit }: Props) {
         setRoundIndex((current) => current + 1);
         setSelectedIndex(null);
       }
-    }, isLastRound ? 4000 : REVEAL_HOLD_MS);
+    }, isLastRound ? 4000 : REVEAL_HOLD_MS + LEAVE_MS);
 
     return () => clearTimeout(timeout);
   }, [isLastRound, phase, selectedIndex]);
@@ -121,7 +122,12 @@ export function OddOneOutGame({ onExit }: Props) {
         <p className="mt-1 text-xl text-slate-300">Choose the item that does not belong.</p>
       </header>
 
-      <main className="flex flex-1 flex-col items-center justify-center gap-6">
+      <main
+        key={roundIndex}
+        className={`flex flex-1 flex-col items-center justify-center gap-6 ${
+          selectedIndex !== null && !isLastRound ? "quiz-slide-leaving" : "quiz-slide"
+        }`}
+      >
         <h2 className="text-center text-3xl font-bold">{round.prompt}</h2>
         <div className="grid w-full max-w-4xl grid-cols-3 grid-rows-3 gap-2">
           {round.items.map((item, index) => {
