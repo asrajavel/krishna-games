@@ -25,9 +25,11 @@ Single-page React app with `useState`-based screen switching (no router). `src/g
 
 **Input:** Stall UI is mouse driven only. No need to add keyboard navigation
 
+**Win celebration:** `CelebrationRain` (`src/components/CelebrationRain.tsx`) is a full-screen falling-petal overlay (`pointer-events: none`). Use it on the ~4s completion hold while the finished board is still visible, then go to `GameResultScreen`. Render `{isComplete && <CelebrationRain />}`. Petal motion lives in `src/index.css` (`petal-fall`). Current games: puzzle, sequence, match-pairs, maze, dasavatar. Timeouts skip it. Do not put it on the result screen.
+
 ## Tailwind CSS v4
 
-Uses `@theme` block in `src/index.css` to define colors as custom properties. Reference in classes as `text-krishna-gold`, `bg-game-panel`, etc. Custom animations (shimmer, float-up, shake) are plain CSS keyframes in the same file — not in a Tailwind config.
+Uses `@theme` block in `src/index.css` to define colors as custom properties. Reference in classes as `text-krishna-gold`, `bg-game-panel`, etc. Custom animations (shimmer, float-up, shake, petal-fall) are plain CSS keyframes in the same file — not in a Tailwind config.
 
 Keep colors centralized in `src/index.css`. Prefer named theme tokens like `bg-game-bg`, `bg-game-panel`, `text-game-accent`, `border-game-correct` over repeated arbitrary hex classes in components.
 

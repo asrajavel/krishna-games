@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type PointerEvent } from "react";
+import { CelebrationRain } from "../../components/CelebrationRain";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 import type { GameProps } from "../../games";
@@ -174,6 +175,7 @@ export function MazeGame({ onExit, variantId }: GameProps) {
 
   return (
     <main className={`relative flex h-full w-full flex-col overflow-hidden bg-game-bg pt-10 text-game-text ${adults ? "px-4 pb-4" : "p-8"}`}>
+      {phase === "complete" && <CelebrationRain />}
       <div className="absolute inset-x-0 top-0 z-20">
         <Timer durationMs={75000} onExpire={handleExpire} paused={phase !== "playing"} />
       </div>

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { CelebrationRain } from "../../components/CelebrationRain";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 import { shuffle } from "../../shuffle";
@@ -80,6 +81,7 @@ export function SequenceGame({ onExit }: Props) {
 
   return (
     <div className="w-full h-full flex flex-col gap-4 p-8 pt-10 relative bg-game-bg text-game-text">
+      {isComplete && <CelebrationRain />}
       <div className="absolute inset-x-0 top-0 z-20">
         <Timer durationMs={GAME_DURATION_MS} onExpire={handleExpire} paused={isFinished} />
       </div>

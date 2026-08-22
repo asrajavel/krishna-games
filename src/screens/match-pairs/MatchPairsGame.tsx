@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { CelebrationRain } from "../../components/CelebrationRain";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 import { REVEAL_HOLD_MS } from "../../feedback";
@@ -84,6 +85,7 @@ export function MatchPairsGame({ onExit }: Props) {
 
   return (
     <div className="w-full h-full flex flex-col gap-5 p-8 pt-10 relative bg-game-bg text-game-text">
+      {phase === "celebrating" && <CelebrationRain />}
       <div className="absolute inset-x-0 top-0 z-20">
         <Timer durationMs={GAME_DURATION_MS} onExpire={handleExpire} paused={phase !== "playing"} />
       </div>

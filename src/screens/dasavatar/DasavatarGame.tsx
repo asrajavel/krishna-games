@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { CelebrationRain } from "../../components/CelebrationRain";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 import { DASAVATAR_ITEMS, type DasavatarItem } from "../../data/dasavatar";
@@ -15,6 +16,7 @@ function Token({ avatar, useClues }: { avatar: DasavatarItem; useClues: boolean 
 }
 
 const GAME_DURATION_MS = 60000;
+const COMPLETION_REVEAL_MS = 4_000;
 const TOTAL_AVATARS = DASAVATAR_ITEMS.length;
 const CLUE_TILE = "h-24 w-44 overflow-hidden p-0";
 
@@ -27,6 +29,7 @@ export function DasavatarGame({ onExit, variantId }: GameProps) {
   const [hoveredTargetId, setHoveredTargetId] = useState<string | null>(null);
   const [wrongId, setWrongId] = useState<string | null>(null);
   const [timedOut, setTimedOut] = useState(false);
+  const [showCompleteResult, setShowCompleteResult] = useState(false);
 
   const placedIds = useMemo(() => new Set(Object.values(placements)), [placements]);
   const matchedCount = placedIds.size;
@@ -82,7 +85,13 @@ export function DasavatarGame({ onExit, variantId }: GameProps) {
     setHoveredTargetId(null);
   }, []);
 
-  if (isComplete || isTimedOut) {
+  useEffect(() => {
+    if (!isComplete || timedOut) return;
+    const timeout = window.setTimeout(() => setShowCompleteResult(true), COMPLETION_REVEAL_MS);
+    return () => window.clearTimeout(timeout);
+  }, [isComplete, timedOut]);
+
+  if (showCompleteResult || isTimedOut) {
     return (
       <GameResultScreen
         title={isComplete ? "Dasavatar Complete!" : "Time's Up!"}
@@ -95,6 +104,7 @@ export function DasavatarGame({ onExit, variantId }: GameProps) {
 
   return (
     <div className="w-full h-full flex flex-col gap-5 p-8 pt-10 relative bg-game-bg text-game-text">
+      {isComplete && <CelebrationRain />}
       <div className="absolute inset-x-0 top-0 z-20">
         <Timer
           durationMs={GAME_DURATION_MS}
