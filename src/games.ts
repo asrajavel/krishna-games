@@ -26,9 +26,7 @@ export interface GameProps {
 interface Game {
   id: string;
   title: string;
-  description: string;
-  imageSrc?: string;
-  emoji?: string;
+  imageSrc: string;
   variants?: readonly GameVariant[];
   Component: ComponentType<GameProps>;
 }
@@ -37,8 +35,7 @@ export const GAMES = [
   {
     id: "quiz",
     title: "Krishna Quiz",
-    description: "Test your knowledge!",
-    imageSrc: "./quiz/quiz-icon.svg",
+    imageSrc: "./quiz/board.png",
     variants: [
       { id: "krishna-lila-kids", title: "Krishna Lila", description: "For Kids", imageSrc: "./quiz/krishna-lila.png" },
       { id: "bhagavad-gita-adults", title: "Bhagavad-gita", description: "For Teens and Grown-ups", imageSrc: "./quiz/bhagavad-gita.png" },
@@ -51,8 +48,7 @@ export const GAMES = [
   {
     id: "dasavatar",
     title: "Dasavatar Match",
-    description: "Match the ten avatars",
-    imageSrc: "./dasavatar/dasavatar-icon.svg",
+    imageSrc: "./dasavatar/board.png",
     variants: [
       { id: "kids", title: "Match the Names", description: "For Kids", imageSrc: "./dasavatar/kids.png" },
       { id: "adults", title: "Match the Clues", description: "For Teens and Grown-ups", imageSrc: "./dasavatar/adults.png" },
@@ -62,25 +58,23 @@ export const GAMES = [
   {
     id: "memory",
     title: "Memory Match",
-    description: "Flip cards to find pairs",
-    imageSrc: "./memory/memory-icon.svg",
+    imageSrc: "./memory/board.png",
     variants: [
       { id: "kids", title: "Six Pairs", description: "For Kids", imageSrc: "./memory/kids.png" },
       { id: "adults", title: "Ten Pairs", description: "For Teens and Grown-ups", imageSrc: "./memory/adults.png" },
     ],
     Component: MemoryGame,
   },
-  { id: "sequence", title: "Lila Sequence", description: "Put Krishna's pastimes in order", imageSrc: "./sequence/sequence-icon.svg", Component: SequenceGame },
-  { id: "puzzle", title: "Picture Puzzle", description: "Reassemble Krishna's picture", imageSrc: "./puzzle/yashoda-krishna.jpg", Component: PuzzleGame },
-  { id: "odd-one-out", title: "Odd One Out", description: "Find what does not belong", emoji: "🔍", Component: OddOneOutGame },
-  { id: "match-pairs", title: "Match the Pairs", description: "Connect characters and symbols", emoji: "🔗", Component: MatchPairsGame },
-  { id: "whack-target", title: "Krishna's Favorites", description: "Catch Krishna's favorite things", emoji: "🧈", Component: WhackTargetGame },
-  { id: "route-to-vrindavan", title: "Route to Vrindavan", description: "Guide the pilgrimage bus", imageSrc: "./route-to-vrindavan/icon.svg", Component: RouteToVrindavanGame },
+  { id: "sequence", title: "Lila Sequence", imageSrc: "./sequence/board.png", Component: SequenceGame },
+  { id: "puzzle", title: "Picture Puzzle", imageSrc: "./puzzle/board.png", Component: PuzzleGame },
+  { id: "odd-one-out", title: "Odd One Out", imageSrc: "./odd-one-out/board.png", Component: OddOneOutGame },
+  { id: "match-pairs", title: "Match the Pairs", imageSrc: "./match-pairs/board.png", Component: MatchPairsGame },
+  { id: "whack-target", title: "Krishna's Favorites", imageSrc: "./whack-target/board.png", Component: WhackTargetGame },
+  { id: "route-to-vrindavan", title: "Route to Vrindavan", imageSrc: "./route-to-vrindavan/board.png", Component: RouteToVrindavanGame },
   {
     id: "maze",
     title: "Krishna’s Forest Maze",
-    description: "Trace the path to the cows",
-    imageSrc: "./maze/icon.svg",
+    imageSrc: "./maze/hedge-maze.png",
     variants: [
       { id: "kids", title: "Easy Mode", description: "For Kids", imageSrc: "./memory/kids.png" },
       { id: "adults", title: "Hard Mode", description: "For Teens and Grown-ups", imageSrc: "./memory/adults.png" },

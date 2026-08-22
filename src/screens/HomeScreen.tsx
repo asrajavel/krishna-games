@@ -48,9 +48,7 @@ export function HomeScreen({ onStart }: Props) {
           <GameCard
             key={game.id}
             title={game.title}
-            description={game.description}
-            imageSrc={"imageSrc" in game ? game.imageSrc : undefined}
-            emoji={"emoji" in game ? game.emoji : undefined}
+            imageSrc={game.imageSrc}
             onClick={() => onStart(game.id)}
           />
         ))}
