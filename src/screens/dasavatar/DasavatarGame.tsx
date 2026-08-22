@@ -23,6 +23,7 @@ const CLUE_TILE = "h-24 w-44 overflow-hidden p-0";
 export function DasavatarGame({ onExit, variantId }: GameProps) {
   const useClues = variantId === "adults";
   const [tokens] = useState(() => shuffle(DASAVATAR_ITEMS));
+  const [targets] = useState(() => shuffle(DASAVATAR_ITEMS));
   const [placements, setPlacements] = useState<Record<string, string>>({});
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
@@ -121,7 +122,7 @@ export function DasavatarGame({ onExit, variantId }: GameProps) {
       </header>
 
       <main className="grid grid-cols-5 grid-rows-2 gap-3 flex-1 min-h-0">
-        {DASAVATAR_ITEMS.map((avatar) => {
+        {targets.map((avatar) => {
           const matchedName = placements[avatar.id] ? avatar.name : null;
           const isHovered = hoveredTargetId === avatar.id && !matchedName && !!draggingId;
 
