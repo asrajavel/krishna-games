@@ -9,6 +9,7 @@ import { PuzzleGame } from "./screens/puzzle/PuzzleGame";
 import { QuizGame } from "./screens/quiz/QuizGame";
 import { RouteToVrindavanGame } from "./screens/route-to-vrindavan/RouteToVrindavanGame";
 import { SequenceGame } from "./screens/sequence/SequenceGame";
+import { SlokaScribeGame } from "./screens/sloka-scribe/SlokaScribeGame";
 import { WhackTargetGame } from "./screens/whack-target/WhackTargetGame";
 
 export interface GameVariant {
@@ -73,6 +74,7 @@ export const GAMES = [
   { id: "match-pairs", title: "Match the Pairs", imageSrc: "./match-pairs/board.png", Component: MatchPairsGame },
   { id: "whack-target", title: "Krishna's Favorites", imageSrc: "./whack-target/board.png", Component: WhackTargetGame },
   { id: "route-to-vrindavan", title: "Route to Vrindavan", imageSrc: "./route-to-vrindavan/board.png", Component: RouteToVrindavanGame },
+  { id: "sloka-scribe", title: "Write the Sloka", imageSrc: "./sloka-scribe/board.png", Component: SlokaScribeGame },
   {
     id: "maze",
     title: "Krishna’s Forest Maze",

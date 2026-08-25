@@ -423,6 +423,39 @@ button.game-card:not(:disabled):hover {
   filter: blur(var(--quiz-art-blur));
 }
 
+@keyframes sloka-marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(calc(-100% - 100vw), 0, 0); }
+}
+
+.sloka-marquee {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  animation: sloka-marquee var(--sloka-speed) linear infinite;
+}
+
+@keyframes sloka-drift {
+  from { transform: translate3d(0, 0, 0) rotate(0deg); }
+  to { transform: translate3d(calc(-100vw - 12rem), var(--drift-y), 0) rotate(var(--drift-spin)); }
+}
+
+.sloka-distraction {
+  position: absolute;
+  left: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  opacity: 0.32;
+  object-fit: cover;
+  pointer-events: none;
+  filter: blur(0.12rem);
+  animation: sloka-drift linear infinite;
+}
+
 .maze-wall {
   position: absolute;
   z-index: 1;
