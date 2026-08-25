@@ -11,7 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
-krishna-games-windows.zip
+krishna-games-*.zip
+krishna-games-*/
 
 # Editor directories and files
 .vscode/*

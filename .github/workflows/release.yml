@@ -1,0 +1,40 @@
+name: Build Offline Releases
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: offline-release
+  cancel-in-progress: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: bash .github/scripts/build-release.sh windows
+      - run: bash .github/scripts/build-release.sh mac
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          NOTES=$'Latest offline builds.\n\n**Windows** — extract `krishna-games-windows.zip` and double-click `Start Krishna Games.bat`.\n\n**Mac (Apple Silicon)** — extract `krishna-games-mac.zip`, then **right-click** `Start Krishna Games.command` and choose **Open** (click Open again in the dialog). A plain double-click will not work the first time; macOS blocks scripts from downloaded archives until approved once this way. Later runs can be double-clicked normally. See `READ ME FIRST.txt` inside the ZIP.'
+          if gh release view temple-latest >/dev/null 2>&1; then
+            gh release edit temple-latest --title "Temple Offline Build" --notes "$NOTES"
+          else
+            gh release create temple-latest \
+              --target "$GITHUB_SHA" \
+              --title "Temple Offline Build" \
+              --notes "$NOTES"
+          fi
+          gh release upload temple-latest krishna-games-windows.zip krishna-games-mac.zip --clobber
