@@ -98,10 +98,9 @@ body * {
 .shimmer-text {
   background: linear-gradient(
     90deg,
-    #ff6fb5 0%,
-    var(--color-krishna-gold) 24%,
-    #fff8e8 50%,
-    #1fc7b6 76%,
+    var(--color-krishna-gold) 0%,
+    var(--color-krishna-cream) 33%,
+    var(--color-krishna-green) 66%,
     var(--color-krishna-gold) 100%
   );
   background-size: 200% auto;
