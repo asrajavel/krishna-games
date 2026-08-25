@@ -28,7 +28,15 @@ function makeRounds() {
   }));
 }
 
-function PixelatedImage({ src, blocks }: { src: string; blocks: number }) {
+function PixelatedImage({
+  src,
+  blocks,
+  children,
+}: {
+  src: string;
+  blocks: number;
+  children?: React.ReactNode;
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -80,8 +88,9 @@ function PixelatedImage({ src, blocks }: { src: string; blocks: number }) {
   }, [src, blocks]);
 
   return (
-    <div className="relative h-[28rem] max-w-[42rem] overflow-hidden rounded-[2rem] border border-white/10 bg-game-panel shadow-xl">
+    <div className="relative h-full max-w-full overflow-hidden rounded-[2rem] border border-white/10 bg-game-panel shadow-xl">
       <canvas ref={canvasRef} className="h-full w-full" />
+      {children}
     </div>
   );
 }
@@ -157,32 +166,34 @@ export function GuessBlurGame({ onExit }: GameProps) {
 
       <main
         key={roundIndex}
-        className={`flex min-h-0 flex-1 flex-col items-center justify-center gap-6 ${
+        className={`flex min-h-0 w-full flex-1 items-center justify-center gap-10 pt-6 ${
           answered && !isLastRound ? "quiz-slide-leaving" : "quiz-slide"
         }`}
       >
-        <PixelatedImage src={round.answer.src} blocks={pixelBlocks} />
-
-        <div className="flex h-20 shrink-0 items-center">
-          {hints < MAX_HINTS && !answered && (
-            <button
-              onClick={() => setHints((current) => current + 1)}
-              tabIndex={-1}
-              className="rounded-xl border border-game-accent bg-game-panel px-8 py-4 text-2xl font-bold text-game-accent shadow-lg hover:bg-game-panel-hover"
-            >
-              Use clue · lose 1 point
-            </button>
-          )}
-          {timedOut && (
-            <div className="animate-pulse rounded-full border border-game-wrong/40 bg-game-panel/70 px-10 py-3 text-2xl font-bold uppercase tracking-widest text-game-wrong-soft shadow-lg">
-              Time&apos;s up
+        <div className="flex h-full min-w-0 flex-1 items-center justify-center">
+          <PixelatedImage src={round.answer.src} blocks={pixelBlocks}>
+            <div className="absolute inset-x-0 bottom-6 flex justify-center">
+              {hints < MAX_HINTS && !answered && (
+                <button
+                  onClick={() => setHints((current) => current + 1)}
+                  tabIndex={-1}
+                  className="rounded-xl border border-game-accent bg-game-panel/90 px-8 py-4 text-2xl font-bold text-game-accent shadow-xl backdrop-blur-sm hover:bg-game-panel-hover"
+                >
+                  Reveal a bit more  (−1 point)
+                </button>
+              )}
+              {timedOut && (
+                <div className="animate-pulse rounded-full border border-game-wrong/40 bg-game-panel/85 px-10 py-3 text-2xl font-bold uppercase tracking-widest text-game-wrong-soft shadow-xl backdrop-blur-sm">
+                  Time&apos;s up
+                </div>
+              )}
             </div>
-          )}
+          </PixelatedImage>
         </div>
 
-        <div className="grid w-full max-w-[88rem] grid-cols-2 gap-6">
+        <div className="flex w-[38rem] shrink-0 flex-col gap-5">
           {round.options.map((option, index) => {
-            const base = "game-card flex cursor-pointer items-center gap-5 rounded-[2rem] border p-6 text-left text-3xl font-semibold transition-all duration-300";
+            const base = "game-card relative flex cursor-pointer items-center gap-5 rounded-[2rem] border p-6 text-left text-3xl font-semibold transition-all duration-300";
             const style = timedOut
               ? `${base} border-white/5 text-krishna-cream/35`
               : answered
