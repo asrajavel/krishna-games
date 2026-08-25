@@ -43,7 +43,7 @@ export function HomeScreen({ onStart }: Props) {
           Krishna Lila Games
         </h1>
       </header>
-      <div className="relative z-10 grid h-[36rem] max-h-full w-full max-w-[112rem] grid-cols-5 grid-rows-2 gap-5">
+      <div className="relative z-10 grid h-[36rem] max-h-full w-full max-w-[112rem] grid-cols-6 grid-rows-2 gap-5">
         {GAMES.map((game) => (
           <GameCard
             key={game.id}

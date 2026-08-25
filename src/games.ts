@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 import { DasavatarGame } from "./screens/dasavatar/DasavatarGame";
+import { GuessBlurGame } from "./screens/guess-blur/GuessBlurGame";
 import { MatchPairsGame } from "./screens/match-pairs/MatchPairsGame";
 import { MazeGame } from "./screens/maze/MazeGame";
 import { MemoryGame } from "./screens/memory/MemoryGame";
@@ -68,6 +69,7 @@ export const GAMES = [
   { id: "sequence", title: "Lila Sequence", imageSrc: "./sequence/board.png", Component: SequenceGame },
   { id: "puzzle", title: "Picture Puzzle", imageSrc: "./puzzle/board.png", Component: PuzzleGame },
   { id: "odd-one-out", title: "Odd One Out", imageSrc: "./odd-one-out/board.png", Component: OddOneOutGame },
+  { id: "guess-blur", title: "Guess the Picture", imageSrc: "./guess-blur/board.png", Component: GuessBlurGame },
   { id: "match-pairs", title: "Match the Pairs", imageSrc: "./match-pairs/board.png", Component: MatchPairsGame },
   { id: "whack-target", title: "Krishna's Favorites", imageSrc: "./whack-target/board.png", Component: WhackTargetGame },
   { id: "route-to-vrindavan", title: "Route to Vrindavan", imageSrc: "./route-to-vrindavan/board.png", Component: RouteToVrindavanGame },
