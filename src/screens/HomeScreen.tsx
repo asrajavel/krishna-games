@@ -21,7 +21,7 @@ const PARTICLES = Array.from({ length: 20 }, (_, i) => {
 
 export function HomeScreen({ onStart }: Props) {
   return (
-    <div className="festival-stage relative flex h-full w-full flex-col items-center justify-center gap-30 p-6">
+    <div className="festival-stage relative flex h-full w-full flex-col items-center justify-center gap-14 p-10">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         {PARTICLES.map((p) => (
           <div
@@ -43,14 +43,15 @@ export function HomeScreen({ onStart }: Props) {
           Krishna Lila Games
         </h1>
       </header>
-      <div className="relative z-10 grid h-[36rem] max-h-full w-full max-w-[112rem] grid-cols-6 grid-rows-2 gap-5">
-        {GAMES.map((game) => (
-          <GameCard
-            key={game.id}
-            title={game.title}
-            imageSrc={game.imageSrc}
-            onClick={() => onStart(game.id)}
-          />
+      <div className="relative z-10 grid h-[48rem] max-h-full w-full max-w-[116rem] grid-cols-5 grid-rows-3 gap-6">
+        {GAMES.map((game, i) => (
+          <div key={game.id} className={i === 0 ? "col-span-2 row-span-2 min-h-0" : "min-h-0"}>
+            <GameCard
+              title={game.title}
+              imageSrc={game.imageSrc}
+              onClick={() => onStart(game.id)}
+            />
+          </div>
         ))}
       </div>
     </div>

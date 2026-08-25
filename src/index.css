@@ -436,7 +436,7 @@ button.game-card:not(:disabled):hover {
   display: flex;
   align-items: center;
   white-space: nowrap;
-  animation: sloka-marquee var(--sloka-speed) linear infinite;
+  animation: sloka-marquee var(--sloka-speed) linear forwards;
 }
 
 @keyframes sloka-drift {

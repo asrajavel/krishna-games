@@ -105,22 +105,20 @@ function Distractions() {
 export function SlokaScribeGame({ onExit }: GameProps) {
   const [levelIndex, setLevelIndex] = useState(0);
   const [slokaIndex, setSlokaIndex] = useState(0);
-  const [written, setWritten] = useState(0);
   const [phase, setPhase] = useState<"writing" | "level-done" | "celebrating" | "results">("writing");
+  const [flowed, setFlowed] = useState(false);
 
   const level = LEVELS[levelIndex];
   const sloka = level.slokas[slokaIndex];
 
-  const advance = useCallback((counted: boolean) => {
-    if (counted) setWritten((current) => current + 1);
+  const advance = useCallback(() => {
+    setFlowed(false);
     if (slokaIndex < level.slokas.length - 1) {
       setSlokaIndex((current) => current + 1);
     } else {
       setPhase(levelIndex === LEVELS.length - 1 ? "celebrating" : "level-done");
     }
   }, [level.slokas.length, levelIndex, slokaIndex]);
-
-  const handleExpire = useCallback(() => advance(false), [advance]);
 
   useEffect(() => {
     if (phase !== "celebrating") return;
@@ -132,7 +130,7 @@ export function SlokaScribeGame({ onExit }: GameProps) {
     return (
       <GameResultScreen
         title="Hare Krishna!"
-        score={`Learnt ${written} ${written === 1 ? "sloka" : "slokas"}`}
+        score={`Learnt ${(levelIndex + 1) * level.slokas.length} slokas`}
         message="Every sloka is in your notebook!"
         onExit={onExit}
       />
@@ -148,7 +146,7 @@ export function SlokaScribeGame({ onExit }: GameProps) {
           <Timer
             key={`${levelIndex}-${slokaIndex}`}
             durationMs={TIME_PER_SLOKA_MS}
-            onExpire={handleExpire}
+            onExpire={advance}
           />
         </div>
       )}
@@ -176,18 +174,22 @@ export function SlokaScribeGame({ onExit }: GameProps) {
               key={`${levelIndex}-${slokaIndex}`}
               className="sloka-marquee text-6xl font-extrabold text-game-text drop-shadow-lg"
               style={{ "--sloka-speed": `${level.marqueeSeconds}s` } as CSSProperties}
+              onAnimationEnd={() => setFlowed(true)}
             >
               {sloka.text}
             </span>
           </div>
 
-          <button
-            onClick={() => advance(true)}
-            tabIndex={-1}
-            className={ACTION_CLASS}
-          >
-            Next Sloka →
-          </button>
+          {flowed && (
+            <div className="flex flex-col items-center gap-4">
+              <p className="text-3xl font-bold text-slate-300">
+                Done writing? Click the button below.
+              </p>
+              <button onClick={advance} tabIndex={-1} className={ACTION_CLASS}>
+                Next Sloka →
+              </button>
+            </div>
+          )}
         </main>
       ) : (
         <main className={STAGE_CLASS}>
@@ -196,9 +198,6 @@ export function SlokaScribeGame({ onExit }: GameProps) {
             <h2 className="text-7xl font-black text-game-correct-soft">
               Level {levelIndex + 1} Complete!
             </h2>
-            <p className="text-5xl font-bold text-game-accent">
-              Learnt {written} {written === 1 ? "sloka" : "slokas"} so far
-            </p>
           </div>
 
           {phase === "level-done" && (
