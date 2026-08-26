@@ -4,6 +4,7 @@ import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 import { REVEAL_HOLD_MS } from "../../feedback";
 import { shuffle } from "../../shuffle";
+import { playSound } from "../../soundEffects";
 
 interface Props {
   onExit: () => void;
@@ -41,17 +42,20 @@ export function MatchPairsGame({ onExit }: Props) {
   const handlePick = (side: Side, id: string) => {
     if (phase !== "playing" || matched.includes(id) || wrong.length) return;
     if (!selected || selected.side === side) {
+      playSound("select");
       setSelected({ id, side });
       return;
     }
     if (selected.id === id) {
       const nextMatched = [...matched, id];
+      playSound("correct");
       setMatched(nextMatched);
       setSelected(null);
       if (nextMatched.length === PAIRS.length) setPhase("celebrating");
       return;
     }
 
+    playSound("wrong");
     setWrong([`${selected.side}:${selected.id}`, `${side}:${id}`]);
     setSelected(null);
     window.setTimeout(() => setWrong([]), REVEAL_HOLD_MS);

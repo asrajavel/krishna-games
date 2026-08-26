@@ -6,6 +6,7 @@ import { DASAVATAR_ITEMS, type DasavatarItem } from "../../data/dasavatar";
 import type { GameProps } from "../../games";
 import { usePointerDrag } from "../../pointerDrag";
 import { shuffle } from "../../shuffle";
+import { playSound } from "../../soundEffects";
 
 function Token({ avatar, useClues }: { avatar: DasavatarItem; useClues: boolean }) {
   if (!useClues) return avatar.name;
@@ -36,10 +37,12 @@ export function DasavatarGame({ onExit, variantId }: GameProps) {
     if (!isGameActive || !targetId || placedIds.has(droppedId)) return;
 
     if (droppedId === targetId) {
+      playSound("correct");
       setPlacements((prev) => ({ ...prev, [targetId]: droppedId }));
       return;
     }
 
+    playSound("wrong");
     setWrongId(droppedId);
     window.setTimeout(() => setWrongId(null), 500);
   }, [isGameActive, placedIds]);

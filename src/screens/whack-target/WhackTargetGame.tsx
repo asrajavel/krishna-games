@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
+import { playSound } from "../../soundEffects";
 
 interface Props {
   onExit: () => void;
@@ -86,6 +87,7 @@ export function WhackTargetGame({ onExit }: Props) {
 
   const handleHit = (item: FallingItem) => {
     if (phase !== "playing" || item.feedback) return;
+    playSound(item.favorite ? "correct" : "wrong");
     setScore((current) => current + (item.favorite ? 10 : -5));
     setItems((current) =>
       current.map((candidate) =>

@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
+import { playSound } from "../../soundEffects";
 
 interface Props {
   onExit: () => void;
@@ -41,12 +42,14 @@ export function RouteToVrindavanGame({ onExit }: Props) {
     setSelected(choice);
 
     if (choice !== route.correct) {
+      playSound("wrong");
       const remainingLives = lives - 1;
       setLives(remainingLives);
       setTimeout(() => remainingLives === 0 ? finish("lost") : setSelected(null), 2000);
       return;
     }
 
+    playSound("correct");
     setPhase("driving");
     setTimeout(() => {
       if (routeIndex === ROUTES.length - 1) {

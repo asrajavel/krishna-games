@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import type { GameVariant } from "../games";
+import { playSound } from "../soundEffects";
 
 interface Props {
   gameTitle: string;
@@ -31,7 +32,10 @@ export function GameVariantScreen({ gameTitle, variants, onSelect, onExit }: Pro
         {variants.map((variant) => (
           <button
             key={variant.id}
-            onClick={() => onSelect(variant.id)}
+            onClick={() => {
+              playSound("click");
+              onSelect(variant.id);
+            }}
             tabIndex={-1}
             className="game-card group relative flex min-h-[17rem] w-[32rem] cursor-pointer flex-col items-center justify-end overflow-hidden rounded-[2rem] border border-white/10 p-4 text-center transition-all duration-300 hover:-translate-y-2 hover:border-krishna-green"
           >

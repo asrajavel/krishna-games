@@ -4,6 +4,7 @@ import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 import type { GameProps } from "../../games";
 import { shuffle } from "../../shuffle";
+import { playSound } from "../../soundEffects";
 
 type Cell = { row: number; col: number };
 type Phase = "playing" | "complete" | "result";
@@ -145,6 +146,7 @@ export function MazeGame({ onExit, variantId }: GameProps) {
 
     if (!canMove(maze, current, candidate)) {
       if (Math.abs(candidate.row - current.row) + Math.abs(candidate.col - current.col) !== 1) return;
+      playSound("wrong");
       setBumpedCell(`${candidate.row}-${candidate.col}`);
       if (bumpTimeoutRef.current !== null) window.clearTimeout(bumpTimeoutRef.current);
       bumpTimeoutRef.current = window.setTimeout(() => setBumpedCell(null), 300);

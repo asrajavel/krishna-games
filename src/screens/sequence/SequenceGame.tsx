@@ -4,6 +4,7 @@ import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 import { usePointerDrag } from "../../pointerDrag";
 import { shuffle } from "../../shuffle";
+import { playSound } from "../../soundEffects";
 
 interface Props {
   onExit: () => void;
@@ -53,6 +54,7 @@ export function SequenceGame({ onExit }: Props) {
     if (target === null || isFinished) return;
     const targetIndex = Number(target);
     if (targetIndex === fromIndex) return;
+    playSound("drop");
     setSwappedIndexes([fromIndex, targetIndex]);
     setEvents((current) => {
       const next = [...current];

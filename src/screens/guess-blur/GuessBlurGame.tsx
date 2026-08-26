@@ -4,6 +4,7 @@ import { Timer } from "../../components/Timer";
 import { REVEAL_HOLD_MS } from "../../feedback";
 import type { GameProps } from "../../games";
 import { shuffle } from "../../shuffle";
+import { playSound } from "../../soundEffects";
 
 const TIME_PER_ROUND_MS = 15_000;
 const COMPLETION_REVEAL_MS = 4_000;
@@ -130,6 +131,7 @@ export function GuessBlurGame({ onExit }: GameProps) {
 
   const handlePick = (index: number) => {
     if (answered) return;
+    playSound(index === correctIndex ? "correct" : "wrong");
     setSelectedIndex(index);
     if (index === correctIndex) setScore((current) => current + POINTS[hints]);
   };
@@ -175,7 +177,10 @@ export function GuessBlurGame({ onExit }: GameProps) {
             <div className="absolute inset-x-0 bottom-6 flex justify-center">
               {hints < MAX_HINTS && !answered && (
                 <button
-                  onClick={() => setHints((current) => current + 1)}
+                  onClick={() => {
+                    playSound("select");
+                    setHints((current) => current + 1);
+                  }}
                   tabIndex={-1}
                   className="rounded-xl border border-game-accent bg-game-panel/90 px-8 py-4 text-2xl font-bold text-game-accent shadow-xl backdrop-blur-sm hover:bg-game-panel-hover"
                 >

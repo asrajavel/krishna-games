@@ -2,6 +2,7 @@ import { useState, useCallback, type ComponentType } from "react";
 import { GAMES, type GameId, type GameProps } from "./games";
 import { GameVariantScreen } from "./screens/GameVariantScreen";
 import { HomeScreen } from "./screens/HomeScreen";
+import { playSound } from "./soundEffects";
 
 interface Selection {
   gameId: GameId;
@@ -29,7 +30,10 @@ export default function App() {
     <div className="relative w-screen h-screen overflow-hidden bg-krishna-bg">
       {selection && (
         <button
-          onClick={goHome}
+          onClick={() => {
+            playSound("click");
+            goHome();
+          }}
           aria-label="Cancel game and return home"
           tabIndex={-1}
           className="absolute left-6 top-3 z-50 rounded-b-xl border-x border-b border-slate-700 bg-game-panel px-6 py-3 text-krishna-cream shadow-lg hover:bg-game-panel-hover hover:text-game-accent"

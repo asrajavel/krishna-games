@@ -3,6 +3,7 @@ import { CelebrationRain } from "../../components/CelebrationRain";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 import type { GameProps } from "../../games";
+import { playSound } from "../../soundEffects";
 
 const COMPLETION_REVEAL_MS = 4_000;
 const TIME_PER_SLOKA_MS = 60_000;
@@ -185,7 +186,14 @@ export function SlokaScribeGame({ onExit }: GameProps) {
               <p className="text-3xl font-bold text-slate-300">
                 Done writing? Click the button below.
               </p>
-              <button onClick={advance} tabIndex={-1} className={ACTION_CLASS}>
+              <button
+                onClick={() => {
+                  playSound("select");
+                  advance();
+                }}
+                tabIndex={-1}
+                className={ACTION_CLASS}
+              >
                 Next Sloka →
               </button>
             </div>
@@ -204,6 +212,7 @@ export function SlokaScribeGame({ onExit }: GameProps) {
             <div className="flex gap-10">
               <button
                 onClick={() => {
+                  playSound("click");
                   setLevelIndex((current) => current + 1);
                   setSlokaIndex(0);
                   setPhase("writing");
@@ -214,7 +223,10 @@ export function SlokaScribeGame({ onExit }: GameProps) {
                 Continue to Level {levelIndex + 2} →
               </button>
               <button
-                onClick={() => setPhase("results")}
+                onClick={() => {
+                  playSound("click");
+                  setPhase("results");
+                }}
                 tabIndex={-1}
                 className="rounded-[2rem] border-2 border-b-8 border-slate-600 bg-game-panel px-14 py-6 text-4xl font-extrabold text-slate-300 transition-transform hover:-translate-y-1 hover:bg-game-panel-hover active:translate-y-1 active:border-b-2"
               >

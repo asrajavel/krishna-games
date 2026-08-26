@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { playSound } from "../soundEffects";
 
 interface Props {
   title: string;
@@ -21,7 +22,10 @@ export function GameResultScreen({ title, score, message, onExit }: Props) {
       {score !== undefined && <div className="text-8xl font-bold">{score}</div>}
       <p className="text-3xl text-slate-300">{message}</p>
       <button
-        onClick={onExit}
+        onClick={() => {
+          playSound("click");
+          onExit();
+        }}
         tabIndex={-1}
         className="rounded-xl border border-game-accent bg-game-panel px-8 py-4 text-xl text-game-accent shadow-lg hover:bg-game-panel-hover"
       >

@@ -3,6 +3,7 @@ import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 import type { GameProps } from "../../games";
 import { shuffle } from "../../shuffle";
+import { playSound } from "../../soundEffects";
 
 const KIDS_PAIRS = [
   { key: "peacock", name: "Peacock" },
@@ -46,6 +47,7 @@ export function MemoryGame({ onExit, variantId }: GameProps) {
     if (isFinished || selected.length === 2 || selected.includes(card.id) || matched.includes(card.key)) return;
 
     if (selected.length === 0) {
+      playSound("select");
       setSelected([card.id]);
       return;
     }
@@ -53,9 +55,11 @@ export function MemoryGame({ onExit, variantId }: GameProps) {
     const firstCard = cards.find((candidate) => candidate.id === selected[0]);
     setMoves((current) => current + 1);
     if (firstCard?.key === card.key) {
+      playSound("correct");
       setMatched((current) => [...current, card.key]);
       setSelected([]);
     } else {
+      playSound("wrong");
       setSelected([selected[0], card.id]);
     }
   };

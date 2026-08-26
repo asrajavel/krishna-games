@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 import { REVEAL_HOLD_MS } from "../../feedback";
+import { playSound } from "../../soundEffects";
 
 interface Props {
   onExit: () => void;
@@ -96,6 +97,7 @@ export function OddOneOutGame({ onExit }: Props) {
 
   const handlePick = (index: number) => {
     if (selectedIndex !== null) return;
+    playSound(index === round.oddIndex ? "correct" : "wrong");
     setSelectedIndex(index);
     if (index === round.oddIndex) setScore((current) => current + 1);
   };

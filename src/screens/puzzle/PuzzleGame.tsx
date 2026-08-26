@@ -4,6 +4,7 @@ import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 import { usePointerDrag } from "../../pointerDrag";
 import { shuffle } from "../../shuffle";
+import { playSound } from "../../soundEffects";
 
 interface Props {
   onExit: () => void;
@@ -73,6 +74,7 @@ export function PuzzleGame({ onExit }: Props) {
 
   const placePiece = useCallback((piece: number, sourceSlot: number | null, targetSlot: number) => {
     if (isFinished) return;
+    playSound("drop");
     setBoard((current) => {
       const next = [...current];
       if (sourceSlot === null) {

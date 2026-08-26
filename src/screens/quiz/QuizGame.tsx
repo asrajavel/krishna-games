@@ -3,6 +3,7 @@ import { GameResultScreen } from "../../components/GameResultScreen";
 import { getQuestions, QUESTION_POOLS, type QuizTopic } from "../../data/questions";
 import type { GameProps } from "../../games";
 import { REVEAL_HOLD_MS } from "../../feedback";
+import { playSound } from "../../soundEffects";
 import { QuizQuestion } from "./QuizQuestion";
 
 const LEAVE_MS = 350;
@@ -24,6 +25,7 @@ export function QuizGame({ onExit, variantId, variantImageSrc }: GameProps) {
 
   const handleAnswer = useCallback((selectedIndex: number | null) => {
     const isCorrect = selectedIndex !== null && selectedIndex === currentQuestion.correctIndex;
+    if (selectedIndex !== null) playSound(isCorrect ? "correct" : "wrong");
     setState((prev) => ({ ...prev, answered: true, selectedIndex, score: isCorrect ? prev.score + 1 : prev.score }));
 
     setTimeout(() => {

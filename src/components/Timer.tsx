@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { playSound } from "../soundEffects";
 
 interface Props {
   durationMs: number;
@@ -19,7 +20,10 @@ export function Timer({ durationMs, onExpire, paused = false }: Props) {
   }, [durationMs, paused]);
 
   useEffect(() => {
-    if (elapsed === durationMs && !paused) onExpire();
+    if (elapsed === durationMs && !paused) {
+      playSound("timeout");
+      onExpire();
+    }
   }, [durationMs, elapsed, onExpire, paused]);
 
   const progress = 1 - elapsed / durationMs;
