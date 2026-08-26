@@ -56,6 +56,10 @@ export default defineConfig([
     plugins: { responsive },
     rules: {
       'responsive/no-fixed-layout-units': 'error',
+      'no-restricted-syntax': ['error', {
+        selector: 'JSXAttribute[name.name=/^on(Drag|DragStart|DragEnd|DragEnter|DragOver|DragLeave|Drop)$/]',
+        message: 'Native HTML5 drag-and-drop lets the OS paint the cursor, losing the stall cursor. Use usePointerDrag from src/pointerDrag.ts.',
+      }],
     },
   },
 ])

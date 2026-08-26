@@ -4,11 +4,8 @@ import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 import { DASAVATAR_ITEMS, type DasavatarItem } from "../../data/dasavatar";
 import type { GameProps } from "../../games";
+import { usePointerDrag } from "../../pointerDrag";
 import { shuffle } from "../../shuffle";
-
-function targetAtPoint(x: number, y: number) {
-  return document.elementFromPoint(x, y)?.closest<HTMLElement>("[data-avatar-target]")?.dataset.avatarTarget ?? null;
-}
 
 function Token({ avatar, useClues }: { avatar: DasavatarItem; useClues: boolean }) {
   if (!useClues) return avatar.name;
@@ -25,9 +22,6 @@ export function DasavatarGame({ onExit, variantId }: GameProps) {
   const [tokens] = useState(() => shuffle(DASAVATAR_ITEMS));
   const [targets] = useState(() => shuffle(DASAVATAR_ITEMS));
   const [placements, setPlacements] = useState<Record<string, string>>({});
-  const [draggingId, setDraggingId] = useState<string | null>(null);
-  const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
-  const [hoveredTargetId, setHoveredTargetId] = useState<string | null>(null);
   const [wrongId, setWrongId] = useState<string | null>(null);
   const [timedOut, setTimedOut] = useState(false);
   const [showCompleteResult, setShowCompleteResult] = useState(false);
@@ -37,20 +31,8 @@ export function DasavatarGame({ onExit, variantId }: GameProps) {
   const isComplete = matchedCount === TOTAL_AVATARS;
   const isTimedOut = timedOut && !isComplete;
   const isGameActive = !isComplete && !isTimedOut;
-  const draggingAvatar = tokens.find((avatar) => avatar.id === draggingId);
-
-  const handleDragStart = useCallback((event: React.PointerEvent<HTMLButtonElement>, avatarId: string) => {
-    if (!isGameActive || placedIds.has(avatarId)) return;
-    event.preventDefault();
-    setDragPosition({ x: event.clientX, y: event.clientY });
-    setDraggingId(avatarId);
-    setWrongId(null);
-  }, [isGameActive, placedIds]);
 
   const handleDrop = useCallback((droppedId: string, targetId: string | null) => {
-    setDraggingId(null);
-    setHoveredTargetId(null);
-
     if (!isGameActive || !targetId || placedIds.has(droppedId)) return;
 
     if (droppedId === targetId) {
@@ -62,30 +44,25 @@ export function DasavatarGame({ onExit, variantId }: GameProps) {
     window.setTimeout(() => setWrongId(null), 500);
   }, [isGameActive, placedIds]);
 
-  useEffect(() => {
-    if (!draggingId) return;
+  const {
+    item: draggingId,
+    position: dragPosition,
+    hoveredTarget: hoveredTargetId,
+    start,
+    cancel,
+  } = usePointerDrag<string>("data-avatar-target", handleDrop);
+  const draggingAvatar = tokens.find((avatar) => avatar.id === draggingId);
 
-    const handlePointerMove = (event: PointerEvent) => {
-      setDragPosition({ x: event.clientX, y: event.clientY });
-      setHoveredTargetId(targetAtPoint(event.clientX, event.clientY));
-    };
-    const handlePointerUp = (event: PointerEvent) => {
-      handleDrop(draggingId, targetAtPoint(event.clientX, event.clientY));
-    };
-
-    document.addEventListener("pointermove", handlePointerMove);
-    document.addEventListener("pointerup", handlePointerUp, { once: true });
-    return () => {
-      document.removeEventListener("pointermove", handlePointerMove);
-      document.removeEventListener("pointerup", handlePointerUp);
-    };
-  }, [draggingId, handleDrop]);
+  const handleDragStart = useCallback((event: React.PointerEvent<HTMLButtonElement>, avatarId: string) => {
+    if (!isGameActive || placedIds.has(avatarId)) return;
+    setWrongId(null);
+    start(event, avatarId);
+  }, [isGameActive, placedIds, start]);
 
   const handleExpire = useCallback(() => {
     setTimedOut(true);
-    setDraggingId(null);
-    setHoveredTargetId(null);
-  }, []);
+    cancel();
+  }, [cancel]);
 
   useEffect(() => {
     if (!isComplete || timedOut) return;
@@ -105,7 +82,10 @@ export function DasavatarGame({ onExit, variantId }: GameProps) {
   }
 
   return (
-    <div className="w-full h-full flex flex-col gap-5 p-8 pt-10 relative bg-game-bg text-game-text">
+    <div
+      className="w-full h-full flex flex-col gap-5 p-8 pt-10 relative bg-game-bg text-game-text"
+      data-dragging={draggingId === null ? undefined : ""}
+    >
       {isComplete && <CelebrationRain />}
       <div className="absolute inset-x-0 top-0 z-20">
         <Timer

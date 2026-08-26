@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { CelebrationRain } from "../../components/CelebrationRain";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
+import { usePointerDrag } from "../../pointerDrag";
 import { shuffle } from "../../shuffle";
 
 interface Props {
@@ -27,8 +28,6 @@ function shuffledEvents() {
 
 export function SequenceGame({ onExit }: Props) {
   const [events, setEvents] = useState(shuffledEvents);
-  const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [swappedIndexes, setSwappedIndexes] = useState<number[]>([]);
   const [timedOut, setTimedOut] = useState(false);
   const [showCompleteResult, setShowCompleteResult] = useState(false);
@@ -50,23 +49,28 @@ export function SequenceGame({ onExit }: Props) {
     return () => window.clearTimeout(timeout);
   }, [swappedIndexes]);
 
-  const handleDrop = (targetIndex: number) => {
-    if (draggingIndex === null || draggingIndex === targetIndex || isFinished) return;
-    setSwappedIndexes([draggingIndex, targetIndex]);
+  const handleDrop = useCallback((fromIndex: number, target: string | null) => {
+    if (target === null || isFinished) return;
+    const targetIndex = Number(target);
+    if (targetIndex === fromIndex) return;
+    setSwappedIndexes([fromIndex, targetIndex]);
     setEvents((current) => {
       const next = [...current];
-      [next[draggingIndex], next[targetIndex]] = [next[targetIndex], next[draggingIndex]];
+      [next[fromIndex], next[targetIndex]] = [next[targetIndex], next[fromIndex]];
       return next;
     });
-    setDraggingIndex(null);
-    setHoveredIndex(null);
-  };
+  }, [isFinished]);
+
+  const { item: draggingIndex, position, hoveredTarget, start, cancel } = usePointerDrag<number>(
+    "data-event-index",
+    handleDrop,
+  );
+  const draggingEvent = draggingIndex === null ? null : events[draggingIndex];
 
   const handleExpire = useCallback(() => {
     setTimedOut(true);
-    setDraggingIndex(null);
-    setHoveredIndex(null);
-  }, []);
+    cancel();
+  }, [cancel]);
 
   if (showResult) {
     return (
@@ -80,7 +84,10 @@ export function SequenceGame({ onExit }: Props) {
   }
 
   return (
-    <div className="w-full h-full flex flex-col gap-4 p-8 pt-10 relative bg-game-bg text-game-text">
+    <div
+      className="w-full h-full flex flex-col gap-4 p-8 pt-10 relative bg-game-bg text-game-text"
+      data-dragging={draggingIndex === null ? undefined : ""}
+    >
       {isComplete && <CelebrationRain />}
       <div className="absolute inset-x-0 top-0 z-20">
         <Timer durationMs={GAME_DURATION_MS} onExpire={handleExpire} paused={isFinished} />
@@ -139,22 +146,8 @@ export function SequenceGame({ onExit }: Props) {
           {events.map((event, index) => (
             <button
               key={event.id}
-              draggable={!isFinished}
-              onDragStart={(dragEvent) => {
-                dragEvent.dataTransfer.effectAllowed = "move";
-                dragEvent.dataTransfer.setData("text/plain", String(index));
-                setDraggingIndex(index);
-              }}
-              onDragEnter={() => setHoveredIndex(index)}
-              onDragOver={(dragEvent) => dragEvent.preventDefault()}
-              onDrop={(dragEvent) => {
-                dragEvent.preventDefault();
-                handleDrop(index);
-              }}
-              onDragEnd={() => {
-                setDraggingIndex(null);
-                setHoveredIndex(null);
-              }}
+              data-event-index={index}
+              onPointerDown={(pointerEvent) => start(pointerEvent, index)}
               disabled={isFinished}
               tabIndex={-1}
               style={{
@@ -162,14 +155,14 @@ export function SequenceGame({ onExit }: Props) {
                 gridRow: index < 3 ? 1 : 2,
               }}
               className={`
-                relative w-full h-full max-w-72 place-self-center rounded-3xl border-2 p-3 flex flex-col text-center transition-all shadow-xl
+                relative w-full h-full max-w-72 place-self-center touch-none rounded-3xl border-2 p-3 flex flex-col text-center transition-all shadow-xl
                 ${isComplete
                   ? "glow-correct border-game-correct bg-game-panel"
                   : swappedIndexes.includes(index)
                     ? "swap-pop border-game-accent bg-game-accent/20"
                   : draggingIndex === index
                   ? "opacity-40 border-game-accent bg-game-accent/10 scale-95"
-                  : hoveredIndex === index && draggingIndex !== null
+                  : hoveredTarget === String(index) && draggingIndex !== null
                     ? "glow-accent border-game-accent bg-game-accent/20 scale-[1.04]"
                     : "border-slate-700 bg-game-panel hover:border-game-accent hover:bg-game-panel-hover hover:-translate-y-1"
                 }
@@ -192,6 +185,15 @@ export function SequenceGame({ onExit }: Props) {
         }
       </p>
 
+      {draggingEvent && (
+        <div
+          className="pointer-events-none fixed z-50 w-64 -translate-x-1/2 -translate-y-1/2 rounded-3xl border-2 border-game-accent bg-game-panel p-3 text-center shadow-lg"
+          style={{ left: position.x, top: position.y }}
+        >
+          <img src={`./sequence/${draggingEvent.id}.png`} alt="" className="h-36 w-full rounded-xl bg-game-text p-2 object-contain" />
+          <span className="mt-2 block text-xl font-extrabold leading-tight">{draggingEvent.title}</span>
+        </div>
+      )}
     </div>
   );
 }

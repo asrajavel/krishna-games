@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { CelebrationRain } from "../../components/CelebrationRain";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
+import { usePointerDrag } from "../../pointerDrag";
 import { shuffle } from "../../shuffle";
 
 interface Props {
@@ -13,6 +14,11 @@ const GAME_DURATION_MS = 75_000;
 const COMPLETION_REVEAL_MS = 4_000;
 const BOARD_MAX_HEIGHT_REM = 46;
 const BOARD_MAX_WIDTH_REM = 54;
+
+interface DraggedPiece {
+  piece: number;
+  slot: number | null;
+}
 
 const PUZZLES = [
   "./puzzle/yashoda-krishna.jpg",
@@ -33,9 +39,7 @@ export function PuzzleGame({ onExit }: Props) {
   const [aspect, setAspect] = useState(0);
   const [pieces] = useState(shuffledPieces);
   const [board, setBoard] = useState<(number | null)[]>(() => PIECES.map(() => null));
-  const [selectedPiece, setSelectedPiece] = useState<{ piece: number; slot: number | null } | null>(null);
-  const [draggingPiece, setDraggingPiece] = useState<number | null>(null);
-  const [draggingSlot, setDraggingSlot] = useState<number | null>(null);
+  const [selectedPiece, setSelectedPiece] = useState<DraggedPiece | null>(null);
   const [timedOut, setTimedOut] = useState(false);
   const [showCompleteResult, setShowCompleteResult] = useState(false);
 
@@ -67,7 +71,7 @@ export function PuzzleGame({ onExit }: Props) {
     return () => window.clearTimeout(timeout);
   }, [isComplete, timedOut]);
 
-  const placePiece = (piece: number, sourceSlot: number | null, targetSlot: number) => {
+  const placePiece = useCallback((piece: number, sourceSlot: number | null, targetSlot: number) => {
     if (isFinished) return;
     setBoard((current) => {
       const next = [...current];
@@ -79,16 +83,22 @@ export function PuzzleGame({ onExit }: Props) {
       return next;
     });
     setSelectedPiece(null);
-    setDraggingPiece(null);
-    setDraggingSlot(null);
-  };
+  }, [isFinished]);
+
+  const handleDrop = useCallback((dragged: DraggedPiece, targetSlot: string | null) => {
+    if (targetSlot !== null) placePiece(dragged.piece, dragged.slot, Number(targetSlot));
+  }, [placePiece]);
+
+  const { item: dragging, position, hoveredTarget, start, cancel } = usePointerDrag<DraggedPiece>(
+    "data-slot",
+    handleDrop,
+  );
 
   const handleExpire = useCallback(() => {
     setTimedOut(true);
     setSelectedPiece(null);
-    setDraggingPiece(null);
-    setDraggingSlot(null);
-  }, []);
+    cancel();
+  }, [cancel]);
 
   if (showResult) {
     return (
@@ -104,7 +114,10 @@ export function PuzzleGame({ onExit }: Props) {
   if (!aspect) return <div className="h-full w-full bg-game-bg" />;
 
   return (
-    <div className="relative flex h-full w-full flex-col bg-game-bg p-8 pt-10 text-game-text">
+    <div
+      className="relative flex h-full w-full flex-col bg-game-bg p-8 pt-10 text-game-text"
+      data-dragging={dragging ? "" : undefined}
+    >
       {isComplete && <CelebrationRain />}
       <div className="absolute inset-x-0 top-0 z-20">
         <Timer durationMs={GAME_DURATION_MS} onExpire={handleExpire} paused={isFinished} />
@@ -130,7 +143,7 @@ export function PuzzleGame({ onExit }: Props) {
             return (
               <button
                 key={slot}
-                draggable={piece !== null && !isFinished}
+                data-slot={slot}
                 disabled={isFinished}
                 tabIndex={-1}
                 aria-label={piece === null ? "Empty puzzle position" : "Placed puzzle piece"}
@@ -138,27 +151,21 @@ export function PuzzleGame({ onExit }: Props) {
                   if (selectedPiece) placePiece(selectedPiece.piece, selectedPiece.slot, slot);
                   else if (piece !== null) setSelectedPiece({ piece, slot });
                 }}
-                onDragStart={(event) => {
-                  if (piece === null) return;
-                  event.dataTransfer.effectAllowed = "move";
-                  setDraggingPiece(piece);
-                  setDraggingSlot(slot);
+                onPointerDown={(event) => {
+                  if (piece !== null) start(event, { piece, slot });
                 }}
-                onDragOver={(event) => event.preventDefault()}
-                onDrop={(event) => {
-                  event.preventDefault();
-                  if (draggingPiece !== null) placePiece(draggingPiece, draggingSlot, slot);
-                }}
-                onDragEnd={() => {
-                  setDraggingPiece(null);
-                  setDraggingSlot(null);
-                }}
-                className={`bg-no-repeat ${
+                className={`touch-none bg-no-repeat ${
+                  dragging && hoveredTarget === String(slot)
+                    ? "ring-8 ring-inset ring-game-accent"
+                    : ""
+                } ${
                   piece === null
                     ? "bg-slate-900 hover:bg-slate-800"
                     : selectedPiece?.slot === slot
                       ? "scale-95 ring-8 ring-inset ring-game-accent"
-                      : "hover:brightness-110"
+                      : dragging?.slot === slot
+                        ? "opacity-40"
+                        : "hover:brightness-110"
                 }`}
                 style={piece !== null ? pieceStyle(piece) : undefined}
               />
@@ -180,26 +187,17 @@ export function PuzzleGame({ onExit }: Props) {
               return (
                 <button
                   key={piece}
-                  draggable={!isPlaced && !isFinished}
                   disabled={isPlaced || isFinished}
                   tabIndex={-1}
                   aria-label="Loose puzzle piece"
                   onClick={() => setSelectedPiece(selectedPiece?.piece === piece ? null : { piece, slot: null })}
-                  onDragStart={(event) => {
-                    event.dataTransfer.effectAllowed = "move";
-                    setDraggingPiece(piece);
-                    setDraggingSlot(null);
-                  }}
-                  onDragEnd={() => {
-                    setDraggingPiece(null);
-                    setDraggingSlot(null);
-                  }}
-                  className={`bg-no-repeat transition-all ${
+                  onPointerDown={(event) => start(event, { piece, slot: null })}
+                  className={`touch-none bg-no-repeat transition-all ${
                     isPlaced
                       ? "pointer-events-none opacity-0"
                       : selectedPiece?.piece === piece
                         ? "scale-95 rounded-lg ring-8 ring-game-accent"
-                        : draggingPiece === piece
+                        : dragging?.piece === piece
                           ? "opacity-40"
                           : "rounded-lg shadow-lg hover:scale-[1.03] hover:brightness-110"
                   }`}
@@ -211,6 +209,17 @@ export function PuzzleGame({ onExit }: Props) {
         </aside>
       </main>
 
+      {dragging && (
+        <div
+          className="pointer-events-none fixed z-50 w-56 -translate-x-1/2 -translate-y-1/2 rounded-lg border-2 border-game-accent bg-no-repeat shadow-lg"
+          style={{
+            ...pieceStyle(dragging.piece),
+            aspectRatio: (aspect * rows) / columns,
+            left: position.x,
+            top: position.y,
+          }}
+        />
+      )}
     </div>
   );
 }
