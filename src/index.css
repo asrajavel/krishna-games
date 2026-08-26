@@ -458,7 +458,7 @@ button.game-card:not(:disabled):hover {
   display: flex;
   align-items: center;
   white-space: nowrap;
-  animation: sloka-marquee var(--sloka-speed) linear forwards;
+  animation: sloka-marquee var(--sloka-duration, 15s) linear forwards;
 }
 
 @keyframes sloka-drift {
@@ -471,7 +471,6 @@ button.game-card:not(:disabled):hover {
   left: 100%;
   aspect-ratio: 1;
   border-radius: 50%;
-  opacity: 0.32;
   object-fit: cover;
   pointer-events: none;
   filter: blur(0.12rem);

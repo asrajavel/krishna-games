@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { CelebrationRain } from "../../components/CelebrationRain";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
@@ -12,7 +12,7 @@ const ACTION_CLASS = "glow-accent rounded-[2rem] border-b-8 border-amber-700 bg-
 
 const LEVELS = [
   {
-    marqueeSeconds: 20,
+    marqueeRemPerSecond: 50,
     slokas: [
       {
         ref: "Bhagavad-gita 2.47",
@@ -29,7 +29,7 @@ const LEVELS = [
     ],
   },
   {
-    marqueeSeconds: 15,
+    marqueeRemPerSecond: 75,
     slokas: [
       {
         ref: "Bhagavad-gita 15.15",
@@ -46,7 +46,7 @@ const LEVELS = [
     ],
   },
   {
-    marqueeSeconds: 11,
+    marqueeRemPerSecond: 100,
     slokas: [
       {
         ref: "Bhagavad-gita 2.14",
@@ -81,7 +81,7 @@ const DISTRACTIONS = [
 
 function Distractions() {
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+    <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-[0.32]" aria-hidden>
       {DISTRACTIONS.map((item, i) => (
         <img
           key={i}
@@ -108,9 +108,19 @@ export function SlokaScribeGame({ onExit }: GameProps) {
   const [slokaIndex, setSlokaIndex] = useState(0);
   const [phase, setPhase] = useState<"writing" | "level-done" | "celebrating" | "results">("writing");
   const [flowed, setFlowed] = useState(false);
+  const marqueeRef = useRef<HTMLSpanElement>(null);
 
   const level = LEVELS[levelIndex];
   const sloka = level.slokas[slokaIndex];
+
+  useLayoutEffect(() => {
+    const marquee = marqueeRef.current;
+    if (!marquee) return;
+
+    const rootFontSize = Number.parseFloat(getComputedStyle(document.documentElement).fontSize);
+    const distanceRem = (marquee.offsetWidth + window.innerWidth) / rootFontSize;
+    marquee.style.setProperty("--sloka-duration", `${distanceRem / level.marqueeRemPerSecond}s`);
+  }, [level.marqueeRemPerSecond, sloka.text]);
 
   const advance = useCallback(() => {
     setFlowed(false);
@@ -165,16 +175,16 @@ export function SlokaScribeGame({ onExit }: GameProps) {
       </header>
 
       {phase === "writing" ? (
-        <main className={STAGE_CLASS}>
-          <div className="rounded-full border border-game-accent/40 bg-game-panel/80 px-10 py-3 text-3xl font-bold text-game-accent shadow-xl">
+        <main className="relative z-10 min-h-0 flex-1">
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 translate-y-[calc(-50%-12rem)] rounded-full border border-game-accent/40 bg-game-panel/80 px-10 py-3 text-3xl font-bold text-game-accent shadow-xl">
             {sloka.ref}
           </div>
 
-          <div className="relative h-64 w-full overflow-hidden">
+          <div className="pointer-events-none absolute -inset-x-8 top-1/2 h-40 -translate-y-1/2 overflow-hidden">
             <span
+              ref={marqueeRef}
               key={`${levelIndex}-${slokaIndex}`}
               className="sloka-marquee text-6xl font-extrabold text-game-text drop-shadow-lg"
-              style={{ "--sloka-speed": `${level.marqueeSeconds}s` } as CSSProperties}
               onAnimationEnd={() => setFlowed(true)}
             >
               {sloka.text}
@@ -182,7 +192,7 @@ export function SlokaScribeGame({ onExit }: GameProps) {
           </div>
 
           {flowed && (
-            <div className="flex flex-col items-center gap-4">
+            <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-4">
               <p className="text-3xl font-bold text-slate-300">
                 Done writing? Click the button below.
               </p>
