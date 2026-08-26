@@ -3,7 +3,6 @@ import { CelebrationRain } from "../../components/CelebrationRain";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 import type { GameProps } from "../../games";
-import { shuffle } from "../../shuffle";
 import { playSound } from "../../soundEffects";
 
 type Cell = { row: number; col: number };
@@ -15,14 +14,6 @@ const NORTH = 1;
 const EAST = 2;
 const SOUTH = 4;
 const WEST = 8;
-const OPPOSITE: Record<number, number> = { [NORTH]: SOUTH, [EAST]: WEST, [SOUTH]: NORTH, [WEST]: EAST };
-const STEPS = [
-  { bit: NORTH, dr: -1, dc: 0 },
-  { bit: EAST, dr: 0, dc: 1 },
-  { bit: SOUTH, dr: 1, dc: 0 },
-  { bit: WEST, dr: 0, dc: -1 },
-];
-
 const KIDS_MAZE = [
   [4, 6, 12, 6, 14, 10, 10, 10, 10, 8],
   [5, 5, 5, 1, 3, 10, 14, 10, 10, 12],
@@ -34,40 +25,24 @@ const KIDS_MAZE = [
 
 const KIDS = { maze: KIDS_MAZE, rows: 6, cols: 10, start: { row: 0, col: 0 }, target: { row: 0, col: 9 } };
 
-function generateMaze(rows: number, cols: number): number[][] {
-  const maze = Array.from({ length: rows }, () => Array(cols).fill(0));
-  const seen = Array.from({ length: rows }, () => Array(cols).fill(false));
-  const stack: Cell[] = [{ row: 0, col: 0 }];
-  seen[0][0] = true;
+// Hand-tuned from the generated layout: 60-step solution with a wrong turn available
+// at 34 of those cells. The removed walls open loops, so more than one route works.
+const ADULTS_MAZE = [
+  [4, 4, 4, 4, 6, 14, 10, 10, 10, 12, 6, 10, 10, 10, 14, 10, 10, 8, 4, 6, 8, 6, 10, 8],
+  [3, 11, 15, 15, 9, 3, 8, 2, 10, 15, 9, 2, 12, 2, 11, 10, 14, 14, 11, 11, 10, 9, 2, 12],
+  [2, 10, 9, 7, 8, 2, 10, 14, 12, 1, 6, 8, 7, 12, 2, 10, 9, 7, 10, 8, 4, 6, 10, 13],
+  [4, 6, 12, 7, 14, 8, 2, 9, 5, 6, 11, 10, 13, 5, 4, 6, 8, 3, 14, 10, 11, 9, 4, 1],
+  [7, 13, 1, 5, 3, 8, 4, 6, 15, 9, 4, 4, 5, 5, 7, 15, 8, 4, 5, 6, 12, 6, 9, 4],
+  [1, 3, 10, 11, 14, 8, 3, 13, 5, 4, 3, 11, 13, 3, 13, 3, 12, 7, 15, 9, 3, 11, 8, 5],
+  [2, 12, 6, 10, 13, 4, 4, 5, 5, 3, 12, 2, 9, 2, 9, 2, 13, 1, 1, 4, 6, 10, 14, 9],
+  [2, 15, 11, 12, 5, 3, 11, 9, 7, 8, 3, 14, 8, 6, 14, 14, 11, 10, 14, 15, 9, 2, 15, 8],
+  [4, 5, 4, 5, 3, 10, 8, 2, 15, 12, 6, 9, 4, 5, 5, 7, 14, 12, 5, 1, 2, 10, 13, 4],
+  [7, 15, 13, 7, 14, 12, 4, 2, 13, 1, 7, 12, 5, 1, 5, 1, 5, 1, 3, 8, 6, 8, 7, 9],
+  [1, 5, 1, 1, 5, 1, 7, 10, 15, 8, 5, 3, 13, 2, 15, 8, 1, 2, 10, 14, 13, 4, 3, 12],
+  [2, 11, 10, 10, 11, 10, 11, 8, 3, 10, 9, 2, 9, 2, 11, 10, 10, 10, 8, 1, 3, 11, 10, 9],
+] as const;
 
-  while (stack.length) {
-    const current = stack[stack.length - 1];
-    const next = shuffle(
-      STEPS.flatMap(({ bit, dr, dc }) => {
-        const row = current.row + dr;
-        const col = current.col + dc;
-        if (row < 0 || col < 0 || row >= rows || col >= cols || seen[row][col]) return [];
-        return [{ bit, row, col }];
-      }),
-    )[0];
-    if (!next) {
-      stack.pop();
-      continue;
-    }
-    maze[current.row][current.col] |= next.bit;
-    maze[next.row][next.col] |= OPPOSITE[next.bit];
-    seen[next.row][next.col] = true;
-    stack.push({ row: next.row, col: next.col });
-  }
-
-  return maze;
-}
-
-function adultLayout() {
-  const rows = 12;
-  const cols = 24;
-  return { maze: generateMaze(rows, cols), rows, cols, start: { row: 0, col: 0 }, target: { row: rows - 1, col: cols - 1 } };
-}
+const ADULTS = { maze: ADULTS_MAZE, rows: 12, cols: 24, start: { row: 0, col: 0 }, target: { row: 11, col: 23 } };
 
 const isSameCell = (a: Cell, b: Cell) => a.row === b.row && a.col === b.col;
 
@@ -85,7 +60,7 @@ function canMove(maze: Maze, from: Cell, to: Cell) {
 
 export function MazeGame({ onExit, variantId }: GameProps) {
   const adults = variantId === "adults";
-  const [{ maze, rows, cols, start, target }] = useState(() => (adults ? adultLayout() : KIDS));
+  const { maze, rows, cols, start, target } = adults ? ADULTS : KIDS;
   const [phase, setPhase] = useState<Phase>("playing");
   const [outcome, setOutcome] = useState<Outcome>("complete");
   const [path, setPath] = useState<Cell[]>([start]);
