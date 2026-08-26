@@ -96,11 +96,13 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
           })}
         </div>
 
-        {timedOut && (
-          <div className="mt-10 animate-pulse rounded-full border border-game-wrong/40 bg-game-panel/70 px-10 py-3 text-2xl font-bold uppercase tracking-widest text-game-wrong-soft shadow-lg">
-            Time's up
-          </div>
-        )}
+        <div
+          className={`mt-10 rounded-full border border-game-wrong/40 bg-game-panel/70 px-10 py-3 text-2xl font-bold uppercase tracking-widest text-game-wrong-soft shadow-lg ${
+            timedOut ? "animate-pulse" : "invisible"
+          }`}
+        >
+          Time's up
+        </div>
       </div>
     </div>
   );
