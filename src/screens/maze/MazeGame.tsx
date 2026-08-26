@@ -93,6 +93,7 @@ export function MazeGame({ onExit, variantId }: GameProps) {
   const pathRef = useRef<Cell[]>([start]);
   const draggingRef = useRef(false);
   const bumpTimeoutRef = useRef<number | null>(null);
+  const lastBumpRef = useRef<string | null>(null);
 
   const finish = useCallback((result: Outcome) => {
     draggingRef.current = false;
@@ -134,6 +135,8 @@ export function MazeGame({ onExit, variantId }: GameProps) {
     const candidate = cellFromPointer(event);
     const previousPath = pathRef.current;
     const current = previousPath[previousPath.length - 1];
+    const candidateKey = `${candidate.row}-${candidate.col}`;
+    if (lastBumpRef.current !== candidateKey) lastBumpRef.current = null;
     if (isSameCell(candidate, current)) return;
 
     const secondLast = previousPath[previousPath.length - 2];
@@ -146,8 +149,11 @@ export function MazeGame({ onExit, variantId }: GameProps) {
 
     if (!canMove(maze, current, candidate)) {
       if (Math.abs(candidate.row - current.row) + Math.abs(candidate.col - current.col) !== 1) return;
-      playSound("wrong");
-      setBumpedCell(`${candidate.row}-${candidate.col}`);
+      if (lastBumpRef.current !== candidateKey) {
+        playSound("wrong");
+        lastBumpRef.current = candidateKey;
+      }
+      setBumpedCell(candidateKey);
       if (bumpTimeoutRef.current !== null) window.clearTimeout(bumpTimeoutRef.current);
       bumpTimeoutRef.current = window.setTimeout(() => setBumpedCell(null), 300);
       return;

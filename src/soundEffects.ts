@@ -1,6 +1,6 @@
 const SOUND_EFFECTS = {
   click: { file: "click_002.ogg", volume: 1 },
-  select: { file: "select_003.ogg", volume: 1 },
+  select: { file: "select_001.ogg", volume: 1 },
   correct: { file: "confirmation_003.ogg", volume: 0.65 },
   wrong: { file: "error_004.ogg", volume: 0.55 },
   drop: { file: "drop_002.ogg", volume: 0.5 },
