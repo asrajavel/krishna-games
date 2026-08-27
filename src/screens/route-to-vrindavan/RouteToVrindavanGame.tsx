@@ -1,4 +1,5 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { CelebrationRain } from "../../components/CelebrationRain";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
 import { playSound } from "../../soundEffects";
@@ -7,7 +8,7 @@ interface Props {
   onExit: () => void;
 }
 
-type Phase = "playing" | "driving" | "result";
+type Phase = "playing" | "driving" | "celebrating" | "result";
 type Outcome = "complete" | "lost" | "timeout";
 
 const ROUTES = [
@@ -34,8 +35,16 @@ export function RouteToVrindavanGame({ onExit }: Props) {
 
   const finish = useCallback((result: Outcome) => {
     setOutcome(result);
-    setPhase("result");
+    setPhase(result === "complete" ? "celebrating" : "result");
   }, []);
+
+  const handleExpire = useCallback(() => finish("timeout"), [finish]);
+
+  useEffect(() => {
+    if (phase !== "celebrating") return;
+    const timeout = window.setTimeout(() => setPhase("result"), 4_000);
+    return () => window.clearTimeout(timeout);
+  }, [phase]);
 
   const handleChoice = (choice: number) => {
     if (phase !== "playing" || selected !== null) return;
@@ -74,12 +83,30 @@ export function RouteToVrindavanGame({ onExit }: Props) {
     );
   }
 
+  if (phase === "celebrating") {
+    return (
+      <main className="route-game relative flex h-full flex-col overflow-hidden">
+        <CelebrationRain />
+        <div className="route-drive-scene absolute inset-0">
+          <div className="route-road" />
+          <img className="route-bus" src="./vrindavan-pilgrimage-bus.webp" alt="Pilgrimage bus travelling toward Vrindavan" />
+        </div>
+        <div className="absolute inset-0 z-20 flex items-center justify-center">
+          <div className="game-card reveal-pop pop-correct reveal-once rounded-[2rem] border border-game-correct px-20 py-14 text-center bg-game-panel/90">
+            <h2 className="text-7xl font-black text-game-correct-soft">Welcome to Vrindavan!</h2>
+            <p className="mt-4 text-3xl font-semibold text-slate-300">Jai Shri Krishna!</p>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   const isCorrect = selected === route.correct;
   const choseWrong = selected !== null && !isCorrect;
 
   return (
     <main className="route-game relative flex h-full flex-col overflow-hidden">
-      <Timer durationMs={150000} onExpire={() => finish("timeout")} paused={phase !== "playing"} />
+      <Timer durationMs={150000} onExpire={handleExpire} paused={phase !== "playing"} />
       {choseWrong && (
         <div className="route-life-lost pointer-events-none absolute inset-0 z-30 flex items-center justify-center">
           <div>

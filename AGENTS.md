@@ -16,3 +16,10 @@ Use this prompt direction:
 
 Use existing related images as references whenever possible so new assets keep
 the same palette, lighting, detail level, and perspective.
+
+# Game Design Reference
+
+When modifying or adding games, consult `GAME_DESIGN_REFERENCE.md` for
+mechanics, timing, effects, scoring patterns, and shared components used
+across all 12 games. It captures per-game format, timer durations,
+end-screen messages, graphics, and effect usage — without actual game content.
