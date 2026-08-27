@@ -25,7 +25,7 @@
 | **Format** | MCQ — single correct answer from multiple options |
 | **Variants** | 5 topics: Krishna Lila (kids), Bhagavad-gita, Mahabharata, Srimad-Bhagavatam, General Trivia |
 | **Timer** | 15s per question via Timer component in QuizQuestion |
-| **Pacing** | After answer: reveal hold (2000ms) + leave anim (350ms) → next question |
+| **Pacing** | After answer: 2000ms reveal hold + 350ms leave animation → next question. Or 15s timer expire → skip as unanswered. |
 | **Answer feedback** | Sound + visual highlight on selected option |
 | **Scoring** | +1 per correct. Score shown only on result screen. |
 | **End screen** | Title: "Quiz Complete!" · Score: `score / total` |
@@ -119,7 +119,7 @@
 | **Format** | MCQ — pick the item that doesn't belong from 4 options per round |
 | **Variants** | None |
 | **Timer** | 75s shared (not per-round) |
-| **Pacing** | After answer: 2000ms reveal hold + 350ms leave anim (last round: 4000ms) |
+| **Pacing** | After answer: 2000ms reveal hold + 350ms leave animation (last round: 4000ms) |
 | **Answer feedback** | Correct: green border + pop-correct. Wrong: red border + pop-wrong. Non-selected fade to 45% opacity. |
 | **Scoring** | +1 per round. `score / 5` |
 | **End screen** | Title: "Odd One Out Complete!" |
@@ -248,13 +248,13 @@
 
 | # | Game | Format | Timer | Per-Round | Score Type | Celebration | Variants |
 |---|---|---|---|---|---|---|---|
-| 1 | Krishna Quiz | MCQ | 15s/question | ~2.35s auto-advance | correct/total | No | 5 topics |
+| 1 | Krishna Quiz | MCQ | 15s/question | 2.35s reveal delay | correct/total | No | 5 topics |
 | 2 | Dasavatar Match | Drag-drop | 60s | Real-time | correct/10 | Yes (4s delay) | 2 |
 | 3 | Memory Match | Card flip | 75s | Real-time | correct/total + moves | No | 2 |
 | 4 | Lila Sequence | Drag-swap | 75s | Real-time | correct/6 | Yes (4s delay) | None |
 | 5 | Picture Puzzle | Jigsaw drag | 75s | Real-time | correct/6 | Yes (4s delay) | None |
-| 6 | Odd One Out | MCQ | 75s shared | ~2.35s auto-advance | correct/5 | No | None |
-| 7 | Guess the Picture | MCQ | 15s/round | ~2.35s auto-advance | points/max (3/2/1) | No | None |
+| 6 | Odd One Out | MCQ | 75s shared | 2.35s reveal delay | correct/5 | No | None |
+| 7 | Guess the Picture | MCQ | 15s/round | 2.35s reveal delay | points/max (3/2/1) | No | None |
 | 8 | Match the Pairs | Two-col pick | 75s | Real-time | correct/6 | Yes (4s delay) | None |
 | 9 | Krishna's Favorites | Whack-a-mole | 75s | Continuous | raw score | No | None |
 | 10 | Route to Vrindavan | MCQ + lives | 150s | 5s drive scene | correct/11 | No | None |
