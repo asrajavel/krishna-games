@@ -9,7 +9,7 @@
 | Concern | Detail |
 |---|---|
 | **Timer bar** | Full-width colored bar at top. Gold → Green → Red as time depletes. Shows remaining seconds badge. All games except Sloka Scribe use it. |
-| **Reveal hold** | `REVEAL_HOLD_MS = 2000ms` — how long correct/wrong feedback is shown before advancing. |
+| **Reveal hold** | 2s — how long correct/wrong feedback is shown before advancing. |
 | **Result screen** | Centered title (text-6xl), score (text-8xl), message (text-3xl), "Back to Home" button. Auto-returns to menu after 120s. |
 | **Celebration rain** | 28 confetti petals (pink/gold/red/yellow gradients) falling with drift + spin, fullscreen overlay, z-50. |
 | **Sound effects** | `correct`, `wrong`, `select`, `click`, `drop`, `timeout` — played via `playSound()`. |
@@ -25,7 +25,7 @@
 | **Format** | MCQ — single correct answer from multiple options |
 | **Variants** | 5 topics: Krishna Lila (kids), Bhagavad-gita, Mahabharata, Srimad-Bhagavatam, General Trivia |
 | **Timer** | 15s per question via Timer component in QuizQuestion |
-| **Pacing** | After answer: 2000ms reveal hold + 350ms leave animation → next question. Or 15s timer expire → skip as unanswered. |
+| **Pacing** | After answer: 2s reveal hold + 0.35s leave animation → next question. Or 15s timer expire → skip as unanswered. |
 | **Answer feedback** | Sound + visual highlight on selected option |
 | **Scoring** | +1 per correct. Score shown only on result screen. |
 | **End screen** | Title: "Quiz Complete!" · Score: `score / total` |
@@ -44,7 +44,7 @@
 | **Variants** | Kids: match names · Adults: match clue images |
 | **Timer** | 60s shared timer |
 | **Pacing** | Real-time drag-and-drop. On completion: 4s celebration delay → result screen |
-| **Answer feedback** | Correct drop: green glow + "glow-correct". Wrong drop: shake animation + red glow (500ms). Dragging shows a floating clone following pointer. |
+| **Answer feedback** | Correct drop: green glow + "glow-correct". Wrong drop: shake animation + red glow (0.5s). Dragging shows a floating clone following pointer. |
 | **Scoring** | `matchedCount / 10` |
 | **End screen** | Title: "Dasavatar Complete!" or "Time's Up!" |
 | **Messages** | Complete → "Hare Krishna! Perfect match!" · Timeout → "Try again and match all avatars!" |
@@ -62,8 +62,8 @@
 | **Format** | Card-flip matching — flip two cards, find pairs |
 | **Variants** | Kids: 6 pairs · Adults: 10 pairs |
 | **Timer** | 75s shared countdown |
-| **Pacing** | Two-card selected state shown 800ms, then hide if not matched. No per-turn timeout. |
-| **Answer feedback** | Match: green border + image stays face-up. Mismatch: wrong sound, cards flip back after 800ms. |
+| **Pacing** | Two-card selected state shown 0.8s, then hide if not matched. No per-turn timeout. |
+| **Answer feedback** | Match: green border + image stays face-up. Mismatch: wrong sound, cards flip back after 0.8s. |
 | **Scoring** | `matched / total` + moves counter displayed during game |
 | **End screen** | Title: "All Pairs Found!" or "Time's Up!" |
 | **Messages** | Complete → "Hare Krishna! Completed in N moves." · Timeout → "Good try! Find all the pairs next time." |
@@ -246,7 +246,7 @@
 
 ## Quick Reference Table
 
-| # | Game | Format | Timer | Per-Round | Score Type | Celebration | Variants |
+| # | Game | Format | Timer | Pacing | Score Type | Celebration | Variants |
 |---|---|---|---|---|---|---|---|
 | 1 | Krishna Quiz | MCQ | 15s/question | 2.35s reveal delay | correct/total | No | 5 topics |
 | 2 | Dasavatar Match | Drag-drop | 60s | Real-time | correct/10 | Yes (4s delay) | 2 |
