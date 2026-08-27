@@ -24,7 +24,7 @@
 |---|---|
 | **Format** | MCQ — single correct answer from multiple options |
 | **Variants** | 5 topics: Krishna Lila (kids), Bhagavad-gita, Mahabharata, Srimad-Bhagavatam, General Trivia |
-| **Timer** | None (untimed per question) |
+| **Timer** | 15s per question via Timer component in QuizQuestion |
 | **Pacing** | After answer: reveal hold (2000ms) + leave anim (350ms) → next question |
 | **Answer feedback** | Sound + visual highlight on selected option |
 | **Scoring** | +1 per correct. Score shown only on result screen. |
@@ -248,7 +248,7 @@
 
 | # | Game | Format | Timer | Per-Round | Score Type | Celebration | Variants |
 |---|---|---|---|---|---|---|---|
-| 1 | Krishna Quiz | MCQ | None | ~2.35s auto-advance | correct/total | No | 5 topics |
+| 1 | Krishna Quiz | MCQ | 15s/question | ~2.35s auto-advance | correct/total | No | 5 topics |
 | 2 | Dasavatar Match | Drag-drop | 60s | Real-time | correct/10 | Yes (4s delay) | 2 |
 | 3 | Memory Match | Card flip | 75s | Real-time | correct/total + moves | No | 2 |
 | 4 | Lila Sequence | Drag-swap | 75s | Real-time | correct/6 | Yes (4s delay) | None |
@@ -272,7 +272,8 @@
 | **150s shared timer** | Route to Vrindavan |
 | **15s per-round timer** | Guess the Picture |
 | **60s per-sloka timer** | Sloka Scribe |
-| **No timer (question-paced)** | Krishna Quiz |
+| **No timer (question-paced)** | — |
+| **15s per-question timer** | Krishna Quiz |
 | **Completion celebration delay** | 4s (Dasavatar, Sequence, Puzzle, Match Pairs, Maze, Guess-last-round, Sloka-final) |
 
 ---
