@@ -67,7 +67,16 @@ export const GAMES = [
     ],
     Component: MemoryGame,
   },
-  { id: "sequence", title: "Lila Sequence", imageSrc: "./sequence/board.png", Component: SequenceGame },
+  {
+    id: "sequence",
+    title: "Lila Sequence",
+    imageSrc: "./sequence/board.png",
+    variants: [
+      { id: "kids", title: "Easy Mode", description: "For Kids", imageSrc: "./memory/kids.png" },
+      { id: "adults", title: "Hard Mode", description: "For Teens and Grown-ups", imageSrc: "./memory/adults.png" },
+    ],
+    Component: SequenceGame,
+  },
   { id: "puzzle", title: "Picture Puzzle", imageSrc: "./puzzle/board.png", Component: PuzzleGame },
   { id: "odd-one-out", title: "Odd One Out", imageSrc: "./odd-one-out/board.png", Component: OddOneOutGame },
   { id: "guess-blur", title: "Guess the Picture", imageSrc: "./guess-blur/board.png", Component: GuessBlurGame },

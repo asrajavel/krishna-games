@@ -2,15 +2,12 @@ import { useCallback, useEffect, useState } from "react";
 import { CelebrationRain } from "../../components/CelebrationRain";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
+import type { GameProps } from "../../games";
 import { usePointerDrag } from "../../pointerDrag";
 import { shuffle } from "../../shuffle";
 import { playSound } from "../../soundEffects";
 
-interface Props {
-  onExit: () => void;
-}
-
-const EVENTS = [
+const KIDS_EVENTS = [
   { id: "birth", title: "Krishna is born in Mathura" },
   { id: "gokula", title: "Vasudeva carries Krishna to Gokula" },
   { id: "trinavarta", title: "Baby Krishna defeats Trinavarta" },
@@ -19,22 +16,43 @@ const EVENTS = [
   { id: "kamsa", title: "Krishna defeats Kamsa" },
 ];
 
+const ADULT_EVENTS = [
+  { id: "abhisheka", title: "Abhisheka of baby Krishna" },
+  { id: "trinavarta", title: "Krishna defeats Trinavarta" },
+  { id: "butter", title: "Krishna and Balarama steal butter" },
+  { id: "brahmanda", title: "Universe in Krishna's mouth" },
+  { id: "bakasura", title: "Krishna defeats Bakasura" },
+  { id: "sankhachuda", title: "Krishna defeats Sankhachuda" },
+  { id: "keshi", title: "Krishna defeats Keshi" },
+  { id: "chanura", title: "Krishna wrestles Chanura" },
+  { id: "sandipani", title: "Krishna and Sudama at Sandipani" },
+  { id: "narakasura", title: "Krishna rescues 16,100 women" },
+  { id: "gita", title: "Krishna speaks the Gita" },
+];
+
 const GAME_DURATION_MS = 75_000;
 const COMPLETION_REVEAL_MS = 4_000;
 
-function shuffledEvents() {
-  const events = shuffle(EVENTS);
-  return events.every((event, index) => event.id === EVENTS[index].id) ? events.reverse() : events;
+function shuffledEvents(ordered: { id: string }[]) {
+  const events = shuffle(ordered);
+  return events.every((event, index) => event.id === ordered[index].id) ? events.reverse() : events;
 }
 
-export function SequenceGame({ onExit }: Props) {
-  const [events, setEvents] = useState(shuffledEvents);
+export function SequenceGame({ onExit, variantId }: GameProps) {
+  const adults = variantId === "adults";
+  const src = (id: string) => (adults ? `./sequence/adults/${id}.jpg` : `./sequence/${id}.png`);
+  const [ordered] = useState(() =>
+    adults
+      ? shuffle(ADULT_EVENTS).slice(0, 6).sort((a, b) => ADULT_EVENTS.indexOf(a) - ADULT_EVENTS.indexOf(b))
+      : KIDS_EVENTS,
+  );
+  const [events, setEvents] = useState(() => shuffledEvents(ordered));
   const [swappedIndexes, setSwappedIndexes] = useState<number[]>([]);
   const [timedOut, setTimedOut] = useState(false);
   const [showCompleteResult, setShowCompleteResult] = useState(false);
 
-  const correctCount = events.filter((event, index) => event.id === EVENTS[index].id).length;
-  const isComplete = correctCount === EVENTS.length;
+  const correctCount = events.filter((event, index) => event.id === ordered[index].id).length;
+  const isComplete = correctCount === ordered.length;
   const isFinished = isComplete || timedOut;
   const showResult = showCompleteResult || timedOut;
 
@@ -78,7 +96,7 @@ export function SequenceGame({ onExit }: Props) {
     return (
       <GameResultScreen
         title={isComplete ? "Perfect Sequence!" : "Time's Up!"}
-        score={`${correctCount} / ${EVENTS.length}`}
+        score={`${correctCount} / ${ordered.length}`}
         message={isComplete ? "Hare Krishna! Every event is in order." : "Events placed in the correct position."}
         onExit={onExit}
       />
@@ -173,7 +191,7 @@ export function SequenceGame({ onExit }: Props) {
               <span className="absolute left-3 top-3 w-11 h-11 rounded-full bg-game-bg border-2 border-game-accent flex items-center justify-center text-xl font-extrabold text-game-accent shadow-md">
                 {index + 1}
               </span>
-              <img src={`./sequence/${event.id}.png`} alt="" draggable={false} className="flex-1 min-h-0 w-full rounded-xl bg-game-text p-2 object-contain" />
+              <img src={src(event.id)} alt="" draggable={false} className="flex-1 min-h-0 w-full rounded-xl bg-game-text p-2 object-contain" />
               <span className="mt-2 shrink-0 text-2xl leading-tight font-extrabold">{event.title}</span>
             </button>
           ))}
@@ -192,7 +210,7 @@ export function SequenceGame({ onExit }: Props) {
           className="pointer-events-none fixed z-50 w-64 -translate-x-1/2 -translate-y-1/2 rounded-3xl border-2 border-game-accent bg-game-panel p-3 text-center shadow-lg"
           style={{ left: position.x, top: position.y }}
         >
-          <img src={`./sequence/${draggingEvent.id}.png`} alt="" className="h-36 w-full rounded-xl bg-game-text p-2 object-contain" />
+          <img src={src(draggingEvent.id)} alt="" className="h-36 w-full rounded-xl bg-game-text p-2 object-contain" />
           <span className="mt-2 block text-xl font-extrabold leading-tight">{draggingEvent.title}</span>
         </div>
       )}
