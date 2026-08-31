@@ -12,7 +12,7 @@ const LEAVE_MS = 350;
 const ROUND_COUNT = 3;
 const MAX_HINTS = 2;
 const POINTS = [3, 2, 1];
-const PIXEL_BLOCKS = [50, 30, 1];
+const PIXEL_BLOCKS = [50, 18, 1];
 const LABELS = ["A", "B", "C", "D"];
 
 const IMAGES = [
