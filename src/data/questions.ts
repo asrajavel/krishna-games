@@ -238,7 +238,7 @@ export const QUESTION_POOLS = {
     },
     {
       question: "Which goddess is Krishna's eternal consort and foremost devotee?",
-      options: ["Sita", "Rukmini", "Subhadra", "Srimati Radharani"],
+      options: ["Sita", "Rohini", "Subhadra", "Srimati Radharani"],
       correctIndex: 3,
     },
     {
