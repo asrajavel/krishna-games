@@ -44,7 +44,7 @@ const ROUNDS = [
     items: [
       { icon: "🏞️", label: "Vrindavan" },
       { icon: "🏰", label: "Mathura" },
-      { icon: "🏹", label: "Ayodhya" },
+      { icon: "🏔️", label: "Mount Kailash" },
       { icon: "🌊", label: "Dwarka" },
     ],
     oddIndex: 2,
@@ -54,14 +54,14 @@ const ROUNDS = [
     items: [
       { icon: "🪔", label: "Janmashtami" },
       { icon: "⛰️", label: "Govardhan Puja" },
-      { icon: "🏹", label: "Rama Navami" },
+      { icon: "🐘", label: "Ganesh Chaturthi" },
       { icon: "🌕", label: "Rasa Purnima" },
     ],
     oddIndex: 2,
   },
 ] as const;
 
-const GAME_TIME_MS = 75_000;
+const TIME_PER_ROUND_MS = 15_000;
 const LEAVE_MS = 350;
 const POSITIONS = [
   "col-start-2 row-start-1",
@@ -73,15 +73,17 @@ const POSITIONS = [
 export function OddOneOutGame({ onExit }: Props) {
   const [roundIndex, setRoundIndex] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [answered, setAnswered] = useState(false);
   const [score, setScore] = useState(0);
   const [phase, setPhase] = useState<"playing" | "result">("playing");
   const round = ROUNDS[roundIndex];
   const isLastRound = roundIndex === ROUNDS.length - 1;
+  const timedOut = answered && selectedIndex === null;
 
-  const handleExpire = useCallback(() => setPhase("result"), []);
+  const handleExpire = useCallback(() => setAnswered(true), []);
 
   useEffect(() => {
-    if (phase !== "playing" || selectedIndex === null) return;
+    if (phase !== "playing" || !answered) return;
 
     const timeout = setTimeout(() => {
       if (isLastRound) {
@@ -89,16 +91,18 @@ export function OddOneOutGame({ onExit }: Props) {
       } else {
         setRoundIndex((current) => current + 1);
         setSelectedIndex(null);
+        setAnswered(false);
       }
     }, isLastRound ? 4000 : REVEAL_HOLD_MS + LEAVE_MS);
 
     return () => clearTimeout(timeout);
-  }, [isLastRound, phase, selectedIndex]);
+  }, [answered, isLastRound, phase]);
 
   const handlePick = (index: number) => {
-    if (selectedIndex !== null) return;
+    if (answered) return;
     playSound(index === round.oddIndex ? "correct" : "wrong");
     setSelectedIndex(index);
+    setAnswered(true);
     if (index === round.oddIndex) setScore((current) => current + 1);
   };
 
@@ -116,7 +120,12 @@ export function OddOneOutGame({ onExit }: Props) {
   return (
     <div className="relative flex h-full w-full flex-col bg-game-bg p-8 pt-10 text-game-text">
       <div className="absolute inset-x-0 top-0 z-20">
-        <Timer durationMs={GAME_TIME_MS} onExpire={handleExpire} />
+        <Timer
+          key={roundIndex}
+          durationMs={TIME_PER_ROUND_MS}
+          onExpire={handleExpire}
+          paused={answered}
+        />
       </div>
 
       <header className="shrink-0 text-center">
@@ -127,7 +136,7 @@ export function OddOneOutGame({ onExit }: Props) {
       <main
         key={roundIndex}
         className={`flex flex-1 flex-col items-center justify-center gap-6 ${
-          selectedIndex !== null && !isLastRound ? "quiz-slide-leaving" : "quiz-slide"
+          answered && !isLastRound ? "quiz-slide-leaving" : "quiz-slide"
         }`}
       >
         <h2 className="text-center text-3xl font-bold">{round.prompt}</h2>
@@ -135,22 +144,22 @@ export function OddOneOutGame({ onExit }: Props) {
           {round.items.map((item, index) => {
             const isOdd = index === round.oddIndex;
             const isSelected = index === selectedIndex;
-            const revealed = selectedIndex !== null;
-            const style = revealed
-              ? isOdd && isSelected
-                ? "reveal-pop pop-correct border-game-correct"
-                : isOdd
-                  ? "border-game-correct/60 bg-game-correct/15"
-                  : isSelected
-                    ? "reveal-pop pop-wrong border-game-wrong"
-                    : "border-slate-800 bg-slate-900 opacity-45"
-              : "border-slate-600 bg-game-panel group-hover:border-game-accent group-hover:bg-game-panel-hover group-hover:scale-110";
+            const faded = "border-slate-800 bg-slate-900 opacity-45";
+            const style = !answered
+              ? "border-slate-600 bg-game-panel group-hover:border-game-accent group-hover:bg-game-panel-hover group-hover:scale-110"
+              : timedOut || (!isOdd && !isSelected)
+                ? faded
+                : isOdd && isSelected
+                  ? "reveal-pop pop-correct border-game-correct"
+                  : isOdd
+                    ? "border-game-correct/60 bg-game-correct/15"
+                    : "reveal-pop pop-wrong border-game-wrong";
 
             return (
               <button
                 key={item.label}
                 onClick={() => handlePick(index)}
-                disabled={revealed}
+                disabled={answered}
                 tabIndex={-1}
                 className={`group flex flex-col items-center justify-center gap-3 ${POSITIONS[index]}`}
               >
@@ -163,6 +172,13 @@ export function OddOneOutGame({ onExit }: Props) {
               </button>
             );
           })}
+        </div>
+        <div
+          className={`rounded-full border border-game-wrong/40 bg-game-panel/70 px-10 py-3 text-2xl font-bold uppercase tracking-widest text-game-wrong-soft shadow-lg ${
+            timedOut ? "animate-pulse" : "invisible"
+          }`}
+        >
+          Time's up
         </div>
       </main>
     </div>
