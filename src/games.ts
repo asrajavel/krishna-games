@@ -45,7 +45,7 @@ export const GAMES = [
       { id: "bhagavad-gita-adults", title: "Bhagavad-gita", description: "For Teens and Grown-ups", imageSrc: "./krishna-quiz/bhagavad-gita.png" },
       { id: "mahabharata-adults", title: "Mahabharata", description: "For Teens and Grown-ups", imageSrc: "./krishna-quiz/mahabharata.png" },
       { id: "srimad-bhagavatam-adults", title: "Srimad-Bhagavatam", description: "For Teens and Grown-ups", imageSrc: "./krishna-quiz/srimad-bhagavatam.png" },
-      { id: "general-krishna-trivia-adults", title: "General Krishna Trivia", description: "For Teens and Grown-ups", imageSrc: "./krishna-quiz/general-trivia.png" },
+      { id: "general-krishna-trivia-adults", title: "Krishna Trivia", description: "For Teens and Grown-ups", imageSrc: "./krishna-quiz/general-trivia.png" },
     ],
     Component: KrishnaQuizGame,
   },
