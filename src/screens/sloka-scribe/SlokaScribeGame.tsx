@@ -184,7 +184,7 @@ export function SlokaScribeGame({ onExit }: GameProps) {
             <span
               ref={marqueeRef}
               key={`${levelIndex}-${slokaIndex}`}
-              className="sloka-marquee text-6xl font-extrabold text-game-text drop-shadow-lg"
+              className="sloka-marquee text-7xl font-extrabold text-game-text drop-shadow-lg"
               onAnimationEnd={() => setFlowed(true)}
             >
               {sloka.text}
