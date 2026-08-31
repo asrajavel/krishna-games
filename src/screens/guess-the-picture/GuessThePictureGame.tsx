@@ -16,17 +16,42 @@ const PIXEL_BLOCKS = [50, 18, 1];
 const LABELS = ["A", "B", "C", "D"];
 
 const IMAGES = [
-  { src: "./picture-puzzle/radha-krishna-swing.png", label: "Radha Krishna Swing" },
-  { src: "./picture-puzzle/kaliya.jpg", label: "Kaliya Daman" },
-  { src: "./picture-puzzle/yashoda-krishna.jpg", label: "Yashoda and Krishna" },
-  { src: "./picture-puzzle/rasa-lila.jpg", label: "Rasa Lila" },
-] as const;
+  "Brahmanda Lila",
+  "Damodar Lila",
+  "Gopas enter into the mouth of Aghasura",
+  "Krishna Being Dressed by Yasodha",
+  "Krishna Dancing on Kaliya",
+  "Krishna and Balarama Steal Butter",
+  "Lord Nrsimhadeva Battles the Hiranyakashipu",
+  "Maha-Vishnu in the Causal Ocean",
+  "Sandipani Muni Instructs Krishna and Balarama",
+].map((label) => ({ src: `./guess-the-picture/${encodeURIComponent(label)}.jpg`, label }));
+
+// Krishna-lila Sequence event titles, excluding any that name the same scene as an image above.
+const DECOYS = [
+  "Krishna is born in Mathura",
+  "Vasudeva carries Krishna to Gokula",
+  "Krishna defeats Trinavarta",
+  "Krishna lifts Govardhan Hill",
+  "Krishna defeats Kamsa",
+  "Krishna defeats Bakasura",
+  "Krishna defeats Sankhachuda",
+  "Krishna defeats Keshi",
+  "Krishna wrestles Chanura",
+  "Krishna rescues 16,100 women",
+  "Krishna speaks the Gita",
+];
 
 function makeRounds() {
-  return shuffle(IMAGES).slice(0, ROUND_COUNT).map((answer) => ({
-    answer,
-    options: shuffle(IMAGES.map((item) => item.label)),
-  }));
+  return shuffle(IMAGES)
+    .slice(0, ROUND_COUNT)
+    .map((answer) => {
+      const wrong = [...IMAGES.map((item) => item.label), ...DECOYS].filter((label) => label !== answer.label);
+      return {
+        answer,
+        options: shuffle([answer.label, ...shuffle(wrong).slice(0, LABELS.length - 1)]),
+      };
+    });
 }
 
 function PixelatedImage({
