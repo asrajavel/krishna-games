@@ -1,16 +1,16 @@
 import type { ComponentType } from "react";
-import { DasavatarGame } from "./screens/dasavatar/DasavatarGame";
-import { GuessBlurGame } from "./screens/guess-blur/GuessBlurGame";
+import { DasavatarMatchGame } from "./screens/dasavatar-match/DasavatarMatchGame";
+import { GuessThePictureGame } from "./screens/guess-the-picture/GuessThePictureGame";
 import { MatchPairsGame } from "./screens/match-pairs/MatchPairsGame";
-import { MazeGame } from "./screens/maze/MazeGame";
-import { MemoryGame } from "./screens/memory/MemoryGame";
+import { KrishnasForestMazeGame } from "./screens/krishnas-forest-maze/KrishnasForestMazeGame";
+import { MemoryMatchGame } from "./screens/memory-match/MemoryMatchGame";
 import { OddOneOutGame } from "./screens/odd-one-out/OddOneOutGame";
-import { PuzzleGame } from "./screens/puzzle/PuzzleGame";
-import { QuizGame } from "./screens/quiz/QuizGame";
+import { PicturePuzzleGame } from "./screens/picture-puzzle/PicturePuzzleGame";
+import { KrishnaQuizGame } from "./screens/krishna-quiz/KrishnaQuizGame";
 import { RouteToVrindavanGame } from "./screens/route-to-vrindavan/RouteToVrindavanGame";
-import { SequenceGame } from "./screens/sequence/SequenceGame";
-import { SlokaScribeGame } from "./screens/sloka-scribe/SlokaScribeGame";
-import { WhackTargetGame } from "./screens/whack-target/WhackTargetGame";
+import { LilaSequenceGame } from "./screens/lila-sequence/LilaSequenceGame";
+import { WriteTheSlokaGame } from "./screens/write-the-sloka/WriteTheSlokaGame";
+import { KrishnasFavoritesGame } from "./screens/krishnas-favorites/KrishnasFavoritesGame";
 
 export interface GameVariant {
   id: string;
@@ -35,64 +35,64 @@ interface Game {
 
 export const GAMES = [
   {
-    id: "quiz",
+    id: "krishna-quiz",
     title: "Krishna Quiz",
-    imageSrc: "./quiz/board.png",
+    imageSrc: "./krishna-quiz/board.png",
     variants: [
-      { id: "krishna-lila-kids", title: "Krishna Lila", description: "For Kids", imageSrc: "./quiz/krishna-lila.png" },
-      { id: "bhagavad-gita-adults", title: "Bhagavad-gita", description: "For Teens and Grown-ups", imageSrc: "./quiz/bhagavad-gita.png" },
-      { id: "mahabharata-adults", title: "Mahabharata", description: "For Teens and Grown-ups", imageSrc: "./quiz/mahabharata.png" },
-      { id: "srimad-bhagavatam-adults", title: "Srimad-Bhagavatam", description: "For Teens and Grown-ups", imageSrc: "./quiz/srimad-bhagavatam.png" },
-      { id: "general-krishna-trivia-adults", title: "General Krishna Trivia", description: "For Teens and Grown-ups", imageSrc: "./quiz/general-trivia.png" },
+      { id: "krishna-lila-kids", title: "Krishna Lila", description: "For Kids", imageSrc: "./krishna-quiz/krishna-lila.png" },
+      { id: "bhagavad-gita-adults", title: "Bhagavad-gita", description: "For Teens and Grown-ups", imageSrc: "./krishna-quiz/bhagavad-gita.png" },
+      { id: "mahabharata-adults", title: "Mahabharata", description: "For Teens and Grown-ups", imageSrc: "./krishna-quiz/mahabharata.png" },
+      { id: "srimad-bhagavatam-adults", title: "Srimad-Bhagavatam", description: "For Teens and Grown-ups", imageSrc: "./krishna-quiz/srimad-bhagavatam.png" },
+      { id: "general-krishna-trivia-adults", title: "General Krishna Trivia", description: "For Teens and Grown-ups", imageSrc: "./krishna-quiz/general-trivia.png" },
     ],
-    Component: QuizGame,
+    Component: KrishnaQuizGame,
   },
   {
-    id: "dasavatar",
+    id: "dasavatar-match",
     title: "Dasavatar Match",
-    imageSrc: "./dasavatar/board.png",
+    imageSrc: "./dasavatar-match/board.png",
     variants: [
-      { id: "kids", title: "Match the Names", description: "For Kids", imageSrc: "./dasavatar/kids.png" },
-      { id: "adults", title: "Match the Clues", description: "For Teens and Grown-ups", imageSrc: "./dasavatar/adults.png" },
+      { id: "kids", title: "Match the Names", description: "For Kids", imageSrc: "./dasavatar-match/kids.png" },
+      { id: "adults", title: "Match the Clues", description: "For Teens and Grown-ups", imageSrc: "./dasavatar-match/adults.png" },
     ],
-    Component: DasavatarGame,
+    Component: DasavatarMatchGame,
   },
   {
-    id: "memory",
+    id: "memory-match",
     title: "Memory Match",
-    imageSrc: "./memory/board.png",
+    imageSrc: "./memory-match/board.png",
     variants: [
-      { id: "kids", title: "Six Pairs", description: "For Kids", imageSrc: "./memory/kids.png" },
-      { id: "adults", title: "Ten Pairs", description: "For Teens and Grown-ups", imageSrc: "./memory/adults.png" },
+      { id: "kids", title: "Six Pairs", description: "For Kids", imageSrc: "./memory-match/kids.png" },
+      { id: "adults", title: "Ten Pairs", description: "For Teens and Grown-ups", imageSrc: "./memory-match/adults.png" },
     ],
-    Component: MemoryGame,
+    Component: MemoryMatchGame,
   },
   {
-    id: "sequence",
+    id: "lila-sequence",
     title: "Lila Sequence",
-    imageSrc: "./sequence/board.png",
+    imageSrc: "./lila-sequence/board.png",
     variants: [
-      { id: "kids", title: "Easy Mode", description: "For Kids", imageSrc: "./memory/kids.png" },
-      { id: "adults", title: "Hard Mode", description: "For Teens and Grown-ups", imageSrc: "./memory/adults.png" },
+      { id: "kids", title: "Easy Mode", description: "For Kids", imageSrc: "./memory-match/kids.png" },
+      { id: "adults", title: "Hard Mode", description: "For Teens and Grown-ups", imageSrc: "./memory-match/adults.png" },
     ],
-    Component: SequenceGame,
+    Component: LilaSequenceGame,
   },
-  { id: "puzzle", title: "Picture Puzzle", imageSrc: "./puzzle/board.png", Component: PuzzleGame },
+  { id: "picture-puzzle", title: "Picture Puzzle", imageSrc: "./picture-puzzle/board.png", Component: PicturePuzzleGame },
   { id: "odd-one-out", title: "Odd One Out", imageSrc: "./odd-one-out/board.png", Component: OddOneOutGame },
-  { id: "guess-blur", title: "Guess the Picture", imageSrc: "./guess-blur/board.png", Component: GuessBlurGame },
+  { id: "guess-the-picture", title: "Guess the Picture", imageSrc: "./guess-the-picture/board.png", Component: GuessThePictureGame },
   { id: "match-pairs", title: "Match the Pairs", imageSrc: "./match-pairs/board.png", Component: MatchPairsGame },
-  { id: "whack-target", title: "Krishna's Favorites", imageSrc: "./whack-target/board.png", Component: WhackTargetGame },
+  { id: "krishnas-favorites", title: "Krishna's Favorites", imageSrc: "./krishnas-favorites/board.png", Component: KrishnasFavoritesGame },
   { id: "route-to-vrindavan", title: "Route to Vrindavan", imageSrc: "./route-to-vrindavan/board.png", Component: RouteToVrindavanGame },
-  { id: "sloka-scribe", title: "Write the Sloka", imageSrc: "./sloka-scribe/board.png", Component: SlokaScribeGame },
+  { id: "write-the-sloka", title: "Write the Sloka", imageSrc: "./write-the-sloka/board.png", Component: WriteTheSlokaGame },
   {
-    id: "maze",
+    id: "krishnas-forest-maze",
     title: "Krishna’s Forest Maze",
-    imageSrc: "./maze/hedge-maze.png",
+    imageSrc: "./krishnas-forest-maze/hedge-maze.png",
     variants: [
-      { id: "kids", title: "Easy Mode", description: "For Kids", imageSrc: "./memory/kids.png" },
-      { id: "adults", title: "Hard Mode", description: "For Teens and Grown-ups", imageSrc: "./memory/adults.png" },
+      { id: "kids", title: "Easy Mode", description: "For Kids", imageSrc: "./memory-match/kids.png" },
+      { id: "adults", title: "Hard Mode", description: "For Teens and Grown-ups", imageSrc: "./memory-match/adults.png" },
     ],
-    Component: MazeGame,
+    Component: KrishnasForestMazeGame,
   },
 ] as const satisfies readonly Game[];
 

@@ -21,8 +21,8 @@ Inspect the shared components, helpers, theme, and related games needed to under
 
 Determine from the request:
 
-- Game ID: lowercase folder/screen value such as `memory`
-- Component name: such as `MemoryGame`
+- Game ID: lowercase folder/screen value such as `memory-match`
+- Component name: such as `MemoryMatchGame`
 - Home-card title, description, and icon
 - Rules, input method, completion condition, score, and timeout
 - Required content and assets

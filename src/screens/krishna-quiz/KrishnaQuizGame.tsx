@@ -8,7 +8,7 @@ import { QuizQuestion } from "./QuizQuestion";
 
 const LEAVE_MS = 350;
 
-export function QuizGame({ onExit, variantId, variantImageSrc }: GameProps) {
+export function KrishnaQuizGame({ onExit, variantId, variantImageSrc }: GameProps) {
   const topic: QuizTopic = variantId && variantId in QUESTION_POOLS
     ? variantId as QuizTopic
     : "krishna-lila-kids";

@@ -22,12 +22,12 @@ interface DraggedPiece {
 }
 
 const PUZZLES = [
-  "./puzzle/yashoda-krishna.jpg",
-  "./puzzle/rasa-lila.jpg",
-  "./puzzle/kaliya.jpg",
-  "./puzzle/bala-krishna.png",
-  "./puzzle/krishna-calf.jpg",
-  "./puzzle/radha-krishna-swing.png",
+  "./picture-puzzle/yashoda-krishna.jpg",
+  "./picture-puzzle/rasa-lila.jpg",
+  "./picture-puzzle/kaliya.jpg",
+  "./picture-puzzle/bala-krishna.png",
+  "./picture-puzzle/krishna-calf.jpg",
+  "./picture-puzzle/radha-krishna-swing.png",
 ];
 
 function shuffledPieces() {
@@ -35,7 +35,7 @@ function shuffledPieces() {
   return pieces.every((piece, index) => piece === index) ? pieces.reverse() : pieces;
 }
 
-export function PuzzleGame({ onExit }: Props) {
+export function PicturePuzzleGame({ onExit }: Props) {
   const [src] = useState(() => PUZZLES[Math.floor(Math.random() * PUZZLES.length)]);
   const [aspect, setAspect] = useState(0);
   const [pieces] = useState(shuffledPieces);

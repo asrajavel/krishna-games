@@ -18,7 +18,7 @@
 
 ---
 
-## Game 1: Krishna Quiz (`quiz`)
+## Game 1: Krishna Quiz (`krishna-quiz`)
 
 | Aspect | Detail |
 |---|---|
@@ -32,11 +32,11 @@
 | **Messages** | Perfect → "Hare Krishna! Perfect!" · ≥60% → "Well played! Jai Shri Krishna!" · <60% → "Keep learning about Krishna!" |
 | **Graphics** | Sub-component `QuizQuestion` renders option cards with variant image |
 | **Effects** | Slide-in + slide-out animation per question (`quiz-slide` / `quiz-slide-leaving`) |
-| **Component** | `QuizGame.tsx` + `QuizQuestion.tsx` |
+| **Component** | `KrishnaQuizGame.tsx` + `QuizQuestion.tsx` |
 
 ---
 
-## Game 2: Dasavatar Match (`dasavatar`)
+## Game 2: Dasavatar Match (`dasavatar-match`)
 
 | Aspect | Detail |
 |---|---|
@@ -51,11 +51,11 @@
 | **Graphics** | 5×2 grid of avatar images with name/placeholder slots below each. Bottom tray of drag tokens. |
 | **Effects** | CelebrationRain on completion before result. Glow/hover states on targets. Floating drag preview. |
 | **Grid** | 5 columns × 2 rows of target cards |
-| **Component** | `DasavatarGame.tsx` |
+| **Component** | `DasavatarMatchGame.tsx` |
 
 ---
 
-## Game 3: Memory Match (`memory`)
+## Game 3: Memory Match (`memory-match`)
 
 | Aspect | Detail |
 |---|---|
@@ -67,14 +67,14 @@
 | **Scoring** | `matched / total` + moves counter displayed during game |
 | **End screen** | Title: "All Pairs Found!" or "Time's Up!" |
 | **Messages** | Complete → "Hare Krishna! Completed in N moves." · Timeout → "Good try! Find all the pairs next time." |
-| **Graphics** | Card grid: face-down shows "?" + "FLIP" label. Face-up shows image + name. Images from `./memory/`. |
+| **Graphics** | Card grid: face-down shows "?" + "FLIP" label. Face-up shows image + name. Images from `./memory-match/`. |
 | **Effects** | Face-up/matched/hover card border transitions. Scale on hover. |
 | **Grid** | Kids: 4×3 · Adults: 5×4 |
-| **Component** | `MemoryGame.tsx` |
+| **Component** | `MemoryMatchGame.tsx` |
 
 ---
 
-## Game 4: Lila Sequence (`sequence`)
+## Game 4: Lila Sequence (`lila-sequence`)
 
 | Aspect | Detail |
 |---|---|
@@ -89,11 +89,11 @@
 | **Graphics** | 6 illustrated event cards on a 3×2 grid positioned along an SVG U-shaped path with arrow marker. START/FINISH badges. |
 | **Effects** | CelebrationRain, SVG path color transition (accent → correct green), glow-correct on completion. Floating drag preview. |
 | **Layout** | S-shaped path: top row left-to-right, bottom row right-to-left |
-| **Component** | `SequenceGame.tsx` |
+| **Component** | `LilaSequenceGame.tsx` |
 
 ---
 
-## Game 5: Picture Puzzle (`puzzle`)
+## Game 5: Picture Puzzle (`picture-puzzle`)
 
 | Aspect | Detail |
 |---|---|
@@ -108,7 +108,7 @@
 | **Graphics** | Puzzle image sliced into 6 pieces via CSS background-position. Left: board grid (2×3 or 3×2 based on image aspect). Right: reference image + piece tray. |
 | **Effects** | CelebrationRain. Board grows green border on completion. Dragging piece has floating preview. |
 | **Puzzles** | 6 Krishna-themed images: Yashoda-Krishna, Rasa Lila, Kaliya, Bala Krishna, Krishna-Calf, Radha-Krishna Swing |
-| **Component** | `PuzzleGame.tsx` |
+| **Component** | `PicturePuzzleGame.tsx` |
 
 ---
 
@@ -131,7 +131,7 @@
 
 ---
 
-## Game 7: Guess the Picture (`guess-blur`)
+## Game 7: Guess the Picture (`guess-the-picture`)
 
 | Aspect | Detail |
 |---|---|
@@ -146,7 +146,7 @@
 | **Graphics** | Canvas-rendered pixelated image (50px blocks → 30px → 1px with hints). Option cards with letter badges (A/B/C/D). "Reveal a bit more (−1 point)" button. |
 | **Effects** | Canvas pixelation via offscreen scaling. Slide animation per round. |
 | **Rounds** | 3 random rounds from 4-image pool |
-| **Component** | `GuessBlurGame.tsx` |
+| **Component** | `GuessThePictureGame.tsx` |
 
 ---
 
@@ -169,7 +169,7 @@
 
 ---
 
-## Game 9: Krishna's Favorites (`whack-target`)
+## Game 9: Krishna's Favorites (`krishnas-favorites`)
 
 | Aspect | Detail |
 |---|---|
@@ -183,7 +183,7 @@
 | **Messages** | "You found Krishna's favorites!" |
 | **Graphics** | 5 vertical lanes (20% each). Items fall with drift animation (CSS `favorite-fall` keyframes). Speeds up as time runs out (5.5s → 3.5s fall duration). Circular item containers. |
 | **Effects** | Falling animation, hit pause, feedback badges, shake on wrong. Lane cooldown (1.8s between spawns in same lane). 65% chance favorite spawn. |
-| **Component** | `WhackTargetGame.tsx` |
+| **Component** | `KrishnasFavoritesGame.tsx` |
 
 ---
 
@@ -206,7 +206,7 @@
 
 ---
 
-## Game 11: Write the Sloka (`sloka-scribe`)
+## Game 11: Write the Sloka (`write-the-sloka`)
 
 | Aspect | Detail |
 |---|---|
@@ -221,11 +221,11 @@
 | **Graphics** | Marquee text scrolls left across center of screen. Verse reference in a pill badge above. Background: floating distraction images (peacock, flute, lotus, etc.) drifting with opacity 0.32. Level-complete card with "Level N Complete!". |
 | **Effects** | Distraction images floating in background with drift, spin, and reverse animations. CSS marquee animation (scroll-left). CelebrationRain on final completion. |
 | **Levels** | 3 levels, 3 slokas each (9 total). Speed increases: 50 → 75 → 100 rem/s. |
-| **Component** | `SlokaScribeGame.tsx` |
+| **Component** | `WriteTheSlokaGame.tsx` |
 
 ---
 
-## Game 12: Krishna's Forest Maze (`maze`)
+## Game 12: Krishna's Forest Maze (`krishnas-forest-maze`)
 
 | Aspect | Detail |
 |---|---|
@@ -240,7 +240,7 @@
 | **Graphics** | Grid-based maze walls (thin lines). Garden background image. Krishna token (circular, ring-glow). Cow goal token (pulsing on completion). Dual-layer SVG path trace. |
 | **Effects** | CelebrationRain. Path color transitions from accent to correct-green. Wall bump red flash. Cow token pulses on completion. Maze border goes green. |
 | **Generation** | Pre-built maze bitmask walls. Adults maze has alternate routes (hand-tuned). |
-| **Component** | `MazeGame.tsx` |
+| **Component** | `KrishnasForestMazeGame.tsx` |
 
 ---
 

@@ -38,9 +38,9 @@ function shuffledEvents(ordered: { id: string }[]) {
   return events.every((event, index) => event.id === ordered[index].id) ? events.reverse() : events;
 }
 
-export function SequenceGame({ onExit, variantId }: GameProps) {
+export function LilaSequenceGame({ onExit, variantId }: GameProps) {
   const adults = variantId === "adults";
-  const src = (id: string) => (adults ? `./sequence/adults/${id}.jpg` : `./sequence/${id}.png`);
+  const src = (id: string) => (adults ? `./lila-sequence/adults/${id}.jpg` : `./lila-sequence/${id}.png`);
   const [ordered] = useState(() =>
     adults
       ? shuffle(ADULT_EVENTS).slice(0, 6).sort((a, b) => ADULT_EVENTS.indexOf(a) - ADULT_EVENTS.indexOf(b))

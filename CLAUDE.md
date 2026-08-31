@@ -25,9 +25,9 @@ Single-page React app with `useState`-based screen switching (no router). `src/g
 
 **Input:** Stall UI is mouse driven only. No need to add keyboard navigation
 
-**Drag and drop:** Use `usePointerDrag` (`src/pointerDrag.ts`) — never `draggable` + `onDragStart`. Native HTML5 drag hands cursor rendering to the OS, which kills the themed gold cursor mid-drag (`npm run lint` blocks the drag handlers). Mark drop zones with a data attribute, pass it to the hook, put `data-dragging` on the screen root so the hand cursor holds over non-button drop zones, and render your own floating ghost. Games using it: puzzle, sequence, dasavatar.
+**Drag and drop:** Use `usePointerDrag` (`src/pointerDrag.ts`) — never `draggable` + `onDragStart`. Native HTML5 drag hands cursor rendering to the OS, which kills the themed gold cursor mid-drag (`npm run lint` blocks the drag handlers). Mark drop zones with a data attribute, pass it to the hook, put `data-dragging` on the screen root so the hand cursor holds over non-button drop zones, and render your own floating ghost. Games using it: picture-puzzle, lila-sequence, dasavatar-match.
 
-**Win celebration:** `CelebrationRain` (`src/components/CelebrationRain.tsx`) is a full-screen falling-petal overlay (`pointer-events: none`). Use it on the ~4s completion hold while the finished board is still visible, then go to `GameResultScreen`. Render `{isComplete && <CelebrationRain />}`. Petal motion lives in `src/index.css` (`petal-fall`). Current games: puzzle, sequence, match-pairs, maze, dasavatar. Timeouts skip it. Do not put it on the result screen.
+**Win celebration:** `CelebrationRain` (`src/components/CelebrationRain.tsx`) is a full-screen falling-petal overlay (`pointer-events: none`). Use it on the ~4s completion hold while the finished board is still visible, then go to `GameResultScreen`. Render `{isComplete && <CelebrationRain />}`. Petal motion lives in `src/index.css` (`petal-fall`). Current games: picture-puzzle, lila-sequence, match-pairs, krishnas-forest-maze, dasavatar-match. Timeouts skip it. Do not put it on the result screen.
 
 **Sound effects:** Use `playSound` from `src/soundEffects.ts`. Sound files and volume are configured centrally there. `Timer` owns the shared timeout sound.
 

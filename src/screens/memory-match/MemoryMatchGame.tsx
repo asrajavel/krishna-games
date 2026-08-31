@@ -23,7 +23,7 @@ const ADULT_PAIRS = [
 
 const GAME_DURATION_MS = 75_000;
 
-export function MemoryGame({ onExit, variantId }: GameProps) {
+export function MemoryMatchGame({ onExit, variantId }: GameProps) {
   const adults = variantId === "adults";
   const pairs = adults ? [...KIDS_PAIRS, ...ADULT_PAIRS] : KIDS_PAIRS;
   const [cards] = useState(() =>
@@ -120,7 +120,7 @@ export function MemoryGame({ onExit, variantId }: GameProps) {
               {isFaceUp ? (
                 <>
                   <div className="flex-1 min-h-0 w-full rounded-xl bg-game-text p-2">
-                    <img src={`./memory/${card.key}.png`} alt="" className="h-full w-full object-contain" />
+                    <img src={`./memory-match/${card.key}.png`} alt="" className="h-full w-full object-contain" />
                   </div>
                   <span className={`mt-2 shrink-0 text-2xl font-extrabold ${isMatched ? "text-game-correct-soft" : "text-game-text"}`}>
                     {card.name}

@@ -18,24 +18,24 @@ interface FallingItem {
 }
 
 const FAVORITES = [
-  "./memory/peacock.png",
-  "./memory/flute.png",
-  "./memory/lotus.png",
-  "./memory/cow.png",
-  "./memory/butter.png",
+  "./memory-match/peacock.png",
+  "./memory-match/flute.png",
+  "./memory-match/lotus.png",
+  "./memory-match/cow.png",
+  "./memory-match/butter.png",
 ];
 const DISTRACTORS = [
-  "./whack-target/phone.png",
-  "./whack-target/fight.png",
-  "./whack-target/junk-food.png",
-  "./whack-target/tv.png",
-  "./whack-target/argue.png",
+  "./krishnas-favorites/phone.png",
+  "./krishnas-favorites/fight.png",
+  "./krishnas-favorites/junk-food.png",
+  "./krishnas-favorites/tv.png",
+  "./krishnas-favorites/argue.png",
 ];
 const GAME_DURATION_MS = 75_000;
 const FREEZE_MS = 4_000;
 const LANE_COOLDOWN_MS = 1_800;
 
-export function WhackTargetGame({ onExit }: Props) {
+export function KrishnasFavoritesGame({ onExit }: Props) {
   const [items, setItems] = useState<FallingItem[]>([]);
   const [score, setScore] = useState(0);
   const [phase, setPhase] = useState<"playing" | "frozen" | "results">("playing");

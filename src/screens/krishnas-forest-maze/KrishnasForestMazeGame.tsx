@@ -58,7 +58,7 @@ function canMove(maze: Maze, from: Cell, to: Cell) {
   return false;
 }
 
-export function MazeGame({ onExit, variantId }: GameProps) {
+export function KrishnasForestMazeGame({ onExit, variantId }: GameProps) {
   const adults = variantId === "adults";
   const { maze, rows, cols, start, target } = adults ? ADULTS : KIDS;
   const [phase, setPhase] = useState<Phase>("playing");
@@ -180,7 +180,7 @@ export function MazeGame({ onExit, variantId }: GameProps) {
           onPointerCancel={() => { draggingRef.current = false; }}
         >
           <img
-            src="./maze/garden-background.webp"
+            src="./krishnas-forest-maze/garden-background.webp"
             alt=""
             className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-80"
           />
@@ -234,7 +234,7 @@ export function MazeGame({ onExit, variantId }: GameProps) {
             className={`pointer-events-none absolute z-10 ${tokenSize} -translate-x-1/2 -translate-y-1/2 rounded-full bg-game-bg/70 p-0.5 ring-2 ring-game-accent shadow-lg shadow-game-accent/70`}
             style={{ left: `${((endpoint.col + 0.5) / cols) * 100}%`, top: `${((endpoint.row + 0.5) / rows) * 100}%` }}
           >
-            <img className="h-full w-full object-contain drop-shadow-2xl" src="./maze/krishna-token.webp" alt="" />
+            <img className="h-full w-full object-contain drop-shadow-2xl" src="./krishnas-forest-maze/krishna-token.webp" alt="" />
           </div>
           <div
             aria-label="Krishna's cows"
@@ -245,7 +245,7 @@ export function MazeGame({ onExit, variantId }: GameProps) {
             }`}
             style={{ left: `${((target.col + 0.5) / cols) * 100}%`, top: `${((target.row + 0.5) / rows) * 100}%` }}
           >
-            <img className="h-full w-full object-contain drop-shadow-2xl" src="./maze/cows-goal.webp" alt="" />
+            <img className="h-full w-full object-contain drop-shadow-2xl" src="./krishnas-forest-maze/cows-goal.webp" alt="" />
           </div>
         </div>
       </div>

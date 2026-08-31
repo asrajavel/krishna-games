@@ -16,10 +16,10 @@ const PIXEL_BLOCKS = [50, 18, 1];
 const LABELS = ["A", "B", "C", "D"];
 
 const IMAGES = [
-  { src: "./puzzle/radha-krishna-swing.png", label: "Radha Krishna Swing" },
-  { src: "./puzzle/kaliya.jpg", label: "Kaliya Daman" },
-  { src: "./puzzle/yashoda-krishna.jpg", label: "Yashoda and Krishna" },
-  { src: "./puzzle/rasa-lila.jpg", label: "Rasa Lila" },
+  { src: "./picture-puzzle/radha-krishna-swing.png", label: "Radha Krishna Swing" },
+  { src: "./picture-puzzle/kaliya.jpg", label: "Kaliya Daman" },
+  { src: "./picture-puzzle/yashoda-krishna.jpg", label: "Yashoda and Krishna" },
+  { src: "./picture-puzzle/rasa-lila.jpg", label: "Rasa Lila" },
 ] as const;
 
 function makeRounds() {
@@ -96,7 +96,7 @@ function PixelatedImage({
   );
 }
 
-export function GuessBlurGame({ onExit }: GameProps) {
+export function GuessThePictureGame({ onExit }: GameProps) {
   const [rounds] = useState(makeRounds);
   const [roundIndex, setRoundIndex] = useState(0);
   const [hints, setHints] = useState(0);

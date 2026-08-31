@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { CelebrationRain } from "../../components/CelebrationRain";
 import { GameResultScreen } from "../../components/GameResultScreen";
 import { Timer } from "../../components/Timer";
-import { DASAVATAR_ITEMS, type DasavatarItem } from "../../data/dasavatar";
+import { DASAVATAR_ITEMS, type DasavatarItem } from "../../data/dasavatar-match";
 import type { GameProps } from "../../games";
 import { usePointerDrag } from "../../pointerDrag";
 import { shuffle } from "../../shuffle";
@@ -10,7 +10,7 @@ import { playSound } from "../../soundEffects";
 
 function Token({ avatar, useClues }: { avatar: DasavatarItem; useClues: boolean }) {
   if (!useClues) return avatar.name;
-  return <img src={`./dasavatar/clues/${avatar.id}.png`} alt="" draggable={false} className="h-full w-full object-cover" />;
+  return <img src={`./dasavatar-match/clues/${avatar.id}.png`} alt="" draggable={false} className="h-full w-full object-cover" />;
 }
 
 const GAME_DURATION_MS = 60000;
@@ -18,7 +18,7 @@ const COMPLETION_REVEAL_MS = 4_000;
 const TOTAL_AVATARS = DASAVATAR_ITEMS.length;
 const CLUE_TILE = "h-24 w-44 overflow-hidden p-0";
 
-export function DasavatarGame({ onExit, variantId }: GameProps) {
+export function DasavatarMatchGame({ onExit, variantId }: GameProps) {
   const useClues = variantId === "adults";
   const [tokens] = useState(() => shuffle(DASAVATAR_ITEMS));
   const [targets] = useState(() => shuffle(DASAVATAR_ITEMS));

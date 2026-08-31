@@ -69,7 +69,7 @@ const DISTRACTIONS = [
   "conch", "tulsi", "govardhan", "krishna", "sudarshan",
   "lotus", "peacock",
 ].map((name, i) => ({
-  src: `./memory/${name}.png`,
+  src: `./memory-match/${name}.png`,
   top: `${(i * 17 + 3) % 82}%`,
   size: `${6 + (i % 4) * 2}rem`,
   duration: `${9 + (i % 6) * 3}s`,
@@ -103,7 +103,7 @@ function Distractions() {
   );
 }
 
-export function SlokaScribeGame({ onExit }: GameProps) {
+export function WriteTheSlokaGame({ onExit }: GameProps) {
   const [levelIndex, setLevelIndex] = useState(0);
   const [slokaIndex, setSlokaIndex] = useState(0);
   const [phase, setPhase] = useState<"writing" | "level-done" | "celebrating" | "results">("writing");
