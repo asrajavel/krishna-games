@@ -192,7 +192,7 @@ body [data-dragging] * {
     inset -0.18rem -0.24rem 0 rgba(20, 8, 48, 0.62),
     0.18rem 0.3rem 0 #4c2d8a,
     0.32rem 0.9rem 0 #16082c,
-    0.55rem 1.3rem 1.8rem rgba(88, 40, 180, 0.45);
+    0.55rem 1.3rem 1.8rem rgba(255, 200, 87, 0.24);
 }
 
 button.game-card:not(:disabled):hover {
@@ -201,7 +201,7 @@ button.game-card:not(:disabled):hover {
     inset -0.18rem -0.24rem 0 rgba(20, 8, 48, 0.62),
     0.22rem 0.34rem 0 #5b38a8,
     0.38rem 0.98rem 0 #16082c,
-    0.65rem 1.45rem 2rem rgba(88, 40, 180, 0.58);
+    0.65rem 1.45rem 2rem rgba(255, 200, 87, 0.36);
 }
 
 .glow-correct {
