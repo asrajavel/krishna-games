@@ -32,7 +32,7 @@ const ADULT_EVENTS = [
 const GAME_DURATION_MS = 75_000;
 const COMPLETION_REVEAL_MS = 4_000;
 
-function shuffledEvents(ordered: { id: string }[]) {
+function shuffledEvents<T extends { id: string }>(ordered: T[]) {
   const events = shuffle(ordered);
   return events.every((event, index) => event.id === ordered[index].id) ? events.reverse() : events;
 }

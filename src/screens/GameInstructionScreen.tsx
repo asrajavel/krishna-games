@@ -1,0 +1,51 @@
+import { useEffect } from "react";
+import { playSound } from "../soundEffects";
+
+interface Props {
+  videoSrc: string;
+  lines: readonly [string, string?];
+  onStart: () => void;
+  onExit: () => void;
+}
+
+const AUTO_RESET_MS = 120_000;
+
+export function GameInstructionScreen({ videoSrc, lines, onStart, onExit }: Props) {
+  useEffect(() => {
+    const timeout = window.setTimeout(onExit, AUTO_RESET_MS);
+    return () => window.clearTimeout(timeout);
+  }, [onExit]);
+
+  return (
+    <div className="flex h-full w-full items-center justify-center bg-black/70 p-8">
+      <section className="flex w-full max-w-[52rem] flex-col items-center gap-4 rounded-[2rem] border border-white/10 bg-game-panel p-6 text-center shadow-2xl">
+        <h1 className="text-4xl font-black text-game-accent">How to Play</h1>
+
+        <video
+          src={videoSrc}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="aspect-video w-full rounded-2xl border border-white/10 bg-game-bg object-contain"
+        />
+
+        <div className="space-y-0.5">
+          <p className="text-2xl font-extrabold text-krishna-cream">{lines[0]}</p>
+          {lines[1] && <p className="text-xl font-bold text-game-accent">{lines[1]}</p>}
+        </div>
+
+        <button
+          onClick={() => {
+            playSound("click");
+            onStart();
+          }}
+          tabIndex={-1}
+          className="rounded-xl bg-game-accent px-10 py-3 text-2xl font-black text-game-bg shadow-xl transition-transform hover:scale-105"
+        >
+          Start Game
+        </button>
+      </section>
+    </div>
+  );
+}

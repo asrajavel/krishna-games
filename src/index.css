@@ -204,6 +204,12 @@ button.game-card:not(:disabled):hover {
     0.65rem 1.45rem 2rem rgba(255, 200, 87, 0.36);
 }
 
+/* Enlarged video preview reads as a screen, not a raised button. */
+button.game-card.video-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 1.2rem 2.5rem rgba(0, 0, 0, 0.55);
+}
+
 .glow-correct {
   box-shadow: 0 0 40px color-mix(in srgb, var(--color-game-correct) 28%, transparent);
 }

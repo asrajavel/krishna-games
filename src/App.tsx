@@ -1,5 +1,6 @@
 import { useState, useCallback, type ComponentType } from "react";
 import { GAMES, type GameId, type GameProps } from "./games";
+import { GameInstructionScreen } from "./screens/GameInstructionScreen";
 import { GameVariantScreen } from "./screens/GameVariantScreen";
 import { HomeScreen } from "./screens/HomeScreen";
 import { playSound } from "./soundEffects";
@@ -7,6 +8,7 @@ import { playSound } from "./soundEffects";
 interface Selection {
   gameId: GameId;
   variantId?: string;
+  instructionsSeen?: boolean;
 }
 
 export default function App() {
@@ -17,12 +19,22 @@ export default function App() {
   const selectVariant = useCallback((variantId: string) => {
     setSelection((current) => current ? { ...current, variantId } : current);
   }, []);
+  const beginGame = useCallback(() => {
+    setSelection((current) => current ? { ...current, instructionsSeen: true } : current);
+  }, []);
 
   const activeGame = selection
     ? GAMES.find((game) => game.id === selection.gameId)
     : undefined;
   const variants = activeGame && "variants" in activeGame
     ? activeGame.variants
+    : undefined;
+  const activeVariant = variants?.find((variant) => variant.id === selection?.variantId);
+  const instructionVideoSrc = activeGame && "instructionVideoSrc" in activeGame
+    ? activeGame.instructionVideoSrc
+    : undefined;
+  const instructionLines = activeGame && "instructionLines" in activeGame
+    ? activeGame.instructionLines
     : undefined;
   const ActiveGame = activeGame?.Component as ComponentType<GameProps> | undefined;
 
@@ -52,11 +64,18 @@ export default function App() {
           onSelect={selectVariant}
           onExit={goHome}
         />
+      ) : instructionVideoSrc && instructionLines && !selection.instructionsSeen ? (
+        <GameInstructionScreen
+          videoSrc={instructionVideoSrc}
+          lines={instructionLines}
+          onStart={beginGame}
+          onExit={goHome}
+        />
       ) : ActiveGame ? (
         <ActiveGame
           onExit={goHome}
           variantId={selection.variantId}
-          variantImageSrc={variants?.find((v) => v.id === selection.variantId)?.imageSrc}
+          variantImageSrc={activeVariant?.imageSrc}
         />
       ) : (
         null

@@ -29,6 +29,8 @@ interface Game {
   id: string;
   title: string;
   imageSrc: string;
+  instructionVideoSrc?: string;
+  instructionLines?: readonly [string, string?];
   variants?: readonly GameVariant[];
   Component: ComponentType<GameProps>;
 }
@@ -71,6 +73,11 @@ export const GAMES = [
     id: "lila-sequence",
     title: "Lila Sequence",
     imageSrc: "./lila-sequence/board.png",
+    instructionVideoSrc: "./instructions/lila-sequence-crop.mp4",
+    instructionLines: [
+      "Drag one scene onto another to swap",
+      "Total time: 75 seconds",
+    ],
     variants: [
       { id: "kids", title: "Easy Mode", description: "For Kids", imageSrc: "./memory-match/kids.png" },
       { id: "adults", title: "Hard Mode", description: "For Teens and Grown-ups", imageSrc: "./memory-match/adults.png" },
