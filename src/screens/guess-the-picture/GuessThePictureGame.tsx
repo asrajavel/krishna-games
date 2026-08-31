@@ -38,7 +38,6 @@ const DECOYS = [
   "Krishna defeats Sankhachuda",
   "Krishna defeats Keshi",
   "Krishna wrestles Chanura",
-  "Krishna rescues 16,100 women",
   "Krishna speaks the Gita",
 ];
 
