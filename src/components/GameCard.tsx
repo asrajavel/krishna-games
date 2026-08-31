@@ -14,7 +14,7 @@ export function GameCard({ title, imageSrc, onClick }: Props) {
         onClick();
       }}
       tabIndex={-1}
-      className="game-card group relative flex h-full min-h-0 w-full cursor-pointer flex-col justify-end overflow-hidden rounded-[2rem] border border-white/10 text-left transition-all duration-300 hover:-translate-y-2 hover:border-krishna-green"
+      className="game-card group relative flex h-full min-h-0 w-full cursor-pointer flex-col justify-end overflow-hidden rounded-[2rem] border border-white/10 text-left transition-all duration-300 hover:-translate-y-2"
     >
       <img
         src={imageSrc}
