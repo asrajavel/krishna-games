@@ -19,7 +19,6 @@ const KIDS_EVENTS = [
 const ADULT_EVENTS = [
   { id: "abhisheka", title: "Abhisheka of baby Krishna" },
   { id: "trinavarta", title: "Krishna defeats Trinavarta" },
-  { id: "butter", title: "Krishna and Balarama steal butter" },
   { id: "brahmanda", title: "Universe in Krishna's mouth" },
   { id: "bakasura", title: "Krishna defeats Bakasura" },
   { id: "sankhachuda", title: "Krishna defeats Sankhachuda" },
