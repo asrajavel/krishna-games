@@ -43,15 +43,14 @@ export function HomeScreen({ onStart }: Props) {
           Krishna Lila Games
         </h1>
       </header>
-      <div className="relative z-10 grid h-[48rem] max-h-full w-full max-w-[116rem] grid-cols-5 grid-rows-3 gap-6">
-        {GAMES.map((game, i) => (
-          <div key={game.id} className={i === 0 ? "col-span-2 row-span-2 min-h-0" : "min-h-0"}>
-            <GameCard
-              title={game.title}
-              imageSrc={game.imageSrc}
-              onClick={() => onStart(game.id)}
-            />
-          </div>
+      <div className="relative z-10 grid h-[48rem] max-h-full w-full max-w-[116rem] grid-cols-4 grid-rows-3 gap-6">
+        {GAMES.map((game) => (
+          <GameCard
+            key={game.id}
+            title={game.title}
+            imageSrc={game.imageSrc}
+            onClick={() => onStart(game.id)}
+          />
         ))}
       </div>
     </div>
