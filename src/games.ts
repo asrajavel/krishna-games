@@ -87,7 +87,16 @@ export const GAMES = [
   { id: "picture-puzzle", title: "Picture Puzzle", imageSrc: "./picture-puzzle/board.png", Component: PicturePuzzleGame },
   { id: "odd-one-out", title: "Odd One Out", imageSrc: "./odd-one-out/board.png", Component: OddOneOutGame },
   { id: "guess-the-picture", title: "Guess the Picture", imageSrc: "./guess-the-picture/board.png", Component: GuessThePictureGame },
-  { id: "match-pairs", title: "Match the Pairs", imageSrc: "./match-pairs/board.png", Component: MatchPairsGame },
+  {
+    id: "match-pairs",
+    title: "Match the Pairs",
+    imageSrc: "./match-pairs/board.png",
+    variants: [
+      { id: "kids", title: "Name Pairs", description: "For Kids", imageSrc: "./memory-match/kids.png" },
+      { id: "adults", title: "Picture Pairs", description: "For Teens and Grown-ups", imageSrc: "./memory-match/adults.png" },
+    ],
+    Component: MatchPairsGame,
+  },
   { id: "krishnas-favorites", title: "Krishna's Favorites", imageSrc: "./krishnas-favorites/board.png", Component: KrishnasFavoritesGame },
   { id: "route-to-vrindavan", title: "Route to Vrindavan", imageSrc: "./route-to-vrindavan/board.png", Component: RouteToVrindavanGame },
   { id: "write-the-sloka", title: "Write the Sloka", imageSrc: "./write-the-sloka/board.png", Component: WriteTheSlokaGame },
