@@ -42,7 +42,7 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
       {imageSrc && (
         <div
           className="quiz-art"
-          style={{ "--quiz-art": `url("${imageSrc}")` } as CSSProperties}
+          style={{ "--quiz-art": `url("${new URL(imageSrc, document.baseURI).href}")` } as CSSProperties}
         />
       )}
 
