@@ -41,7 +41,7 @@ export function GameInstructionScreen({ videoSrc, lines, onStart, onExit }: Prop
             onStart();
           }}
           tabIndex={-1}
-          className="rounded-xl bg-game-accent px-10 py-3 text-2xl font-black text-game-bg shadow-xl transition-transform hover:scale-105"
+          className="mt-8 rounded-[2rem] border-b-8 border-amber-700 bg-game-accent px-10 py-3 text-2xl font-black text-game-bg transition-transform hover:-translate-y-1 hover:bg-game-accent-soft active:translate-y-1 active:border-b-4"
         >
           Start Game
         </button>

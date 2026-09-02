@@ -29,8 +29,7 @@ interface Game {
   id: string;
   title: string;
   imageSrc: string;
-  instructionVideoSrc?: string;
-  instructionLines?: readonly [string, string?];
+  instructionLines: readonly [string, string?];
   variants?: readonly GameVariant[];
   Component: ComponentType<GameProps>;
 }
@@ -40,6 +39,10 @@ export const GAMES = [
     id: "krishna-quiz",
     title: "Krishna Quiz",
     imageSrc: "./krishna-quiz/board.png",
+    instructionLines: [
+      "Choose the correct answer",
+      "15 seconds for each question",
+    ],
     variants: [
       { id: "krishna-lila-kids", title: "Krishna Lila", description: "For Kids", imageSrc: "./krishna-quiz/krishna-lila.png" },
       { id: "bhagavad-gita-adults", title: "Bhagavad-gita", description: "For Teens and Grown-ups", imageSrc: "./krishna-quiz/bhagavad-gita.png" },
@@ -53,6 +56,10 @@ export const GAMES = [
     id: "dasavatar-match",
     title: "Dasavatar Match",
     imageSrc: "./dasavatar-match/board.png",
+    instructionLines: [
+      "Drag each name or clue to the matching avatar",
+      "Total time: 60 seconds",
+    ],
     variants: [
       { id: "kids", title: "Match the Names", description: "For Kids", imageSrc: "./dasavatar-match/kids.png" },
       { id: "adults", title: "Match the Clues", description: "For Teens and Grown-ups", imageSrc: "./dasavatar-match/adults.png" },
@@ -63,6 +70,10 @@ export const GAMES = [
     id: "memory-match",
     title: "Memory Match",
     imageSrc: "./memory-match/board.png",
+    instructionLines: [
+      "Flip two cards and find the matching pairs",
+      "Total time: 75 seconds",
+    ],
     variants: [
       { id: "kids", title: "Six Pairs", description: "For Kids", imageSrc: "./memory-match/kids.png" },
       { id: "adults", title: "Ten Pairs", description: "For Teens and Grown-ups", imageSrc: "./memory-match/adults.png" },
@@ -73,7 +84,6 @@ export const GAMES = [
     id: "lila-sequence",
     title: "Lila Sequence",
     imageSrc: "./lila-sequence/board.png",
-    instructionVideoSrc: "./instructions/lila-sequence-crop.mp4",
     instructionLines: [
       "Drag one scene onto another to swap",
       "Total time: 75 seconds",
@@ -84,26 +94,88 @@ export const GAMES = [
     ],
     Component: LilaSequenceGame,
   },
-  { id: "picture-puzzle", title: "Picture Puzzle", imageSrc: "./picture-puzzle/board.png", Component: PicturePuzzleGame },
-  { id: "odd-one-out", title: "Odd One Out", imageSrc: "./odd-one-out/board.png", Component: OddOneOutGame },
-  { id: "guess-the-picture", title: "Guess the Picture", imageSrc: "./guess-the-picture/board.png", Component: GuessThePictureGame },
+  {
+    id: "picture-puzzle",
+    title: "Picture Puzzle",
+    imageSrc: "./picture-puzzle/board.png",
+    instructionLines: [
+      "Drag each piece into the correct place",
+      "Total time: 75 seconds",
+    ],
+    Component: PicturePuzzleGame,
+  },
+  {
+    id: "odd-one-out",
+    title: "Odd One Out",
+    imageSrc: "./odd-one-out/board.png",
+    instructionLines: [
+      "Choose the item that does not belong",
+      "Total time: 75 seconds",
+    ],
+    Component: OddOneOutGame,
+  },
+  {
+    id: "guess-the-picture",
+    title: "Guess the Picture",
+    imageSrc: "./guess-the-picture/board.png",
+    instructionLines: [
+      "Choose what the picture shows, can use the hint button if needed",
+      "15 seconds for each picture",
+    ],
+    Component: GuessThePictureGame,
+  },
   {
     id: "match-pairs",
     title: "Match the Pairs",
     imageSrc: "./match-pairs/board.png",
+    instructionLines: [
+      "Choose an item, then choose its matching pair",
+      "Total time: 75 seconds",
+    ],
     variants: [
       { id: "kids", title: "Name Pairs", description: "For Kids", imageSrc: "./memory-match/kids.png" },
       { id: "adults", title: "Picture Pairs", description: "For Teens and Grown-ups", imageSrc: "./memory-match/adults.png" },
     ],
     Component: MatchPairsGame,
   },
-  { id: "krishnas-favorites", title: "Krishna's Favorites", imageSrc: "./krishnas-favorites/board.png", Component: KrishnasFavoritesGame },
-  { id: "route-to-vrindavan", title: "Route to Vrindavan", imageSrc: "./route-to-vrindavan/board.png", Component: RouteToVrindavanGame },
-  { id: "write-the-sloka", title: "Write the Sloka", imageSrc: "./write-the-sloka/board.png", Component: WriteTheSlokaGame },
+  {
+    id: "krishnas-favorites",
+    title: "Krishna's Favorites",
+    imageSrc: "./krishnas-favorites/board.png",
+    instructionLines: [
+      "Mouse over to collect Krishna's favorites and avoid the others",
+      "Total time: 75 seconds",
+    ],
+    Component: KrishnasFavoritesGame,
+  },
+  {
+    id: "route-to-vrindavan",
+    title: "Route to Vrindavan",
+    imageSrc: "./route-to-vrindavan/board.png",
+    instructionLines: [
+      "Choose the correct city at each turn",
+      "You have 3 lives and 150 seconds",
+    ],
+    Component: RouteToVrindavanGame,
+  },
+  {
+    id: "write-the-sloka",
+    title: "Write the Sloka",
+    imageSrc: "./write-the-sloka/board.png",
+    instructionLines: [
+      "Read the scrolling verse and write it in your notebook",
+      "60 seconds for each verse",
+    ],
+    Component: WriteTheSlokaGame,
+  },
   {
     id: "krishnas-forest-maze",
     title: "Krishna’s Forest Maze",
     imageSrc: "./krishnas-forest-maze/hedge-maze.png",
+    instructionLines: [
+      "Drag Krishna through the maze to reach the cows",
+      "Total time: 75 seconds",
+    ],
     variants: [
       { id: "kids", title: "Easy Mode", description: "For Kids", imageSrc: "./memory-match/kids.png" },
       { id: "adults", title: "Hard Mode", description: "For Teens and Grown-ups", imageSrc: "./memory-match/adults.png" },

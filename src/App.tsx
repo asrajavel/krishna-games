@@ -30,12 +30,10 @@ export default function App() {
     ? activeGame.variants
     : undefined;
   const activeVariant = variants?.find((variant) => variant.id === selection?.variantId);
-  const instructionVideoSrc = activeGame && "instructionVideoSrc" in activeGame
-    ? activeGame.instructionVideoSrc
+  const instructionVideoSrc = activeGame
+    ? `./instructions/${activeGame.id}.mp4`
     : undefined;
-  const instructionLines = activeGame && "instructionLines" in activeGame
-    ? activeGame.instructionLines
-    : undefined;
+  const instructionLines = activeGame?.instructionLines;
   const ActiveGame = activeGame?.Component as ComponentType<GameProps> | undefined;
 
   return (

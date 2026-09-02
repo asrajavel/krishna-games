@@ -49,7 +49,7 @@ export function HomeScreen({ onStart }: Props) {
             key={game.id}
             title={game.title}
             imageSrc={game.imageSrc}
-            videoSrc={"instructionVideoSrc" in game ? game.instructionVideoSrc : undefined}
+            videoSrc={`./instructions/${game.id}.mp4`}
             onClick={() => onStart(game.id)}
           />
         ))}

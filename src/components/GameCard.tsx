@@ -14,7 +14,7 @@ export function GameCard({ title, imageSrc, videoSrc, onClick }: Props) {
   const playPreview = () => {
     if (!videoRef.current) return;
     videoRef.current.currentTime = 0;
-    void videoRef.current.play();
+    void videoRef.current.play().catch(() => {});
   };
 
   const stopPreview = () => {
@@ -34,7 +34,7 @@ export function GameCard({ title, imageSrc, videoSrc, onClick }: Props) {
       tabIndex={-1}
       className={`game-card group relative flex h-full min-h-0 w-full cursor-pointer flex-col justify-end overflow-hidden rounded-[2rem] border border-white/10 text-left transition-all duration-300 ${
         videoSrc
-          ? "video-card origin-center hover:z-40 hover:scale-[1.4]"
+          ? "video-card origin-center hover:z-40 hover:scale-[1.2]"
           : "hover:-translate-y-2"
       }`}
     >
