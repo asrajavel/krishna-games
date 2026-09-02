@@ -27,10 +27,10 @@ export function GameInstructionScreen({ videoSrc, lines, onStart, onExit }: Prop
           muted
           loop
           playsInline
-          className="aspect-video w-full rounded-2xl border border-white/10 bg-game-bg object-contain"
+          className="aspect-video w-full rounded-2xl border-2 border-game-accent/30 bg-game-bg object-contain"
         />
 
-        <div className="space-y-0.5">
+        <div className="mt-8 space-y-0.5">
           <p className="text-2xl font-extrabold text-krishna-cream">{lines[0]}</p>
           {lines[1] && <p className="text-xl font-bold text-game-accent">{lines[1]}</p>}
         </div>
