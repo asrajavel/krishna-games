@@ -1,9 +1,12 @@
+import { useEffect, useState } from "react";
 import { GameCard } from "../components/GameCard";
 import { GAMES, type GameId } from "../games";
 
 interface Props {
   onStart: (game: GameId) => void;
 }
+
+const ATTRACT_MODE_IDLE_MS = 5_000;
 
 const PARTICLES = Array.from({ length: 20 }, (_, i) => {
   const duration = Math.random() * 8 + 6;
@@ -20,6 +23,49 @@ const PARTICLES = Array.from({ length: 20 }, (_, i) => {
 });
 
 export function HomeScreen({ onStart }: Props) {
+  const [attractMode, setAttractMode] = useState(false);
+  const [demoIndex, setDemoIndex] = useState(0);
+
+  useEffect(() => {
+    let idleTimeout: number;
+    const resetIdleTimeout = () => {
+      window.clearTimeout(idleTimeout);
+      setAttractMode(false);
+      idleTimeout = window.setTimeout(() => setAttractMode(true), ATTRACT_MODE_IDLE_MS);
+    };
+
+    resetIdleTimeout();
+    window.addEventListener("pointermove", resetIdleTimeout);
+    window.addEventListener("pointerdown", resetIdleTimeout);
+
+    return () => {
+      window.clearTimeout(idleTimeout);
+      window.removeEventListener("pointermove", resetIdleTimeout);
+      window.removeEventListener("pointerdown", resetIdleTimeout);
+    };
+  }, []);
+
+  if (attractMode) {
+    const game = GAMES[demoIndex];
+
+    return (
+      <div data-attract-mode className="flex h-full w-full flex-col bg-black">
+        <h1 className="shrink-0 border-b border-white/15 bg-game-panel py-4 text-center text-5xl font-black text-game-accent shadow-2xl">
+          {game.title}
+        </h1>
+        <video
+          key={game.id}
+          src={`./instructions/${game.id}.mp4`}
+          autoPlay
+          muted
+          playsInline
+          onEnded={() => setDemoIndex((current) => (current + 1) % GAMES.length)}
+          className="attract-video min-h-0 w-full flex-1 object-contain"
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="festival-stage relative flex h-full w-full flex-col items-center justify-center gap-14 p-10">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
