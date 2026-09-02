@@ -6,7 +6,7 @@ interface Props {
   onStart: (game: GameId) => void;
 }
 
-const ATTRACT_MODE_IDLE_MS = 5_000;
+const ATTRACT_MODE_IDLE_MS = 60_000;
 
 const PARTICLES = Array.from({ length: 20 }, (_, i) => {
   const duration = Math.random() * 8 + 6;
