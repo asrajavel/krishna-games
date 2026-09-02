@@ -140,8 +140,9 @@ export function MatchPairsGame({ onExit, variantId }: GameProps) {
                 x2={rightPosition}
                 y2="100"
                 className="stroke-game-correct opacity-75"
-                strokeWidth="0.1875rem"
+                strokeWidth="0.75rem"
                 strokeLinecap="round"
+                vectorEffect="non-scaling-stroke"
               />
             );
           })}

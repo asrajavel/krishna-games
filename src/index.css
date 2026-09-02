@@ -462,6 +462,11 @@ button.game-card.video-card:hover {
   filter: blur(var(--quiz-art-blur));
 }
 
+/* Question is plain text over the art, not a raised card, so it never reads as a fifth option. */
+.quiz-question {
+  text-shadow: 0 0.2rem 0.6rem rgba(10, 4, 24, 0.85);
+}
+
 @keyframes sloka-marquee {
   from { transform: translate3d(0, 0, 0); }
   to { transform: translate3d(calc(-100% - 100vw), 0, 0); }

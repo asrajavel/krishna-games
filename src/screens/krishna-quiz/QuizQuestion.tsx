@@ -63,12 +63,9 @@ export function QuizQuestion({ question, questionNumber, totalQuestions, onAnswe
           Question {questionNumber} of {totalQuestions}
         </div>
 
-        <div className="game-card relative mt-8 w-full max-w-[88rem] overflow-hidden rounded-[2rem] border border-white/10 p-10">
-          <span className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-game-accent to-transparent" />
-          <h2 className="text-center text-5xl font-extrabold leading-tight text-krishna-cream">
-            {question.question}
-          </h2>
-        </div>
+        <h2 className="quiz-question mt-10 w-full max-w-[88rem] text-center text-5xl font-extrabold leading-tight text-krishna-cream">
+          {question.question}
+        </h2>
 
         <div className="mt-28 grid w-full max-w-[88rem] grid-cols-2 gap-6">
           {question.options.map((option, index) => {
